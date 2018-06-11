@@ -1356,6 +1356,10 @@ application = webapp.WSGIApplication([
 	('/.*',      TestHandler)],  # testing
 	debug=True)
 
+# IMPORTANT: PREVIOUS (PILOT) APP HAD SCENARIO DATA AND TEST ON THE SAME PAGE.
+# I CHANGED THIS FOR E1 BECAUSE THE HTML FILE WAS 2000+ LINES LONG, VERY UNWIELDY
+# NEED TO CHANGE THE HANDLERS TO REFLECT THIS
+
 def main():
 		run_wsgi_app(application)
 
