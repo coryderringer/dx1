@@ -1,0 +1,850 @@
+{% extends "_base.htm" %}
+
+{% block title %}
+    Learning Task
+{% endblock%}
+
+{% block bodycontent %}
+
+
+
+
+<body data-spy="scroll" data-target=".navbar" data-offset="120">
+    <!-- Navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <p class="navbar-text">Learning Task</p>
+            </div>
+        </div>
+    </nav>
+
+    <div id="containerDiv" style="width:750px; display: none" class="container well">
+        <div class="section">
+            <div class="tab-content">
+                <div id="instructions1" class="tab-pane fade in active">
+                    <div style="height:175px">
+                        <h3>Overview</h3>
+                        <p name="story">For this task, imagine that you work in a hospital, and your job is to make sure that the patients have GOOD outcomes after treatment. You will see two scenarios, each containing information about patients who were treated for a fictional disease. You are responsible for finding out if the different treatments are effective or not. Keep in mind that different diseases have different success rates for treatment. Before seeing data about each disease, you will be told which treatment is the most common, and whether the outcomes for the disease are typically GOOD or BAD.</p>
+                        <p name="monetary" style="display:none">For this task, you will learn about the relationships between shapes. You will see two scenarios, each containing information about two sets of shape pairs. You are responsible for finding out if the shape pairs are related or not. Keep in mind that some shapes are more common than others. Before seeing the shape combinations, you will be told which shapes are the most common.</p>
+                    </div>
+
+                    <button id="next1" class="btn btn-default" data-toggle="tab" href="#instructions2">
+                        Next
+                    </button>
+
+                </div>
+                <div id="instructions2" class="tab-pane fade">
+                    <div style="height:175px">
+                        <h3>Overview</h3>
+                        <p name="story">For each patient, you will first see whether their outcome was GOOD or BAD. You will be asked to confirm the outcome by clicking the appropriate face. Each GOOD or BAD outcome is added or subtracted from the bonus you will receive after completing this experiment. Each GOOD outcome (like this one) adds 6 cents to your baseline bonus of $1.00, while each BAD outcome subtracts 6 cents. (See "Treatment Bonus" on the right side.)</p>
+                        <p name="monetary" style="display:none">On each trial, you will first see whether shape 1 was a <span name="shape1a">SQUARE</span> or a <span name="shape1b">CIRCLE</span>. You will be asked to confirm by clicking the matching shape in the top row. Your bonus amount is affected by these shapes; each <span name="shape1a">SQUARE</span> (like this one) adds 6 cents to your baseline bonus of $1.00, while each <span name="shape1b">CIRCLE</span> subtracts 6 cents. (See "Bonus" on the right side.)</p>
+                    </div>
+
+                    <button id="previous1" class="btn btn-default" data-toggle="tab" href="#instructions1">Previous</button>
+                    <button id="next2" class="btn btn-default" data-toggle="tab" href="#instructions3">
+                        Next
+                    </button>
+                </div>
+
+                <div id="instructions3" class="tab-pane fade">
+                    <div style="height:175px">
+                        <h3>Task Description</h3>
+                        <p name="story">You will also <b>guess</b> which of two treatments the patient received by clicking on one of the pills below. In this case the options are TW405 or HL376. You will be told the names of the drugs, as well as which one is more commonly used, before each disease scenario.
+                            <br><br>For now, let's say you guess TW405.
+                        </p>
+                        <p name="monetary" style="display:none">You will also <b>guess</b> what shape 2 will be. In this case the options are <span name="shape1a">SQUARE</span> or <span name="shape1b">CIRCLE</span>. You will be told the shape options, as well as which one is more common, before each scenario.
+                            <br><br>For now, let's say you guess <span name="shape2a">SQUARE</span>.</p>
+                    </div>
+                    <button id="previous2" class="btn btn-default" data-toggle="tab" href="#instructions2">Previous</button>
+                    <button id="next3" class="btn btn-default" data-toggle="tab" href="#instructions4">
+                        Next
+                    </button>
+                </div>
+
+                <div id="instructions4" class="tab-pane fade">
+                    <div style="height:175px">
+                        <h3>Example Task</h3>
+                        <p name="story">After making your guess, you will receive immediate feedback about which drug the patient received. For each patient, if you correctly guess which drug they received, you will get a 3 cent accuracy bonus. The total bonus (Treatment Bonus + Accuracy Bonus) is the amount that will be paid to you at the end of the study. (See right side.)</p>
+                        <p name="monetary" style="display:none">After making your guess, you will receive immediate feedback about shape 2. For each trial, if you correctly guess shape 2, you will get a 3 cent accuracy bonus. The total bonus is the amount that will be paid to you at the end of the study. (See right side.)</p>
+                    </div>
+                    <button id="previous3" class="btn btn-default" data-toggle="tab" href="#instructions3">Previous</button>
+                    <button id="next4" class="btn btn-info" data-toggle="tab">
+                        Begin
+                    </button>
+
+
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="row" id="taskDisplay">
+                <div class="col-xs-8" class="text-center">
+                    <div id="effectDiv" class="text-center">
+                        <h2 name="story">Patient Number <span name="patientNumber">1</span></h2>
+                        <h2 name="monetary">Trial <span name="patientNumber">1</span></h2>
+                        <!-- find a place for the patient impact info here -->
+                        <div>
+                            <p name="story">The patient's outcome was <span name="outcomeSpan">BAD</span>.</p>
+                            <p name="monetary" style="display:none">Shape 1 is a <span name="shape1a">SHAPE</span>.</p>
+                        </div>
+
+                        <div class="text-center" style="height:100px; border-bottom: 1px solid grey"> <!-- this is the div that we want split up vertically -->
+                            <div class="col-xs-4"></div>
+                            <div class="col-xs-4 text-center">
+
+                                <div name="story">
+                                    <div id="effectiveEmoji">
+                                        <img src="/static/images/good.png" style="height:70px"/>
+                                    </div>
+
+                                    <div id="ineffectiveEmoji" style="display:none">
+                                        <img src="/static/images/bad.png" style="height:70px"/>
+                                    </div>
+                                </div>
+
+                                <div name="monetary" id="mainSvgDiv" style="height:70px; display:none">
+                                    <svg height="100%" width="100%" viewBox="0,0,100,100">
+
+                                        <polygon name="SQUARE" points = "1,1 99,1 99,99 1,99"
+                                        style="display:none; fill:#F5F5F5; stroke-width:1; stroke:black"/>
+
+                                        <circle name="CIRCLE" cx="50", cy="50", r=49
+                                        style="display:none; fill:#F5F5F5; stroke-width:1; stroke:black"/>
+
+                                        <polygon name="STAR" points="50,6 62,39 95,39 68,61 80,99 50,75 20,99 32,61 5,39 38,39"
+                                        style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1"/>
+
+                                        <polygon name="TRIANGLE" points="50,6, 95,95, 5,95"
+                                        style="display:none; fill:#F5F5F5; stroke:black; stroke-width:1"/>
+
+                                        <ellipse name="OVAL" cx="50" cy="50" rx="50" ry="25"
+                                        style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1" />
+
+                                        <polygon name="DIAMOND" points ="50,1 99,50 50,99 1,50"
+                                        style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1" />
+
+                                        <polygon name="RECTANGLE" points = "1,20 99,20 99,80 1,80"
+                                        style="fill:#F5F5F5; stroke-width:1; stroke:black"/>
+
+                                        <polygon name="PENTAGON" points="50,6 95,39 80,99 20,99 5,39"
+                                        style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1"/>
+
+                                    </svg>
+
+
+                                </div>
+
+                            </div>
+
+                            <div id="outcomePercentageText" class="col-xs-4 text-left">
+                                <p style="font-size: 14pt"><span id="outcomePercentageSpan">-0.03</span></p>
+                            </div>
+
+                        </div>
+
+                        <div class="text-center">
+                            <p name="story" id="effectPrompt">Was the patient's outcome GOOD or BAD?</p>
+                            <p name="monetary">Was shape 1 a <span name="shape1a"></span> or a <span name="shape1b"></span>?</p>
+
+                        </div>
+
+                        <div name="story" style="height:50px" class="row">
+
+                            <div id="leftFace" class="col-xs-5">
+                                <div id="effectiveClick" class="text-center">
+                                    <img src="/static/images/good.png" style="height:50px"/>
+                                </div>
+                            </div>
+                            <div id="leftBorderDiv" class="col-xs-1" style="border-right: 1px solid black; height:50px"></div>
+                            <div id="rightBorderDiv" style="height:50px" class="col-xs-1"></div>
+                            <div id="rightFace" class="col-xs-5">
+                                <div id="ineffectiveClick" class="text-center">
+                                    <img src="/static/images/bad.png" style="height:50px"/>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div id="shape1Click" name="monetary" style="height:50px" class="row">
+
+                            <div id="shape1a" class="col-xs-5", style="height:50px">
+                                <svg height="100%" width="100%" viewBox="0,0,100,100">
+
+                                    <polygon name="SQUARE" points = "5,5 95,5 95,95 5,95"
+                                    style="display:none; fill:#F5F5F5; stroke-width:1; stroke:black"/>
+
+                                    <circle name="CIRCLE" cx="50", cy="50", r=45
+                                    style="display:none; fill:#F5F5F5; stroke-width:1; stroke:black"/>
+
+                                    <polygon name="STAR" points="50,6 62,39 95,39 68,61 80,99 50,75 20,99 32,61 5,39 38,39"
+                                    style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1"/>
+
+                                    <polygon name="TRIANGLE" points="50,6, 95,95, 5,95"
+                                    style="display:none; fill:#F5F5F5; stroke:black; stroke-width:1"/>
+
+                                    <ellipse name="OVAL" cx="50" cy="50" rx="45" ry="25"
+                                    style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1" />
+
+                                    <polygon name="DIAMOND" points ="50,5 95,50 50,95 5,50"
+                                    style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1" />
+
+                                    <polygon name="RECTANGLE" points = "5,20 95,20 95,80 5,80"
+                                    style="fill:#F5F5F5; stroke-width:1; stroke:black"/>
+
+                                    <polygon name="PENTAGON" points="50,5 95,39 80,95 20,95 5,39"
+                                    style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1"/>
+                                </svg>
+                            </div>
+                            <div id="leftBorderDiv" class="col-xs-1" style="border-right: 1px solid black; height:50px"></div>
+                            <div id="rightBorderDiv" style="height:50px" class="col-xs-1"></div>
+                            <div id="shape1b" class="col-xs-5", style="height:50px">
+                                <svg height="100%" width="100%" viewBox="0,0,100,100">
+
+                                    <polygon name="SQUARE" points = "5,5 95,5 95,95 5,95"
+                                    style="display:none; fill:#F5F5F5; stroke-width:1; stroke:black"/>
+
+                                    <circle name="CIRCLE" cx="50", cy="50", r=45
+                                    style="display:none; fill:#F5F5F5; stroke-width:1; stroke:black"/>
+
+                                    <polygon name="STAR" points="50,6 62,39 95,39 68,61 80,99 50,75 20,99 32,61 5,39 38,39"
+                                    style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1"/>
+
+                                    <polygon name="TRIANGLE" points="50,6, 95,95, 5,95"
+                                    style="fill:#F5F5F5; stroke:black; stroke-width:1"/>
+
+                                    <ellipse name="OVAL" cx="50" cy="50" rx="45" ry="25"
+                                    style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1" />
+
+                                    <polygon name="DIAMOND" points ="50,5 95,50 50,95 5,50"
+                                    style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1" />
+
+                                    <polygon name="RECTANGLE" points = "5,20 95,20 95,80 5,80"
+                                    style="display:none; fill:#F5F5F5; stroke-width:1; stroke:black"/>
+
+                                    <polygon name="PENTAGON" points="50,5 95,39 80,95 20,95 5,39"
+                                    style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1"/>
+                                </svg>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <br>
+                    <div id="causeDiv" class = "text-center">
+                        <p name="story" id="causePrompt">Guess whether the patient received TW405 or HL376:</p>
+                        <p name="monetary">Guess whether shape 2 will be a <span name="shape2a"></span> or a <span name="shape2b"></span>:</p>
+                        <div name="story" class="row" id="pillDiv" style="height:75px">
+                            <div id="drugA" class="col-xs-5 text-center">
+                                <p>TW405</p>
+                                <img src="/static/images/Red.png" style="width:100px"/>
+                            </div>
+                            <div class="col-xs-2 text-center">
+                                <div style="height:10px"></div>
+                                <div name="feedbackDiv" style="font-size: 10pt; padding: 5px; height: 75px"></div>
+                            </div>
+                            <div id="drugB" class="col-xs-5 text-center">
+                                <p>HL376</p>
+                                <img src="/static/images/White.png" style="width:100px"/>
+                            </div>
+                        </div>
+
+                        <div name="monetary" class="row" id="shape2Click" style="height:75px">
+                            <div id="shape2a" class="col-xs-5 text-center" style="height:50px">
+                                <svg height="100%" width="100%" viewBox="0,0,100,100">
+
+                                    <polygon name="SQUARE" points = "5,5 95,5 95,95 5,95"
+                                    style="display:none; fill:#F5F5F5; stroke-width:1; stroke:black"/>
+
+                                    <circle name="CIRCLE" cx="50", cy="50", r=45
+                                    style="fill:#F5F5F5; stroke-width:1; stroke:black"/>
+
+                                    <polygon name="STAR" points="50,6 62,39 95,39 68,61 80,99 50,75 20,99 32,61 5,39 38,39"
+                                    style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1"/>
+
+                                    <polygon name="TRIANGLE" points="50,6, 95,95, 5,95"
+                                    style="display:none; fill:#F5F5F5; stroke:black; stroke-width:1"/>
+
+                                    <ellipse name="OVAL" cx="50" cy="50" rx="45" ry="25"
+                                    style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1" />
+
+                                    <polygon name="DIAMOND" points ="50,5 95,50 50,95 5,50"
+                                    style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1" />
+
+                                    <polygon name="RECTANGLE" points = "5,20 95,20 95,80 5,80"
+                                    style="display:none; fill:#F5F5F5; stroke-width:1; stroke:black"/>
+
+                                    <polygon name="PENTAGON" points="50,5 95,39 80,95 20,95 5,39"
+                                    style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1"/>
+
+                                </svg>
+                            </div>
+                            <div class="col-xs-2 text-center">
+                                <div name="feedbackDiv" style="font-size: 10pt; padding: 5px; height: 75px"></div>
+                            </div>
+                            <div id="shape2b" class="col-xs-5 text-center" style="height:50px">
+                                <svg height="100%" width="100%" viewBox="0,0,100,100">
+
+                                    <polygon name="SQUARE" points = "5,5 95,5 95,95 5,95"
+                                    style="display:none; fill:#F5F5F5; stroke-width:1; stroke:black"/>
+
+                                    <circle name="CIRCLE" cx="50", cy="50", r=45
+                                    style="display:none; fill:#F5F5F5; stroke-width:1; stroke:black"/>
+
+                                    <polygon name="STAR" points="50,6 62,39 95,39 68,61 80,99 50,75 20,99 32,61 5,39 38,39"
+                                    style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1"/>
+
+                                    <polygon name="TRIANGLE" points="50,6, 95,95, 5,95"
+                                    style="display:none; fill:#F5F5F5; stroke:black; stroke-width:1"/>
+
+                                    <ellipse name="OVAL" cx="50" cy="50" rx="45" ry="25"
+                                    style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1" />
+
+                                    <polygon name="DIAMOND" points ="50,5 95,50 50,95 5,50"
+                                    style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1" />
+
+                                    <polygon name="RECTANGLE" points = "5,20 95,20 95,80 5,80"
+                                    style="display:none; fill:#F5F5F5; stroke-width:1; stroke:black"/>
+
+                                    <polygon name="PENTAGON" points="50,5 95,39 80,95 20,95 5,39"
+                                    style="fill:#F5F5F5;stroke:black;stroke-width:1"/>
+
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div>
+                            <span id="feedbackSpan" style="visibility: hidden">The patient received TW405!</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="scoreDiv" class="col-xs-4 text-center">
+
+                    <p><b>Current bonus:</b></p>
+                    <!-- <div id="treatmentBonusDiv" class="scoreDisplay">
+                        Treatment Bonus: $<span id="treatmentBonusSpan">1.06</span>
+                    </div>
+                    <div style="height:5px"></div>
+                    <div id="accuracyBonusDiv" class="scoreDisplay">
+                        Accuracy Bonus: $<span id="accuracyBonusSpan">0.00</span>
+                    </div>
+                    <div style="height:5px"></div> -->
+                    <div id="totalBonusDiv" class="scoreDisplay">
+                        Bonus: $<span id="totalBonusSpan">1.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- form to advance to scenario -->
+        <form id="submitForm" method="get" action="/preScenario" class="hidden">
+            <input type="submit" value="" class="hidden"/>
+        </form>
+
+
+
+    </div>
+</body>
+
+
+
+
+
+<script>
+
+// $(document).ready(function(){
+
+    var main = {
+        // main should be the overall page function, data, etc.
+
+        init: function(){
+            // variables
+            main.paradigmData = [2, -1, 3] //{{paradigmData}}
+            // main.groupData = {{practiceData}} //{{groupData}} // 0 is A, 1 is B
+            main.progress = 0
+            main.assets = 100+main.paradigmData[main.trialNumber]
+            main.accuracyBonus = 0
+            main.guesses = new Array()
+            main.attentionFails = 0 // resets every trial
+
+            // main.condition = {{condition}}
+            main.condition = "monetary" // either "combined", "monetary", or "story"
+            if(main.condition == 'monetary'){
+                // going to be four shapes: 1a,1b, 2a,2b
+                // 1a/1b are the two shape options for the given shape
+                // 2a/2b are the two shape options for the predicted shape
+
+                // main.shape1a = {{shapes}}[0]
+                // main.shape1b = {{shapes}}[1]
+                main.shape1a = 'RECTANGLE'
+                main.shape1b = 'TRIANGLE'
+                main.shape2a = 'CIRCLE'
+                main.shape2b = 'PENTAGON'
+
+                main.shapeIDs = ['SQUARE', 'CIRCLE', 'STAR', 'TRIANGLE', 'OVAL', 'DIAMOND', 'RECTANGLE', 'PENTAGON']
+
+            }
+
+            main.shapeIDs = ['SQUARE', 'CIRCLE', 'STAR', 'TRIANGLE', 'OVAL', 'DIAMOND', 'RECTANGLE', 'PENTAGON']
+
+            main.position2 = {{position2}}
+            // main.position2 = 1 // testing
+
+            // weird out of place thing that is really terrible in practice... #don'tTryThisAtHome
+            if(main.position2 == 1){ // switch left and right faces
+                $('#rightFace').html('<div id="effectiveClick" class="text-center">'+
+                    '<img src="/static/images/good.png" style="height:50px"/>'+
+                    '</div>')
+
+                $('#leftFace').html('<div id="ineffectiveClick" class="text-center">'+
+                    '<img src="/static/images/bad.png" style="height:50px"/>'+
+                    '</div>')
+                $('#effectPrompt').text('Was this patient\'s outcome BAD or GOOD?')
+            }
+
+
+            // cache DOM
+            main.cacheDOM()
+
+
+            // bind events (effect only)
+            main.bindEvents(main.progress)
+
+            // render page
+            main.render(0)
+            main.getTrialStartTime()
+        },
+
+        cacheDOM: function(){
+            this.$co = $('#containerDiv')
+
+            this.$instructionsSpan = main.$co.find('#instructionsSpan')
+
+            // this.$backButton = main.$co.find('#backButton')
+            // this.$nextButton = main.$co.find('#nextButton')
+
+            this.$next1 = main.$co.find('#next1')
+            this.$next2 = main.$co.find('#next2')
+            this.$next3 = main.$co.find('#next3')
+            this.$next4 = main.$co.find('#next4')
+
+            this.$previous1 = main.$co.find('#previous1')
+            this.$previous2 = main.$co.find('#previous2')
+            this.$previous3 = main.$co.find('#previous3')
+
+            this.$effectExample = main.$co.find('#effectExample')
+            this.$effectClickExample = main.$co.find('#effectClickExample')
+            this.$instructionsDiv = main.$co.find('#instructionsDiv')
+
+            this.$leftBorderDiv = main.$co.find('#leftBorderDiv')
+            this.$rightBorderDiv = main.$co.find('#rightBorderDiv')
+            this.$effectiveClick = main.$co.find('#effectiveClick')
+            this.$ineffectiveClick = main.$co.find('#ineffectiveClick')
+            this.$causeClick = main.$co.find('#causeClick')
+
+            this.$effectDiv = main.$co.find('#effectDiv')
+            this.$causeDiv = main.$co.find('#causeDiv')
+            this.$scoreDiv = main.$co.find('#scoreDiv')
+
+            this.$outcomeSpans = main.$co.find('span[name=outcomeSpan]')
+            this.$outcomePercentageSpan = main.$co.find('#outcomePercentageSpan')
+
+            this.$treatmentBonusDiv = main.$co.find('#treatmentBonusDiv')
+            this.$accuracyBonusDiv = main.$co.find('#accuracyBonusDiv')
+            this.$totalBonusDiv = main.$co.find('#totalBonusDiv')
+
+            this.$treatmentBonusSpan = main.$co.find('#treatmentBonusSpan')
+            this.$accuracyBonusSpan = main.$co.find('#accuracyBonusSpan')
+            this.$totalBonusSpan = main.$co.find('#totalBonusSpan')
+            this.$feedbackDiv = main.$co.find('[name="feedbackDiv"]')
+
+            this.$drugA = main.$co.find('#drugA')
+            this.$drugB = main.$co.find('#drugB')
+
+            // these are the actual svgs
+            var shape1a = '[name="'+main.shape1a+'"]'
+            this.$shape1a = $('#shape1Click').find(shape1a)
+            var shape1b = '[name="'+main.shape1b+'"]'
+            this.$shape1b = $('#shape1Click').find(shape1b)
+
+            var shape2a = '[name="'+main.shape2a+'"]'
+            this.$shape2a = $('#shape2Click').find(shape2a)
+            var shape2b = '[name="'+main.shape2b+'"]'
+            this.$shape2b = $('#shape2Click').find(shape2b)
+
+            // these are the divs (for borders)
+            this.$shape1aDiv = main.$co.find('#shape1a')
+            this.$shape1bDiv = main.$co.find('#shape1b')
+            this.$shape2aDiv = main.$co.find('#shape2a')
+            this.$shape2bDiv = main.$co.find('#shape2b')
+
+            this.$shapes = [main.$co.find('[name="SQUARE"]'), main.$co.find('[name="CIRCLE"]'),
+                main.$co.find('[name="STAR"]'), main.$co.find('[name="TRIANGLE"]'),
+                main.$co.find('[name="OVAL"]'), main.$co.find('[name="DIAMOND"]'),
+                main.$co.find('[name="RECTANGLE"]'), main.$co.find('[name="PENTAGON"]')]
+
+        },
+
+
+        render: function(stage){
+            if(main.condition == 'monetary'){
+                if(stage == 0){ // very beginning, opacity of 0.2 for the example div
+
+
+                    $('[name="story"]').hide()
+                    $('[name="monetary"]').show()
+                    $('[name="shape1a"]').text(main.shape1a)
+                    $('[name="shape1b"]').text(main.shape1b)
+                    $('[name="shape2a"]').text(main.shape2a)
+                    $('[name="shape2b"]').text(main.shape2b)
+
+                    // fill in the necessary visuals using the data
+                    if(main.paradigmData[stage] > 0){ // effective
+                        main.$outcomePercentageSpan.text('+6 cents!')
+                        main.$totalBonusSpan.text('1.06')
+
+
+                    }
+
+                    // everything opaque
+                    main.$effectDiv.css('opacity', '0.2')
+                    main.$causeDiv.css('opacity', '0.2')
+                    main.$scoreDiv.css('opacity', '0.2')
+
+
+
+                    main.$co.show()
+
+                }else if(stage == 1){
+                    // if going forward:
+                    main.$effectDiv.css('opacity', '1.0')
+
+                    // if coming backward:
+                    main.$ineffectiveClick.css('opacity', '1.0')
+                    main.removeBorder(main.$shape1aDiv)
+                    main.$causeDiv.css('opacity', '0.2')
+
+                    main.$treatmentBonusDiv.css('opacity', '1.0')
+                    main.$accuracyBonusDiv.css('opacity', '0.2')
+                    main.$totalBonusDiv.css('opacity', '0.2')
+                    main.$scoreDiv.css('opacity', '1.0')
+
+
+
+                }else if(stage == 2){
+                    main.$causeDiv.css('opacity', '1.0')
+                    main.$ineffectiveClick.css('opacity', '0.2')
+                    main.insertBorder(main.$shape1aDiv)
+
+                    main.$drugB.css('opacity', '1.0')
+                    main.removeBorder(main.$shape2aDiv)
+                    main.$feedbackDiv.text('')
+
+                    // if coming backwards
+                    main.$accuracyBonusSpan.text('0.00')
+                    main.$totalBonusSpan.text('1.06')
+                    main.$accuracyBonusDiv.css('opacity', '0.2')
+                    main.$totalBonusDiv.css('opacity', '0.2')
+
+
+
+                }else if(stage == 3){
+                    main.$drugB.css('opacity', '0.2')
+                    main.insertBorder(main.$shape2aDiv)
+                    main.$feedbackDiv.html('Correct!<br>+3 cents!')
+
+
+                    main.$accuracyBonusSpan.text('0.03')
+                    main.$totalBonusSpan.text('1.09')
+                    main.$accuracyBonusDiv.css('opacity', '1.0')
+                    main.$totalBonusDiv.css('opacity', '1.0')
+
+
+
+                }
+            }else{
+
+                if(stage == 0){ // very beginning, opacity of 0.2 for the example div
+
+                    // fill in the necessary visuals using the data
+                    if(main.paradigmData[stage] > 0){ // effective
+                        main.$outcomeSpans.html('GOOD')
+                        // main.$outcomePercentageSpan.css('color', 'green')
+                        main.$outcomePercentageSpan.text('+6 cents!')
+                        main.$totalBonusSpan.text('1.06')
+
+
+                    }
+
+                    // everything opaque
+                    main.$effectDiv.css('opacity', '0.2')
+                    main.$causeDiv.css('opacity', '0.2')
+                    main.$scoreDiv.css('opacity', '0.2')
+
+                    if(main.condition == 'monetary'){ // if monetary condition
+                        $('[name="story"]').hide()
+                        $('[name="monetary"]').show()
+                        $('[name="shape1a"]').text(main.shape1a)
+                        $('[name="shape1b"]').text(main.shape1b)
+                        $('[name="shape2a"]').text(main.shape2a)
+                        $('[name="shape2b"]').text(main.shape2b)
+                    }
+
+                    main.$co.show()
+
+
+
+
+                }else if(stage == 1){
+                    // if going forward:
+                    main.$effectDiv.css('opacity', '1.0')
+
+                    // if coming backward:
+                    main.$ineffectiveClick.css('opacity', '1.0')
+                    main.removeBorder(main.$effectiveClick)
+                    main.$causeDiv.css('opacity', '0.2')
+
+                    main.$treatmentBonusDiv.css('opacity', '1.0')
+                    main.$accuracyBonusDiv.css('opacity', '0.2')
+                    main.$totalBonusDiv.css('opacity', '0.2')
+                    main.$scoreDiv.css('opacity', '1.0')
+
+
+
+                }else if(stage == 2){
+                    main.$causeDiv.css('opacity', '1.0')
+                    main.$ineffectiveClick.css('opacity', '0.2')
+                    main.insertBorder(main.$effectiveClick)
+
+                    main.$drugB.css('opacity', '1.0')
+                    main.removeBorder(main.$drugA)
+                    main.$feedbackDiv.text('')
+
+                    // if coming backwards
+                    main.$accuracyBonusSpan.text('0.00')
+                    main.$totalBonusSpan.text('1.06')
+                    main.$accuracyBonusDiv.css('opacity', '0.2')
+                    main.$totalBonusDiv.css('opacity', '0.2')
+
+
+
+                }else if(stage == 3){
+                    main.$drugB.css('opacity', '0.2')
+                    main.insertBorder(main.$drugA)
+                    main.$feedbackDiv.html('Correct!<br>+3 cents!')
+
+
+                    main.$accuracyBonusSpan.text('0.03')
+                    main.$totalBonusSpan.text('1.09')
+                    main.$accuracyBonusDiv.css('opacity', '1.0')
+                    main.$totalBonusDiv.css('opacity', '1.0')
+
+
+
+                }
+
+
+            }
+
+        },
+
+        creditRender: function(credits){
+            // display credits div
+            if(credits % 100 == 0){
+                var displayCredits = String(credits/100) + '.00';
+            }else if(credits %10 == 0){
+                displayCredits = String(credits/100) +'0';
+            }else{
+                displayCredits = credits/100;
+            }
+            return(displayCredits);
+            // $creditSpan.html(displayCredits);
+        },
+
+        bindEvents: function(stage){
+            // main.$backButton.unbind().on('click', main.decrementInstructions)
+            // main.$nextButton.unbind().on('click', main.incrementInstructions)
+
+            if(main.condition == 'monetary'){
+                if(stage == 1){
+                    main.$shape1a.unbind().on('click', function(){
+                        // hard coding this for the tutorial page
+                        alert('Great! During the experiment, you will need to click here to indicate that Shape 1 is a RECTANGLE!')
+                    })
+                    main.$shape1b.unbind().on('click', function(){
+                        alert('Whoops! Clicking here would indicate that Shape 1 is a TRIANGLE!')
+                    })
+                    // if(main.position2 == 0){
+                    //     main.$leftBorderDiv.unbind().on('click', main.effectiveAlert)
+                    //     main.$rightBorderDiv.unbind().on('click', main.ineffectiveAlert)
+                    // }else{
+                    //     main.$rightBorderDiv.unbind().on('click', main.effectiveAlert)
+                    //     main.$leftBorderDiv.unbind().on('click', main.ineffectiveAlert)
+                    //
+                    // }
+                }else{
+                    main.$shape1a.unbind()
+                    main.$shape1b.unbind()
+                }
+
+                if(stage == 2){
+                    main.$shape2a.unbind().on('click', function(){
+                        // hard coding this for the tutorial page
+                        alert('Great! During the experiment, clicking here is a guess that Shape 2 is a CIRCLE.')
+                    })
+                    main.$shape2b.unbind().on('click', function(){
+                        alert('Whoops! During the experiment, clicking here is a guess that Shape 2 is a PENTAGON.')
+                    })
+                }else{
+                    main.$shape2a.unbind()
+                    main.$shape2b.unbind()
+                }
+
+                main.$next1.unbind().on('click', main.incrementInstructions)
+                main.$next2.unbind().on('click', main.incrementInstructions)
+                main.$next3.unbind().on('click', main.incrementInstructions)
+                main.$next4.unbind().on('click', main.mySubmit)
+
+                main.$previous1.unbind().on('click', main.decrementInstructions)
+                main.$previous2.unbind().on('click', main.decrementInstructions)
+                main.$previous3.unbind().on('click', main.decrementInstructions)
+                // main.$drugA.unbind().on('click', main.drugA_Function)
+                // main.$drugB.unbind().on('click', main.drugB_Function)
+
+                // if(main.renderTracker == 4){
+                //     $nextButton.unbind().on('click', main.mySubmit)
+                // }else{
+                //     $nextButton.unbind().on('click', main.incrementInstructions)
+                // }
+            }else{
+                if(stage == 1){
+                    main.$effectiveClick.unbind().on('click', main.effectiveAlert)
+                    main.$ineffectiveClick.unbind().on('click', main.ineffectiveAlert)
+                    if(main.position2 == 0){
+                        main.$leftBorderDiv.unbind().on('click', main.effectiveAlert)
+                        main.$rightBorderDiv.unbind().on('click', main.ineffectiveAlert)
+                    }else{
+                        main.$rightBorderDiv.unbind().on('click', main.effectiveAlert)
+                        main.$leftBorderDiv.unbind().on('click', main.ineffectiveAlert)
+
+                    }
+                }else{
+                    main.$effectiveClick.unbind()
+                    main.$ineffectiveClick.unbind()
+                }
+
+                if(stage == 2){
+                    main.$drugA.unbind().on('click', main.drugA_Click)
+                    main.$drugB.unbind().on('click', main.drugB_Click)
+                }else{
+                    main.$drugA.unbind()
+                    main.$drugB.unbind()
+                }
+
+                main.$next1.unbind().on('click', main.incrementInstructions)
+                main.$next2.unbind().on('click', main.incrementInstructions)
+                main.$next3.unbind().on('click', main.incrementInstructions)
+                main.$next4.unbind().on('click', main.mySubmit)
+
+                main.$previous1.unbind().on('click', main.decrementInstructions)
+                main.$previous2.unbind().on('click', main.decrementInstructions)
+                main.$previous3.unbind().on('click', main.decrementInstructions)
+                // main.$drugA.unbind().on('click', main.drugA_Function)
+                // main.$drugB.unbind().on('click', main.drugB_Function)
+
+                // if(main.renderTracker == 4){
+                //     $nextButton.unbind().on('click', main.mySubmit)
+                // }else{
+                //     $nextButton.unbind().on('click', main.incrementInstructions)
+                // }
+            }
+
+        },
+
+        incrementInstructions: function(){
+            main.progress += 1
+            main.render(main.progress)
+            main.bindEvents(main.progress)
+        },
+
+        decrementInstructions: function(){
+            if(main.progress > 0){
+                main.progress -= 1
+            }
+            main.render(main.progress)
+            main.bindEvents(main.progress)
+
+        },
+
+        effectiveAlert: function(){
+            alert('Great! During the experiment, you will need to click here to indicate that the outcome was GOOD!')
+        },
+
+        ineffectiveAlert: function(){
+            alert('Whoops! That face would indicate that the outcome was BAD!')
+        },
+
+        drugA_Click: function(){
+            alert('Great! During the experiment, clicking here is a guess that the patient received TW405.')
+        },
+
+        drugB_Click: function(){
+            alert('Whoops! During the experiment, clicking here is a guess that the patient received HL376.')
+        },
+
+        instructionsVisualReset: function(){
+
+        },
+
+        newTrial: function(){
+            // new trial:
+            main.trialNumber += 1
+            main.assets += main.paradigmData[main.trialNumber]
+            main.render('reset')
+            main.getTrialStartTime()
+            effect.bindEvents()
+            main.attentionFails = 0
+        },
+
+        getTrialStartTime: function(){
+            var trialDate = new Date()
+            main.trialStartTime = trialDate.getTime()
+        },
+
+        mySubmit: function(){
+            $('#submitForm').submit()
+
+        },
+
+        startTimer: function(){
+            start = new Date();
+            return start.getTime();
+        },
+
+        insertBorder: function(object){
+            object.css('border', '5px solid grey')
+            object.css('-moz-border-radius', '20px')
+            object.css('border-radius', '15px')
+        },
+
+        removeBorder: function(object){
+            object.css('border', '5px solid #F5F5F5')
+        }
+
+    }
+
+
+
+
+
+    main.init()
+
+
+
+
+// })
+ </script>
+{% endblock %}

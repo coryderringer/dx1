@@ -1,0 +1,62 @@
+{% extends "_base.htm" %}
+
+{% block title %}
+	Data Viewer
+{% endblock %}
+
+{% block bodycontent %}
+<head>
+</head>
+<body>
+
+
+<!-- ########## Data For Each Scenario ########## -->
+<div class="container">
+	ScenarioData:
+	<table class="table td">
+
+		<!-- Header Row -->
+		<tr>
+			<th>Usernum</th>
+			<th>Participant ID</th>
+			<th>Scenario</th>
+			<th>Trial</th>
+			<th>Guess</th>
+			<th>Correct</th>
+			<th>Time</th>
+			<th>Attention Fails</th>
+			<th>Outcome</th>
+			<th>Reloads</th> <!-- this codes back-and-forth and refresh in the same way -->
+
+		</tr>
+
+		<!-- Subsequent Rows -->
+		{% for i in d %}
+		<tr>
+		<th>{{ i.usernum }}</th>
+		<th>{{ i.account }}</th>
+		<th>{{ i.scenario }}</th>
+		<th>{{ i.trialNumber }}</th>
+		<th>{{ i.trialGuess }}</th>
+		<th>{{ i.trialCorrect }}</th>
+		<th>{{ i.trialTime }}</th>
+		<th>{{ i.attentionFails }}</th>
+		<th>{{ i.profitImpact }}</th>
+		<th>{{ i.reloads }}</th>
+
+		</tr>
+		{% endfor %}
+	</table>
+</div>
+
+
+
+
+
+</body>
+{% endblock %}
+
+
+
+
+

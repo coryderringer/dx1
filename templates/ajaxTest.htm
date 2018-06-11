@@ -1,0 +1,80 @@
+{% extends "_base.htm" %}
+
+{% block title %}
+	Ajax Data
+{% endblock %}
+
+{% block bodycontent %}
+<head>
+</head>
+<body>
+
+
+<!-- ########## Data For Each Scenario ########## -->
+<div class="container">
+	Final Judgment Data:
+
+	<table class="table td">
+
+	<!-- Header Row -->
+	<tr>
+		<th>Usernum</th>
+		<th>Account</th>
+		<th>Scenario</th>
+		<th>Condition</th>	<!-- "positive" means rare positive -->
+		<th>Left Drug Name</th>
+		<th>Right Drug Name</th>
+		<th>Left Drug Rarity</th>
+		<th>Right Drug Rarity</th>
+		<th>Left Drug Color</th>
+		<th>Right Drug Color</th>
+		<th>Left Drug Bad Outcomes</th>
+		<th>Right Drug Bad Outcomes</th>
+		<th>Good Outcomes Left</th>
+		<th>Good Outcomes Right</th>
+		<th>Bad Outcomes Left</th>
+		<th>Bad Outcomes Right</th>
+		<th>Causal Judgment</th>
+		<th>Judgment Order</th>
+	
+	</tr>
+
+	<!-- Subsequent Rows -->
+	{% for i in t %}
+	<tr>
+		<th> {{ i.usernum }}</th> 
+		<th> {{ i.account }}</th> 
+		<th> {{ i.scenario }}</th> 
+		<th> {{ i.condition }}</th> 
+		<th> {{ i.leftDrugName }}</th> 
+		<th> {{ i.rightDrugName }}</th> 
+		<th> {{ i.leftDrugRarity }}</th> 
+		<th> {{ i.rightDrugRarity }}</th> 
+		<th> {{ i.leftDrugColor }}</th> 
+		<th> {{ i.rightDrugColor }}</th> 
+		<th> {{ i.leftNumberBad }}</th> 
+		<th> {{ i.rightNumberBad }}</th> 
+		<th> {{ i.goodOutcomesLeft }}</th> 
+		<th> {{ i.goodOutcomesRight }}</th> 
+		<th> {{ i.badOutcomesLeft }}</th> 
+		<th> {{ i.badOutcomesRight }}</th> 
+		<th> {{ i.causalJudgment }}</th>
+		<th> {{ i.judgmentOrder }}</th>
+
+
+	</tr>
+	{% endfor %}
+	</table>
+</div>
+
+
+
+
+
+</body>
+{% endblock %}
+
+
+
+
+

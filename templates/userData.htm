@@ -1,0 +1,57 @@
+{% extends "_base.htm" %}
+
+{% block title %}
+	User Data
+{% endblock %}
+
+{% block bodycontent %}
+<head>
+</head>
+<body>
+
+
+<!-- ########## Data For Each User ########## -->
+<div class="container">
+	User Data:
+	<table class="table-bordered td">
+
+		<!-- Header Row -->
+		<tr>
+			<th>Usernum</th>
+			<th>Participant ID</th>
+			<th>Browser</th>
+			<th>Bonus</th>
+			<th>Sex</th>
+			<th>Ethnicity</th>
+			<th>Race</th>
+			<th>Age</th>
+			<th>Test Order</th>
+
+		</tr>
+
+		<!-- Subsequent Rows -->
+		{% for i in u %}
+		<tr>
+			<th>{{ i.usernum }}</th>
+			<th>{{ i.account }}</th>
+			<th>{{ i.browser }}</th>
+			<th>{{ i.bonusAmt }}</th>
+			<th>{{ i.sex }}</th>
+			<th>{{ i.ethnicity }}</th>
+			<th>{{ i.race }}</th>
+			<th>{{ i.age }}</th>
+			<th>{{ i.testOrder }}</th>
+		</tr>
+		{% endfor %}
+	</table>
+	
+</div>
+
+
+</body>
+{% endblock %}
+
+
+
+
+

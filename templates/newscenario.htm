@@ -1,0 +1,174 @@
+{% extends "_base.htm" %}
+
+{% block title %}
+	New Scenario!
+{% endblock%}
+
+{% block bodycontent %}
+
+
+<body data-spy="scroll" data-target=".navbar" data-offset="120">
+    <!-- Navbar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <p class="navbar-text">Medication Task</p> 
+            </div>
+        </div>
+    </nav>
+    
+    <div id="containerDiv" style="width:700px; display: none" class="container well">
+		<h2>New Scenario!</h2>
+		
+		<p>Well done! You earned <span name="bonusSpan">bonusAmount</span> in bonuses from that round. Now we will start a new round. You will see your bonus amount reset to $1.00 for the second round, but your <b>final bonus</b> will be determined by adding your bonus from the first round (<span name="bonusSpan">bonusAmount</span>) to the amount you earn in this round.
+
+		<p>You will now see data from <b>48 new patients</b> being treated for a different disease: <span name="disease">Disease 2</span>. This disease is <b><span id="freq1">often</span> treated with <span name="drugA_Name">drug A</span>, but is <span id="freq2">sometimes</span> treated with <span name="drugB_Name">drug B</span></b>. Most patients have <span id="outcome"></span> treatment outcomes for this disease.</p>
+		<br>
+		<div id="causeDiv" class = "text-center">
+            <p id="causePrompt">To begin, click the drug below that is <b>more often</b> used to treat <span name="disease"></span>.</p> 
+            <div class = "row" id="pillDiv" style="height:75px"> 
+                <div id="drugA" class="col-xs-5 text-center">
+                    <p><span name="drugA_Name">Drug A</span></p>
+                    <img id="leftDrug" src="/static/images/LightBlue.png" style="width:100px"/>
+                </div>
+                <div class = "col-xs-2 text-center">
+                    <div style="height:10px"></div>
+                    <div id="feedbackDiv" class="text-center" style="font-size: 10pt; padding:0px; height:75px"></div>
+                </div>
+                <div id="drugB" class="col-xs-5 text-center">
+                    <p><span name="drugB_Name">Drug B</span></p>
+                    <img id="rightDrug" src="/static/images/DarkBlue.png" style="width:100px"/>
+                </div>
+            </div>
+        </div>
+
+		<form id="submitForm" method="get" action="/scenario">
+	    	<input type="submit" value="" class="hidden"/>
+		</form>
+
+		
+	</div>
+
+</body>
+
+<script>
+
+
+
+// need to tell them what their current bonus amount is, and that their current amount will be added to the amount from the second scenario at the end
+
+$(document).ready(function(){
+
+	var main = {
+		init: function(){
+			main.bonus = {{bonus}}
+			main.disease = '{{disease}}'
+
+			main.position = {{position}}
+			// main.position = 1 // testing
+			// console.log(main.position)
+			main.freqArrange()
+
+			main.drugNames = ['XF702', 'BT339', 'GS596', 'PR242']
+	        main.drugs = {{drugs}}
+
+	        this.colors = {{drugColors}}
+            
+            main.drugColors = ['/static/images/LightBlue.png', 
+                '/static/images/DarkBlue.png',
+                '/static/images/Orange.png',
+                '/static/images/Purple.png']
+
+            this.leftColor = String(main.drugColors[main.colors[2]])
+            this.rightColor = String(main.drugColors[main.colors[3]])
+	        
+	        main.drugA_Name = String(main.drugNames[main.drugs[0]])
+	        main.drugB_Name = String(main.drugNames[main.drugs[1]])
+
+			main.cacheDOM()
+			main.bindEvents()
+			main.render()
+		},
+		
+		cacheDOM: function(){
+			main.$co = $('#containerDiv')
+			main.$diseaseName = $('[name="disease"]')
+			main.$drugA = $('[name="drugA_Name"]')
+			main.$drugB = $('[name="drugB_Name"]')
+			main.$bonusSpans = main.$co.find('span[name=bonusSpan]')
+			main.$outcomeSpan = $('#outcome')
+		},
+		render: function(){
+			main.$bonusSpans.text('$'+main.creditRender(main.bonus))
+			main.$diseaseName.text(main.disease)
+			
+			main.$drugA.text(main.drugA_Name)
+			main.$drugB.text(main.drugB_Name)
+
+			if('{{condition}}' == 'negative'){
+				main.$outcomeSpan.text('GOOD')
+			}else{
+				main.$outcomeSpan.text('BAD')
+			}
+
+			$('#leftDrug').attr('src', main.leftColor)
+			$('#rightDrug').attr('src', main.rightColor)
+
+			main.$co.show()
+		},
+		creditRender: function(credits){
+		    // display credits div
+		    if(credits % 100 == 0){
+		        var displayCredits = String(credits/100) + '.00';
+		    }else if(credits %10 == 0){
+		        displayCredits = String(credits/100) +'0'; 
+		    }else{
+		        displayCredits = credits/100;
+		    }
+		    return(displayCredits);
+		    // $creditSpan.html(displayCredits);
+		},
+
+		bindEvents: function(){
+			if(main.position === 0){ // common on left
+                $('#drugA').unbind().on('click', function(){
+                    $('#submitForm').submit()
+                    // console.log('yep')
+                })
+                $('#drugB').unbind().on('click', function(){  
+                    // alert('right click')
+                    // console.log('nope')
+                })
+
+            }else if(main.position === 1){
+                $('#drugA').unbind().on('click', function(){
+                    // alert('left click')
+                    // console.log('nope')
+                })
+                $('#drugB').unbind().on('click', function(){  
+                    // alert('right click')
+                    $('#submitForm').submit()
+                    // console.log('yep')
+                })
+            }
+		},
+
+
+		freqArrange: function(){
+			if(main.position == 1){
+				$('#freq1').text('sometimes')
+				$('#freq2').text('more often')
+			}
+		}
+
+
+	}
+
+
+
+	main.init()
+})
+</script>
+
+
+{% endblock %}
