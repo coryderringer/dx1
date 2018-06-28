@@ -35,14 +35,14 @@
                         <!-- find a place for the patient impact info here -->
                         <div>
                             <p name="story">The patient's outcome was <span name="outcomeSpan">BAD</span>.</p>
-                            <p name="monetary">Shape 1 is a <span id="var2_feedback">SHAPE NAME</span>.</p>
+                            <p name="monetary">Shape 1: <span id="var2_feedback">SHAPE NAME</span>.</p>
                         </div>
 
                         <div class="text-center" style="height:100px; border-bottom: 1px solid grey"> <!-- this is the div that we want split up vertically -->
                             <div class="col-xs-4"></div>
                             <div class="col-xs-4 text-center">
                                 <div id="var2_outcome">
-                                    <img id"var2_outcome_Image" src="/static/images/good.png" style="height:70px"/>
+                                    <img id="var2_outcome_image" src="/static/images/blank.png" style="height:70px"/>
                                 </div>
 
                             </div>
@@ -56,7 +56,7 @@
 
                         <p id="v2_Prompt">
                             <span name="story">Was the patient's outcome <span name="var2a">GOOD</span> or <span name="var2b">BAD</span>?</span>
-                            <span name="monetary">Is Shape 1 a <span name="var2a">SHAPE NAME 1</span> or a <span name="var2b">SHAPE NAME 2</span>?</span>
+                            <span name="monetary">Shape 1: <span name="var2a">SHAPE NAME 1</span> or <span name="var2b">SHAPE NAME 2</span>?</span>
                         </p>
 
 
@@ -64,14 +64,14 @@
 
                             <div id="var2a" class="col-xs-5" style="height:100px">
                                 <div id="var2a_Click" class="text-center" style="height:100px">
-                                    <img name="var2a_image" src="/static/images/bad.png" style="height:66%; position:relative; top:15px"/>
+                                    <img name="var2a_image" src="/static/images/blank.png" style="height:66%; position:relative; top:15px"/>
                                 </div>
                             </div>
                             <div id="leftBorderDiv" class="col-xs-1" style="border-right: 1px solid black; height:50px"></div>
                             <div id="rightBorderDiv" style="height:50px" class="col-xs-1"></div>
                             <div id="var2b" class="col-xs-5">
                                 <div id="var2b_Click" class="text-center" style="height:100px">
-                                    <img name="var2b_image" src="/static/images/good.png" style="height:66%; position:relative; top:15px"/>
+                                    <img name="var2b_image" src="/static/images/blank.png" style="height:66%; position:relative; top:15px"/>
                                 </div>
                             </div>
 
@@ -81,12 +81,12 @@
                     <div id="causeDiv" class = "text-center">
                         <p id="v1_Prompt">
                             <span name="story">Guess whether the patient received <span name="var1a">Drug A</span> or <span name="var1b">Drug B</span>?</span>
-                            <span name="monetary">Guess whether Shape 2 is a <span name="var1a">SHAPE NAME 1</span> or <span name="var1b">SHAPE NAME 2</span>?</span>
+                            <span name="monetary">Guess Shape 2: <span name="var1a">SHAPE NAME 1</span> or <span name="var1b">SHAPE NAME 2</span>?</span>
                         </p>
                         <div class = "row" id="pillDiv" style="height:75px">
                             <div id="var1a" class="col-xs-5 text-center" style="height:100px">
                                 <p><span name="var1a">Drug A</span></p>
-                                <img name="var1b_image" src="/static/images/LightBlue.png" style="width:100px"/>
+                                <img name="var1a_image" src="/static/images/blank.png" style="width:100px"/>
                             </div>
                             <div class = "col-xs-2 text-center">
                                 <div style="height:10px"></div>
@@ -94,7 +94,7 @@
                             </div>
                             <div id="var1b" class="col-xs-5 text-center" style="height:100px">
                                 <p><span name="var1b">Drug B</span></p>
-                                <img name="var1b_image" src="/static/images/DarkBlue.png" style="width:100px"/>
+                                <img name="var1b_image" src="/static/images/blank.png" style="width:100px"/>
 
                             </div>
                         </div>
@@ -141,8 +141,8 @@
             <input id="Submit" onclick="mySubmit()" value="Submit" type="hidden">
         </form>
 
-        <!-- form to advance to scenario -->
-        <form id="submitForm" method="post" action="/scenario" class="hidden">
+        <!-- form to advance to final judgments -->
+        <form id="submitForm" method="get" action="/finalJudgment" class="hidden">
             <input type="submit" value="" class="hidden"/>
         </form>
 
@@ -169,20 +169,30 @@
 
 // $(document).ready(function(){
 
-
+    // document.write('{{usernum}}'+'<br>')
+    // document.write('{{condition}}'+'<br>')
+    // document.write('{{var1_Names}}'+'<br>')
+    // document.write('{{var2_Names}}'+'<br>')
+    // document.write('{{disease}}'+'<br>')
+    // document.write('{{drugColors}}'+'<br>')
+    // document.write('{{v1_Data}}'+'<br>')
+    // document.write('{{v2_Data}}'+'<br>')
+    // document.write('{{testOrder}}'+'<br>')
+    // document.write('{{trialGuesses}}'+'<br>')
+    // document.write('{{rewardAmount}}'+'<br>')
+    //
 
     var main = {
-        // main should be the tbt part.
 
         init: function(){
+            // MAKE SURE "0" in the v2 data is always bad
+
             // variables
             // main.trialNumber = {{trialNumber}}
-            main.trialNumber = 1
+            main.trialNumber = 0
 
             main.condition = '{{condition}}' // story, monetary, combined
             // main.condition = 'story' // testing
-
-
 
             if(main.condition == 'story'){
                 main.rewardAmount = 0
@@ -190,19 +200,9 @@
                 main.rewardAmount = {{rewardAmount}}
             }
 
-            main.position1 = {{position1}}
-            main.frequency1 = {{frequency1}}
-
-            main.position2 = {{position2}}
-            main.frequency2 = {{frequency2}}
-
             // testing:
-            main.position1 = 0
-            main.frequency1 = 0
-            main.position2 = 0
-            main.frequency2 = 0
-
-
+            main.position2 = {{position2}} // if 0, left is bad. if 1, left is good
+            main.frequency2 = {{frequency2}} // if 0, mostly bad
 
             if(main.position2 === main.frequency2){
                 main.valence = 'rare-positive'
@@ -218,111 +218,112 @@
                 main.reloads = {{reloads}}+1
             }
 
-            //console.log('TRIALNUMBER: '+String(main.trialNumber))
-            // main.trialNumber = 47 // testing
-
             main.lengthOfData = 48
 
             if(main.trialNumber >= main.lengthOfData){
-                test.init()
+                main.mySubmit()
             }
 
             main.accuracyBonusAmt = 3
             main.drugNames = ['XF702', 'BT339', 'GS596', 'PR242']
-            main.drugs = {{drugs}}
+            // main.drugs = {{drugs}}
 
-            main.shapeNames = ['SQUARE', 'CIRCLE', 'STAR', 'TRIANGLE', 'OVAL', 'DIAMOND', 'RECTANGLE', 'PENTAGON']
-            main.shapes = {{shapeNames}}
+            // main.shapes = {{shapeNames}}
 
-            main.shapeSources = ['/static/images/square.png',
+            main.imageSources = ['/static/images/square.png',
                 '/static/images/circle.png',
                 '/static/images/star.png',
                 '/static/images/triangle.png',
                 '/static/images/oval.png',
                 '/static/images/diamond.png',
                 '/static/images/rectangle.png',
-                '/static/images/pentagon.png']
+                '/static/images/pentagon.png',
+                '/static/images/good.png',
+                '/static/images/bad.png',
+
+                '/static/images/lightblue.png',
+                '/static/images/darkblue.png',
+                '/static/images/orange.png',
+                '/static/images/purple.png']
+
+            main.var1a = '{{var1_Names_Left}}'
+            main.var1b = '{{var1_Names_Right}}'
+            main.var2a = '{{var2_Names_Left}}'
+            main.var2b = '{{var2_Names_Right}}'
 
 
-            if(main.condition == 'monetary'){
-                main.var1a = String(main.shapeNames[main.shapes[0]])
-                main.var1b = String(main.shapeNames[main.shapes[1]])
-                main.var2a = String(main.shapeNames[main.shapes[2]])
-                main.var2b = String(main.shapeNames[main.shapes[3]])
+            console.log(main.var1a)
+            console.log(main.var1b)
+            console.log(main.var2a)
+            console.log(main.var2b)
 
-                main.var1a_img_src = main.shapeSources[main.shapes[0]]
-                main.var1b_img_src = main.shapeSources[main.shapes[1]]
-                main.var2a_img_src = main.shapeSources[main.shapes[2]]
-                main.var2b_img_src = main.shapeSources[main.shapes[3]]
+            // console.log(main.shapeSources[0].split('/')[3].split('.')[0])
 
-            }else{
-                // drug = ['blue', 'green', 'orange', 'purple']
-                // drugColors = [0,1,2,3]
-                main.colors = {{drugColors}} // this is the order from the backend, something like [3,1]
+            for(var i = 0; i < main.imageSources.length; i++){
+                // 2a
+                if(main.imageSources[i].split('/')[3].split('.')[0] === main.var2a.toLowerCase()){
+                    main.var2a_img_src = main.imageSources[i]
+                }
+                // 2b
+                if(main.imageSources[i].split('/')[3].split('.')[0] === main.var2b.toLowerCase()){
+                    main.var2b_img_src = main.imageSources[i]
+                }
 
-                main.drugColors = ['/static/images/LightBlue.png',
-                    '/static/images/DarkBlue.png',
-                    '/static/images/Orange.png',
-                    '/static/images/Purple.png']
+                if(main.condition === 'monetary'){ // only for shapes
 
-                main.var1a_img_src = String(main.drugColors[main.colors[0]])
-                main.var1b_img_src = String(main.drugColors[main.colors[1]])
+                    // 1a
+                    if(main.imageSources[i].split('/')[3].split('.')[0] === main.var1a.toLowerCase()){
+                        main.var1a_img_src = main.imageSources[i]
+                    }
+                    // 1b
+                    if(main.imageSources[i].split('/')[3].split('.')[0] === main.var1b.toLowerCase()){
+                        main.var1b_img_src = main.imageSources[i]
+                    }
+                }else{ // colors
+                    // 1a
+                    if(main.imageSources[i].split('/')[3].split('.')[0] === '{{drugColor_Left}}'){
+                        main.var1a_img_src = main.imageSources[i]
+                    }
 
-                main.var1a = String(main.drugNames[main.drugs[0]])
-                main.var1b = String(main.drugNames[main.drugs[1]])
-
-                // default for "bad" is on the left
-                if(main.position2 == 0){
-                    main.var2a = 'BAD'
-                    main.var2b = 'GOOD'
-
-                    main.var2a_img_src = '/static/images/bad.png'
-                    main.var2b_img_src = '/static/images/good.png'
-                }else{
-                    main.var2a = 'GOOD'
-                    main.var2b = 'BAD'
-
-                    main.var2a_img_src = '/static/images/good.png'
-                    main.var2b_img_src = '/static/images/bad.png'
+                    if(main.imageSources[i].split('/')[3].split('.')[0] === '{{drugColor_Right}}'){
+                        main.var1b_img_src = main.imageSources[i]
+                    }
                 }
             }
 
-            // main.shape1a = main.shapeNames[main.shapes[0]]
-			// main.shape1b = main.shapeNames[main.shapes[1]]
-			// main.shape2a = main.shapeNames[main.shapes[2]]
-			// main.shape2b = main.shapeNames[main.shapes[3]]
+            console.log(main.var1a_img_src)
+            console.log(main.var1b_img_src)
+            console.log(main.var2a_img_src)
+            console.log(main.var2b_img_src)
 
 
-            main.paradigmData = {{v2_Data}}
+            // main.var1a = String(main.drugNames[main.drugs[0]])
+            // main.var1b = String(main.drugNames[main.drugs[1]])
 
 
-            // main.v1_Position denotes which drug is on the left vs right.
-            // 0 is the default; "Drug A" is on the left (whichever drug that is)
-            // 5/15/18 YOU ARE HERE
 
+            // main.position1 denotes whether the left and right drug/shape (var1) are switched (1) or not (0).
+            // main.frequency1 denotes whether the left (0) or right (1) drug is more common.
 
-            // main.position is complicated...In both of the data files, 0 is the most common drug ID (Drug A). If main.position is zero, 1 becomes the most common drug ID in the data. Either way, we think of "Drug A" as the common drug, in keeping with "Group A" in the literature. What I've done here (might be a mistake, because it's a little confusing) is to always call the drug on the left side of the screen "Drug A". So Drug A here (and in the final judgment page) is just the drug that was on the left, NOT the most common drug. If main.position = 0, the drug on the left is more common. If main.position = 1, the drug on the right is more common.
-
-            // main.position = 1 // testing
-            // main.v1_Data = main.dataSetup(main.position1) // I don't think we need this anymore
+            main.v1_Data = {{v1_Data}}
+            main.v2_Data = {{v2_Data}}
 
             main.scenario = {{scenario}}
 
             main.assets = 100
 
-            if(main.valence == 'rare-positive'){
-                if(main.paradigmData[main.trialNumber] === 0){ // common outcome
-                    main.assets -= main.rewardAmount
-                }else{
-                    main.assets += main.rewardAmount
-                }
-            }else if(main.valence == 'rare-negative'){
-                if(main.paradigmData[main.trialNumber] === 0){ // common outcome
-                    main.assets += main.rewardAmount
-                }else{
-                    main.assets -= main.rewardAmount
-                }
+            console.log('')
+            console.log(String(main.position2)+ ' (if 0, 0 in data is bad, 1 is good)')
+            console.log('data: '+String(main.v2_Data[main.trialNumber]))
+
+
+            // don't know if this is the best place for this (testing)
+            if(main.v2_Data[main.trialNumber] === 0){ // common outcome
+                main.assets -= main.rewardAmount
+            }else{
+                main.assets += main.rewardAmount
             }
+
 
             main.accuracyBonus = 0
             main.guesses = new Array()
@@ -330,8 +331,7 @@
 
 
 
-            console.log('position 1: '+String(main.position1))
-            console.log('frequency 1: '+String(main.frequency1))
+
             console.log('position 2: '+String(main.position2))
             console.log('frequency 2: '+String(main.frequency2))
 
@@ -370,29 +370,13 @@
             main.getTrialStartTime()
         },
 
-        dataSetup: function(position){
-            // This function reverses the left/right drug positions on the screen if necessary.
-            // It reverses the positions by simply switching all of the group IDs.
-            // So on a given trial, if a patient would usually get Drug A (0), they get Drug B (1)
-
-            if(position === 0){
-                return({{v1_Data}})
-            }else{
-                var dummy = {{v1_Data}}
-                var v1_Data = new Array()
-                // reverse code group data
-                for(var i = 0; i < dummy.length; i++){
-                    if(dummy[i] === 1){
-                        v1_Data.push(0)
-                    }else{
-                        v1_Data.push(1)
-                    }
-                }
-                return(v1_Data)
-            }
-        },
 
         cacheDOM: function(){
+
+
+
+
+
             // this function saves the DOM searches, so we only have to search the DOM once.
 
             main.$co = $('#containerDiv') // container div
@@ -476,7 +460,14 @@
             main.$var2aDiv = main.$co.find('#var2a')
             main.$var2bDiv = main.$co.find('#var2b')
 
+            // images
+            main.$var1a_image = main.$co.find('[name="var1a_image"]')
+            main.$var1b_image = main.$co.find('[name="var1b_image"]')
+            main.$var2a_image = main.$co.find('[name="var2a_image"]')
+            main.$var2b_image = main.$co.find('[name="var2b_image"]')
+
             // svgs
+            // now that we're using images this might be unnecessary code
             if(main.position1 === 1){
 				main.$shape1a = main.$var1aDiv.find('[name="'+main.var1b+'"]')
 				main.$shape1b = main.$var1bDiv.find('[name="'+main.var1a+'"]')
@@ -527,14 +518,6 @@
             main.$var2a_Spans.text(String(main.var2a))
             main.$var2b_Spans.text(String(main.var2b))
 
-            main.$shape1a.show()
-            main.$shape1b.show()
-            main.$shape2a.show()
-            main.$shape2b.show()
-
-            main.$leftDrug.attr('src', main.var1a_img_src)
-            main.$rightDrug.attr('src', main.var1b_img_src)
-
 
             if(stage == 'reset'){ // new trial
                 ////// console.log('render reset')
@@ -547,11 +530,26 @@
                 main.removeBorder(main.$var2a_Click)
                 main.removeBorder(main.$var2b_Click)
 
+                // story only
+                if(main.condition === 'story'){
+                    main.$outcomePercentageSpan.hide()
+                }
+
                 // effect div
                 main.$v2_Prompt.css('opacity', '1.0')
                 main.$var2a_Click.css('opacity', '1.0')
                 main.$var2b_Click.css('opacity', '1.0')
 
+                if(main.condition == 'monetary'){
+                    main.$var1a_image.attr('src', main.var1a_img_src).css('width', '55px')
+                    main.$var1b_image.attr('src', main.var1b_img_src).css('width', '55px')
+                }else{
+                    main.$var1a_image.attr('src', main.var1a_img_src).css('width', '100px')
+                    main.$var1b_image.attr('src', main.var1b_img_src).css('width', '100px')
+                }
+
+                main.$var2a_image.attr('src', main.var2a_img_src)
+                main.$var2b_image.attr('src', main.var2b_img_src)
 
 
                 // cause div
@@ -562,83 +560,47 @@
                 main.$feedbackDiv.css('visibility', 'hidden')
                 main.$feedbackButtonDiv.css('visibility', 'hidden')
 
-                // SLIDERS
-                // main.$leftRange.css('opacity', '1.0')
-                // main.$rightRange.css('opacity', '1.0')
 
-                console.log(main.paradigmData[main.trialNumber])
-                if(main.paradigmData[main.trialNumber] > 0){ // if paradigmData = 1 (rare), it's the left value, unless position2 = 1
-                    main.$outcomeB.hide()
-                    main.$outcomeA.show()
-                    $('#var2_feedback').text(main.var2a)
-                    main.$patientImpact.text('+'+main.paradigmData[main.trialNumber]+ ' cents!')
-                    $('#var2_outcome').children('img').attr('src', '/static/images/good.png')
-                    // main.$ineffectiveEmoji.hide()
-                    // main.$effectiveEmoji.show()
+                console.log('outcome: '+main.v2_Data[main.trialNumber])
+                // 0 is always bad
+                // if position2 === 0, left is bad, and 0 is left
+                // don't have to worry about frequency2 *visually*; it's just about rarity (done in Python)
 
-                }else{
-                    main.$outcomeA.hide()
-                    main.$outcomeB.show()
-                    $('#var2_feedback').text(main.var2b)
-                    main.$patientImpact.text(main.paradigmData[main.trialNumber]+' cents!')
-                    $('#var2_outcome').children('img').attr('src', '/static/images/bad.png')
-                    // main.$effectiveEmoji.hide()
-                    // main.$ineffectiveEmoji.show()
+                if(main.position2 === 0){ // left is bad (0 is always bad)
+                    if(main.v2_Data[main.trialNumber] > 0){ // good outcome, so right image
+                        $('#var2_outcome_image').attr('src', main.var2b_img_src)
+                        $('#var2_feedback').text(main.var2b)
+                        main.$outcomeSpans.text('GOOD')
+                        main.$outcomePercentageSpan.text('+6 cents!')
 
-
-                }
-                // outcome description
-                if(main.frequency2 === 0){
-                    // If main.frequency2 == 0, the left side is common (data[trialnumber] == 0)
-                    if(main.position2 === 0){ // if position2 is 0, the left side is bad
-                        if(main.paradigmData[main.trialNumber] === 0){ // common
-                            main.$outcomeSpans.text('BAD')
-                            main.$outcomePercentageSpan.text('-6 cents!')
-                        }else{ // rare
-                            main.$outcomeSpans.text('GOOD')
-                            main.$outcomePercentageSpan.text('+6 cents!')
-                        }
-                    }else if(main.position2 === 1){
-                        // f2 = 0, p2 = 1
-                        if(main.paradigmData[main.trialNumber] === 0){ // common
-                            main.$outcomeSpans.text('GOOD')
-                            main.$outcomePercentageSpan.text('+6 cents!')
-                        }else{ // rare
-                            main.$outcomeSpans.text('BAD')
-                            main.$outcomePercentageSpan.text('-6 cents!')
-                        }
-
+                    }else{ // bad outcome, so left image
+                        $('#var2_outcome_image').attr('src', main.var2a_img_src)
+                        $('#var2_feedback').text(main.var2a)
+                        main.$outcomeSpans.text('BAD')
+                        main.$outcomePercentageSpan.text('-6 cents!')
                     }
-                }else if(main.frequency2 === 1){
-                    // f2 = 1, p2 = 0
-                    if(main.position2 === 0){ // if position2 is 0, the left side is bad
-                        if(main.paradigmData[main.trialNumber] === 0){ // common
-                            main.$outcomeSpans.text('GOOD')
-                            main.$outcomePercentageSpan.text('+6 cents!')
-                        }else{ // rare
-                            main.$outcomeSpans.text('BAD')
-                            main.$outcomePercentageSpan.text('-6 cents!')
-                        }
-                    }else if(main.position2 === 1){
-                        // f2 = 1, p2 = 1
-                        if(main.paradigmData[main.trialNumber] === 0){ // common
-                            main.$outcomeSpans.text('BAD')
-                            main.$outcomePercentageSpan.text('-6 cents!')
-                        }else{ // rare
-                            main.$outcomeSpans.text('GOOD')
-                            main.$outcomePercentageSpan.text('+6 cents!')
-                        }
 
+                }else{ // right is bad (0 is always bad)
+                    if(main.v2_Data[main.trialNumber] > 0){ // good outcome, so left image
+                        $('#var2_outcome_image').attr('src', main.var2a_img_src)
+                        $('#var2_feedback').text(main.var2a)
+                        main.$outcomeSpans.text('GOOD')
+                        main.$outcomePercentageSpan.text('+6 cents!')
+
+                    }else{ // bad outcome, so left image
+                        $('#var2_outcome_image').attr('src', main.var2b_img_src)
+                        $('#var2_feedback').text(main.var2b)
+                        main.$outcomeSpans.text('BAD')
+                        main.$outcomePercentageSpan.text('-6 cents!')
                     }
                 }
 
-                main.$co.show()
 
             }else if(stage == 'guess'){
 
                 ////// console.log('render guess')
 
-                if(main.paradigmData[main.trialNumber] > 0){ // if effective
+                if(main.v2_Data[main.trialNumber] > 0){ // 0 is bad
                     main.$var2b_Click.css('opacity', '0.2')
                     main.insertBorder(main.$var2a_Click)
                 }else{
@@ -716,7 +678,7 @@
 
 
 
-
+            main.$co.show()
         },
 
         creditRender: function(credits){
@@ -782,39 +744,101 @@
 
 
         var2a_Click: function(){
-            // this function fires when they click the left div
-            // if paradigmData = 1 (rare), it's the left value, unless position2 = 1
-            if(main.paradigmData[main.trialNumber] === 1){
-                main.bindEvents(1)
-                main.render('guess')
-            }else{
-                main.attentionFails += 1
-                if(main.condition == 'monetary'){
-                    alertMessage = 'Please click to indicate that Shape 1 is a '+main.var2b
+            if(main.position2 === 0){ // v2_Data = 0 means it's the left, bad outcome
+
+                if(main.v2_Data[main.trialNumber] === 0){ // correctly clicked left
+                    main.bindEvents(1)
+                    main.render('guess')
+                }else{
+                    main.attentionFails += 1
+
+                    if(main.condition == 'monetary'){
+                        if(main.var2b == 'OVAL'){
+                            alertMessage = 'Please click to indicate that Shape 1 is an '+main.var2b
+                        }else{
+                            alertMessage = 'Please click to indicate that Shape 1 is a '+main.var2b
+                        }
+                    }else{
+                        alertMessage = 'Please click to indicate that the patient\'s outcome was '+main.var2b
+                    }
+
+                    alert(alertMessage)
+
+                }
+            }else{ // v2_Data = 0 means it's the right, bad outcome
+                if(main.v2_Data[main.trialNumber] === 1){ // correctly clicked left
+                    main.bindEvents(1)
+                    main.render('guess')
+                }else{
+                    main.attentionFails += 1
+
+                    if(main.condition == 'monetary'){
+                        if(main.var2b == 'OVAL'){
+                            alertMessage = 'Please click to indicate that Shape 1 is an '+main.var2b
+                        }else{
+                            alertMessage = 'Please click to indicate that Shape 1 is a '+main.var2b
+                        }
+                    }else{
+                        alertMessage = 'Please click to indicate that the patient\'s outcome was '+main.var2b
+                    }
+
+                    alert(alertMessage)
+
                 }
 
-                alert(alertMessage)
             }
         },
 
         var2b_Click: function(){
             // this function fires when they click the right div
-            // if paradigmData = 0 (common), it's the right value, unless position2 = 1
-            if(main.paradigmData[main.trialNumber] === 0){
-                main.bindEvents(1)
-                main.render('guess')
-            }else{
-                main.attentionFails += 1
+            // 0 is always bad
+            // if position2 = 0, and v2_Data[trialNumber] = 0, they should click the left
 
-                if(main.condition == 'monetary'){
-                    alertMessage = 'Please click to indicate that Shape 1 is a '+main.var2a
+            if(main.position2 === 0){ // v2_Data = 0 means it's the left, bad outcome
+
+                if(main.v2_Data[main.trialNumber] === 1){ // correctly clicked right
+                    main.bindEvents(1)
+                    main.render('guess')
                 }else{
-                    alertMessage = 'Please click to indicate that the patient\'s outcome was '+main.var2a
+                    main.attentionFails += 1
+
+                    if(main.condition == 'monetary'){
+                        if(main.var2a == 'OVAL'){
+                            alertMessage = 'Please click to indicate that Shape 1 is an '+main.var2a
+                        }else{
+                            alertMessage = 'Please click to indicate that Shape 1 is a '+main.var2a
+                        }
+                    }else{
+                        alertMessage = 'Please click to indicate that the patient\'s outcome was '+main.var2a
+                    }
+
+                    alert(alertMessage)
+
+                }
+            }else{ // v2_Data = 0 means it's the right, bad outcome
+                if(main.v2_Data[main.trialNumber] === 0){ // correctly clicked right
+                    main.bindEvents(1)
+                    main.render('guess')
+                }else{
+                    main.attentionFails += 1
+
+                    if(main.condition == 'monetary'){
+                        if(main.var2a == 'OVAL'){
+                            alertMessage = 'Please click to indicate that Shape 1 is an '+main.var2a
+                        }else{
+                            alertMessage = 'Please click to indicate that Shape 1 is a '+main.var2a
+                        }
+                    }else{
+                        alertMessage = 'Please click to indicate that the patient\'s outcome was '+main.var2a
+                    }
+
+                    alert(alertMessage)
+
                 }
 
-                alert(alertMessage)
-
             }
+
+
         },
 
         newTrial: function(){
@@ -824,7 +848,7 @@
             if(main.trialNumber >= main.lengthOfData-1){
                 main.unbindEvents()
                 main.$co.hide()
-                test.init()
+                main.mySubmit()
             }else{
                 // new trial:
                 console.log("NEW TRIAL")
@@ -832,13 +856,13 @@
 
 
                 if(main.valence == 'rare-positive'){
-                    if(main.paradigmData[main.trialNumber] === 0){ // common outcome
+                    if(main.v2_Data[main.trialNumber] === 0){ // common outcome
                         main.assets -= main.rewardAmount
                     }else{
                         main.assets += main.rewardAmount
                     }
                 }else if(main.valence == 'rare-negative'){
-                    if(main.paradigmData[main.trialNumber] === 0){ // common outcome
+                    if(main.v2_Data[main.trialNumber] === 0){ // common outcome
                         main.assets += main.rewardAmount
                     }else{
                         main.assets -= main.rewardAmount
@@ -892,7 +916,7 @@
             $('#runningBonusInput').val(bonus)
 
             // profit impact
-            main.$profitImpactInput.val(main.paradigmData[main.trialNumber])
+            main.$profitImpactInput.val(main.v2_Data[main.trialNumber])
 
 
             // // send to back end with ajax
@@ -950,7 +974,7 @@
 
         mySubmit: function(){
 
-            // $('#submitForm').submit()
+            $('#submitForm').submit()
         },
 
         startTimer: function(){
@@ -986,6 +1010,7 @@
 
 
     main.init()
+
 
 
 

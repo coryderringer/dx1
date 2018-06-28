@@ -12,7 +12,27 @@ NumScenarios=2
 rewardAmount = 6 # number of cents added/subtracted for a good/bad outcome
 
 
-
+# session variables:
+# account
+# BonusOne
+# BonusTwo
+# scenario
+# testOrder
+# trialGuesses
+# userkey
+# usernum
+# trialNumber
+# reloads
+# v1_Data
+# v2_Data
+# frequency1
+# frequency2
+# position2
+# var1_Names
+# var2_Names
+# condition
+# drugColors
+# diseaseNames
 
 
 ###############################################################################
@@ -497,59 +517,43 @@ class AjaxCausalHandler(webapp.RequestHandler):
 class ScenarioHandler(webapp.RequestHandler):
 	def get(self):
 		self.session = get_current_session()
-		logging.info("THIS IS A TEST")
-
 
 		try:
 			scenario = self.session['scenario']
+			obj = User.get(self.session['userkey']);
 
 			if scenario == 0:
-				drugs = [self.session['drugNames'][0], self.session['drugNames'][1]]
-				drugColors = [self.session['drugColors'][0], self.session['drugColors'][1]]
-
-				obj = User.get(self.session['userkey']);
 				obj.progress = 1
-				obj.put()
 			else:
-				drugs = [self.session['drugNames'][2], self.session['drugNames'][3]]
-				drugColors = [self.session['drugColors'][2], self.session['drugColors'][3]]
-
-
-				obj = User.get(self.session['userkey']);
 				obj.progress = 3
-				obj.put()
 
-
-
-			# position1 = self.session['position1']
-
-
-			# if(valence == 'positive'):
-			# 	data = self.session['posParadigmData']
-			# 	group = self.session['posGroupData']
-			# else:
-			# 	data = self.session['negParadigmData']
-			# 	group = self.session['negGroupData']
+			obj.put()
 
 			group = self.session['v1_Data'][scenario]
 			data = self.session['v2_Data'][scenario]
 
-
 			doRender(self, 'scenario.htm',
-				{'paradigmData':data,
-				'groupData':group,
-				'drugNames': self.session['drugNames'],
-				'diseaseNames': self.session['diseaseNames'],
-				'frequency1': self.session['frequency1'],
+				{'usernum':self.session['usernum'],
+				'test': 0,
+				'condition': self.session['condition'], # monetary, story, combined
+				'var1_Names_Left': self.session['var1_Names'][2*scenario],
+				'var1_Names_Right': self.session['var1_Names'][2*scenario+1],
+				'var2_Names_Left': self.session['var2_Names'][2*scenario],
+				'var2_Names_Right': self.session['var2_Names'][2*scenario+1],
+				'disease': self.session['diseaseNames'][scenario],
+				'drugColor_Left': self.session['drugColors'][2*scenario],
+				'drugColor_Right': self.session['drugColors'][2*scenario+1],
+				'v1_Data':self.session['v1_Data'][scenario], # var1
+				'v2_Data':self.session['v2_Data'][scenario], # var2
+				'testOrder':self.session['testOrder'],
+				'trialGuesses':self.session['trialGuesses'],
+				'trialNumber':0, # testing
+				'reloads':0, # testing
 				'frequency2': self.session['frequency2'][scenario],
-				'condition':condition, # monetary, story, combined
-				'scenario': self.session['scenario'],
-				'drugs': drugs,
-				'drugColors': drugColors,
-				'position1': self.session['position1'],
 				'position2': self.session['position2'],
-				'trialNumber': self.session['trialNumber'],
-				'reloads': self.session['reloads']})
+				# 'testOrder':testOrder, # CHANGE FROM PILOT: ask the three in any order.
+				'rewardAmount':rewardAmount})
+
 
 
 		except KeyError:
@@ -562,9 +566,6 @@ class ScenarioHandler(webapp.RequestHandler):
 
 		scenario = self.session['scenario']
 		# scenario = 0 # testing
-
-
-
 
 		if scenario == 0:
 			drugs = [self.session['drugNames'][0], self.session['drugNames'][1]]
@@ -581,7 +582,7 @@ class ScenarioHandler(webapp.RequestHandler):
 
 
 
-		doRender(self, 'mJudgment.htm',
+		doRender(self, 'test.htm',
 			{'drugNames': self.session['drugNames'],
 			'diseaseNames': self.session['diseaseNames'],
 			'drugs': drugs,
@@ -620,35 +621,24 @@ class FinalJudgmentHandler(webapp.RequestHandler):
 		# this one is only used when they load the scenario page but should be on the test page
 		self.session = get_current_session()
 
-		scenario = self.session['scenario']
-		# scenario = 0 # testing
+		scenario = self.session['scenario'] # for readability
 
-
-
-		if scenario == 0:
-			drugs = [self.session['drugNames'][0], self.session['drugNames'][1]]
-			drugColors = [self.session['drugColors'][0], self.session['drugColors'][1]]
-		else:
-			drugs = [self.session['drugNames'][2], self.session['drugNames'][3]]
-			drugColors = [self.session['drugColors'][2], self.session['drugColors'][3]]
-
-		position1 = self.session['position1']
-
-		# self.session['testOrder'] = 1 # testing
-
-		logging.info('TEST ORDER: '+str(self.session['testOrder']))
-
-
-		doRender(self, 'mJudgment.htm',
-			{'drugNames': self.session['drugNames'],
-			'diseaseNames': self.session['diseaseNames'],
-			'drugs': drugs,
-			'drugColors': drugColors,
-			'position1': position1,
-			'testOrder':self.session['testOrder'],
-			'frequency2':self.session['frequency2'][scenario],
+		doRender(self, 'test.htm',{
+			'scenario': self.session['scenario'],
+			'frequency1': self.session['frequency1'],
+			'frequency2': self.session['frequency2'][scenario],
+			'condition': self.session['condition'],
+			'testOrder': self.session['testOrder'],
+			'disease': self.session['diseaseNames'][scenario],
+			'var1_Names_Left': self.session['var1_Names'][2*scenario],
+			'var1_Names_Right': self.session['var1_Names'][2*scenario+1],
+			'var2_Names_Left': self.session['var2_Names'][2*scenario],
+			'var2_Names_Right': self.session['var2_Names'][2*scenario+1],
+			'drugColor_Left': self.session['drugColors'][2*scenario],
+			'drugColor_Right': self.session['drugColors'][2*scenario+1],
+			'reloads':0, # testing
 			'position2': self.session['position2'],
-			'memOrder':self.session['memOrder']})
+			'rewardAmount':rewardAmount}) # this is a global variable set at the very top (is this a bad practice?)
 
 	def post(self):
 
@@ -657,13 +647,12 @@ class FinalJudgmentHandler(webapp.RequestHandler):
 
 
 		self.session['scenario'] += 1
-		# self.session['scenario'] = 1 # testing
+		self.session['scenario'] = 1 # testing
 
 		scenario=self.session['scenario']
 
 
-
-		# does it make sense to have multiple scenarios? How long should our datasets be?
+		# # does it make sense to have multiple scenarios? How long should our datasets be?
 		if scenario<=NumScenarios-1: #have more scenarios to go
 			obj = User.get(self.session['userkey']);
 			obj.progress = 2
@@ -672,19 +661,44 @@ class FinalJudgmentHandler(webapp.RequestHandler):
 			self.session['trialNumber'] = 0
 			self.session['reloads']		= 0
 
-			disease = self.session['diseaseNames'][1]
-			drugs = [self.session['drugNames'][2], self.session['drugNames'][3]]
+			disease = self.session['diseaseNames'][scenario]
+			var1_Names_Left = self.session['var1_Names'][2*scenario]
+			var1_Names_Right = self.session['var1_Names'][2*scenario+1]
+			var2_Names_Left = self.session['var2_Names'][2*scenario]
+			var2_Names_Right = self.session['var2_Names'][2*scenario+1]
 
-			# valence = self.session['frequency2'][scenario]
 
-			position1 = self.session['position1']
-			doRender(self, 'newscenario.htm',
-				{'bonus':self.session['BonusOne'],
-				'disease': disease,
-				'drugs': drugs,
-				'drugColors':self.session['drugColors'],
-				'frequency2':self.session['frequency2'][scenario],
-				'position1': position1})
+			condition = self.session['condition'] # monetary, combined, story
+
+			logging.info("PRESCENARIO HANDLER")
+			doRender(self, 'prescenario.htm',
+				{'disease':disease,
+				'var1_Left_Name': var1_Names_Left,
+				'var1_Right_Name': var1_Names_Right,
+				'var2_Left_Name': var2_Names_Left,
+				'var2_Right_Name': var2_Names_Right,
+				'frequency1': self.session['frequency1'],
+				'frequency2': self.session['frequency2'][scenario],
+				'condition':condition,
+				'drugColor_Left': self.session['drugColors'][2*scenario],
+				'drugColor_Right': self.session['drugColors'][2*scenario+1],
+				'position2':self.session['position2']})
+
+
+		#
+		# 	disease = self.session['diseaseNames'][1]
+		#
+		#
+		# 	# valence = self.session['frequency2'][scenario]
+		#
+		# 	position1 = self.session['position1']
+		# 	doRender(self, 'newscenario.htm',
+		# 		{'bonus':self.session['BonusOne'],
+		# 		'disease': disease,
+		# 		'drugs': drugs,
+		# 		'drugColors':self.session['drugColors'],
+		# 		'frequency2':self.session['frequency2'][scenario],
+		# 		'position1': position1})
 
 		else:
 			obj = User.get(self.session['userkey']);
@@ -701,24 +715,99 @@ class FinalJudgmentHandler(webapp.RequestHandler):
 
 class TestHandler(webapp.RequestHandler):	# handler that renders a specific page, for testing purposes
 	def get(self):
-		usernum = 2 # testing
+
 		logging.info('TEST HANDLER')
+		# this one is only used when they load the scenario page but should be on the test page
 		self.session = get_current_session()
 
+		self.session['usernum'] = 2 # testing
+
+		# disease names
+		self.session['diseaseNames'] = ['Duastea', 'Stectosis']
+		random.shuffle(self.session['diseaseNames'])
+		# drugColors = ['blue', 'green', 'orange', 'purple']
+
+		self.session['drugColors'] = ['lightblue', 'darkblue', 'orange', 'purple']
+		random.shuffle(self.session['drugColors'])
+			# names and colors are the randomized visuals for var1 (position1, now randomized in this handler (below), no need to randomized further)
+
+		# position2 (valence)
+		self.session['position2'] = random.choice([0,1])
+
+			# if 0, left value of var2 is BAD, right is GOOD
+			# if 1, left is GOOD, right is BAD
+			# this is position2 (valence)
+			# position2 (visual): just randomize the presentation of the stimuli in Python, than read them into JS in the order that they're randomized in.
+				# for the story conditions this will have to be read in consistently both times.
+
+		# cover story counterbalance
+		if self.session['usernum'] % 3 == 0:
+			self.session['condition'] = 'combined'
+		elif self.session['usernum'] % 3 == 1:
+			self.session['condition'] = 'story'
+		elif self.session['usernum'] % 3 == 2:
+			self.session['condition'] = 'monetary'
+
+		self.session['condition'] = 'story' # testing
+		# position1 and position2 (visual)
+		if self.session['condition'] == 'monetary':
+			# shapes
+			shapeNames = ['SQUARE', 'CIRCLE', 'STAR', 'TRIANGLE', 'OVAL', 'DIAMOND', 'RECTANGLE', 'PENTAGON']
+			# testing
+			# random.shuffle(shapeNames) # which shapes they see when. This takes care of position1 and position2 (visual)
+
+			self.session['var1_Names'] = shapeNames[0:4] # worked in python 3...we'll see
+				# the first two are the var1 shape names for the first scenario, in order (this is position1, no need to randomize further)
+			self.session['var2_Names'] = shapeNames[4:8]
+				# the first two are the var2 shape names for the first scenario, in order (this is position2 (visual), no need to randomize further)
+		else:
+
+			# drug names
+			self.session['var1_Names'] = ['XF702', 'BT339', 'GS596', 'PR242']
+			random.shuffle(self.session['var1_Names'])
+				# names and colors are the randomized visuals for var1 (position1, now randomized in python, no need to randomized further)
+
+
+
+			# valence and visual are the same for position2 in this condition
+			if self.session['position2'] == 0:
+				self.session['var2_Names'] = ['BAD', 'GOOD', 'BAD', 'GOOD']
+			else:
+				self.session['var2_Names'] = ['GOOD', 'BAD', 'GOOD', 'BAD']
+
+		self.session['frequency1'] = random.choice([0,1])
+		self.session['frequency2'] = [0,1] # is the left outcome common (0) or rare (1)
+
+		# in the story condition, if the bad outcome is on the left (position2 == 0) and the left outcome is common (frequency2 == 0), rare_positive valence.
+
+		random.shuffle(self.session['frequency2'])
+
+		#Make the data that this subject will see.
+		#It is made once and stored both in self.session and in database
+
+		# dataset 1
 		# new data method for E1
 		# Data1_var1 is the drug or shape1 in the first scenario: 0 is common, 1 is rare
-		a = [[0]*36, [1]*12]
-		a = [item for sublist in a for item in sublist]
+		if self.session['frequency1'] == 0:
+			a = [[0]*36, [1]*12] # 0 is common
+		else:
+			a = [[1]*36, [0]*12] # 1 is common
 
-		# Data1_var2 is the outcome/face or shape2: 0 is common, 1 is rare
-		b = [[0]*24, [1]*12, [0]*8, [1]*4]
-		b = [item for sublist in b for item in sublist]
+		a = [item for sublist in a for item in sublist] # flatten the list
+
+		# Data1_var2 is the outcome/face or shape2:
+		# 0 is ***always bad*** in our datasets
+		if self.session['frequency2'][0] == 0:
+			b = [[0]*24, [1]*12, [0]*8, [1]*4] # 0 is common
+		else:
+			b = [[1]*24, [0]*12, [1]*8, [0]*4] # 1 is common
+
+		b = [item for sublist in b for item in sublist] # flatten the list
 
 		# random data order
 		order = list(range(48))
 		random.shuffle(order)
 
-		# first scenario
 		Data1_var1 = []
 		Data1_var2 = []
 
@@ -726,45 +815,55 @@ class TestHandler(webapp.RequestHandler):	# handler that renders a specific page
 			Data1_var1.append(a[i])
 			Data1_var2.append(b[i])
 
-		random.shuffle(order)
+		# dataset 2 (second scenario)
+		# Data1_var1 is the drug or shape1 in the first scenario: 0 is common, 1 is rare
+		if self.session['frequency1'] == 0:
+			a = [[0]*36, [1]*12] # 0 is common
+		else:
+			a = [[1]*36, [0]*12] # 1 is common
 
-		# second scenario
+		a = [item for sublist in a for item in sublist] # unlist
+
+		# Data1_var2 is the outcome/face or shape2
+		# 0 is ***always bad*** in our datasets
+		if self.session['frequency2'][1] == 0:
+			b = [[0]*24, [1]*12, [0]*8, [1]*4] # 0 is common
+		else:
+			b = [[1]*24, [0]*12, [1]*8, [0]*4] # 1 is common
+
+		b = [item for sublist in b for item in sublist] # unlist
+
+		random.shuffle(order)
 		Data2_var1 = []
 		Data2_var2 = []
 
 		for i in order:
-			Data1_var1.append(a[i])
-			Data1_var2.append(b[i])
+			Data2_var1.append(a[i])
+			Data2_var2.append(b[i])
 
-		v1_Data = [Data1_var1, Data2_var1]
-		v2_Data = [Data1_var2, Data2_var2]
+		self.session['v1_Data'] = [Data1_var1, Data2_var1]
+		self.session['v2_Data'] = [Data1_var2, Data2_var2]
 
-		# randomize left/right for drug A/B at the level of the scenario
-		# default is 0, A on the left. 1 is A on the right
-		# old code: this is now position1, randomized below
-		# position = []
-		# for i in range(0, NumScenarios):
-		# 	position.append(random.choice([0,1]))
 
-		# order of asking (memory vs causal)
-		testOrder = random.choice([0,1])
+		# order of test questions
+		self.session['testOrder'] = random.choice([1,2,3,4,5,6]) # all possible orders, not breaking down by memory vs causal
 
-		# within memory, order of asking C|E or E|C
-		# 0 is E|C first
-		memOrder = random.choice([0,1])
+		# running tally of bonuses
+		self.session['runningBonuses'] = [0,0]
 
-		# testOrder = 0: memory first
-		# memOrder = 0: ask about outcomes given drug first
+		self.session['scenario'] = 0 # testing
 
-		# TO = 0, MO = 0: E|C, C|E, Causal
-		# TO = 0, MO = 1: C|E, E|C, Causal
-		# TO = 1, MO = 0: Causal, E|C, C|E
-		# TO = 1, MO = 1: Causal, C|E, E|C
+		trialGuesses = [0]*LengthOfData
 
-		# 8 possible orders:
-		t = round(time.time(),0)
+		# running tally of bonuses
+		runningBonuses = [0,0]
 
-		TO = (t % 6)+1 # between 1 and 6
+		# # order of test questions
+		self.session['testOrder'] = random.choice([1,2,3,4,5,6]) # all possible orders, not breaking down by memory vs causal
+
+		# testing
+		self.session['testOrder'] = 1 # memory first
+
 		# TO = 1: Causal, E|C, C|E
 		# TO = 2: Causal, C|E, E|C
 		# TO = 3: E|C, Causal, C|E
@@ -772,142 +871,103 @@ class TestHandler(webapp.RequestHandler):	# handler that renders a specific page
 		# TO = 5: C|E, Causal, E|C
 		# TO = 6: C|E, E|C, Causal
 
-		# note: E|C is "memory1", C|E is "memory2"
-
-
-		# position1, position2, and frequency1 are counterbalanced at the participant level
-			# doesn't make sense to do this by scenario; if the square is common in scenario 1, that has
-			# nothing to do with whether the pentagon is common in scenario 2. Same with drug names/colors
-
-		# position1: is var 1 (drug, shape1) reversed on the screen? (what would be left is now on right)
-		# position2: is var 2 (face, shape2) reversed on the screen?
-		# frequency1: is the common state on the left or right?
-			# if 0, the shape/pill on the left is common. If 1, the shape/pill on the right is common.
-
-		# frequency2: is the common state of var 2 (face, shape2) reversed?
-			# THIS IS OUTCOME VALENCE, MANIPULATED WITHIN SUBJECTS
-
-		# randomly determine position1/position2/frequency1
-		t = round(time.time(), 0)
-
-		if t % 8 == 1:
-			position1 = 0
-			position2 = 0
-			frequency1 = 0
-		elif t % 8 == 2:
-			position1 = 0
-			position2 = 0
-			frequency1 = 1
-		elif t % 8 == 3:
-			position1 = 0
-			position2 = 1
-			frequency1 = 0
-		elif t % 8 == 4:
-			position1 = 0
-			position2 = 1
-			frequency1 = 1
-		elif t % 8 == 5:
-			position1 = 1
-			position2 = 0
-			frequency1 = 0
-		elif t % 8 == 6:
-			position1 = 1
-			position2 = 0
-			frequency1 = 1
-		elif t % 8 == 7:
-			position1 = 1
-			position2 = 1
-			frequency1 = 0
-		elif t % 8 == 0:
-			position1 = 1
-			position2 = 1
-			frequency1 = 1
-
-		frequency2 = [0,1] # base rates of var2; for story/combined, 0 is rare-positive, 1 is rare-negative
-		random.shuffle(frequency2) # conditions in random order
-
-		# cover story counterbalance
-		if usernum % 3 == 0:
-			condition = 'combined'
-		elif usernum % 3 == 1:
-			condition = 'story'
-		elif usernum % 3 == 2:
-			condition = 'monetary'
-		logging.info(condition)
-
-
-		# shapes
-		# shape names: 'SQUARE', 'CIRCLE', 'STAR', 'TRIANGLE', 'OVAL', 'DIAMOND', 'RECTANGLE', 'PENTAGON'
-		# shapeNames = list(range(8))
-		# random.shuffle(shapeNames) # which shapes they see when
-		#
-		shapeNames = [0,1,2,3]
-
-
-		# disease names
-
-		diseaseNames = ['Duastea', 'Stectosis']
-		# random.shuffle(diseaseNames)
-
-		# drug names
-		# drugNames = ['XF702', 'BT339', 'GS596', 'PR242']
-		drugNames = [0,1,2,3]
-		# random.shuffle(drugNames)
-
-		# drugColors = ['blue', 'green', 'orange', 'purple']
-		drugColors = [0,1,2,3]
-		# random.shuffle(drugColors)
-
-		trialGuesses = [0]*LengthOfData
-
-		# running tally of bonuses
-		runningBonuses = [0,0]
-
-		scenario = 0
-		doRender(self, 'scenario.htm',
-			{'v1_Data':v1_Data[scenario], # var1
-			'v2_Data':v2_Data[scenario], # var2
-			'drugNames': drugNames,
-			'shapeNames': shapeNames,
-			'disease': diseaseNames[0],
-			'frequency1': 0,
-			'frequency2': 0,
-			'condition':condition, # monetary, story, combined
-			'scenario': 0,
-			'drugs': [drugNames[0], drugNames[1]],
-			'drugColors': drugColors,
-			'position1': 0,
-			'position2': 0,
-			'trialNumber': 0,
-			'reloads': 0,
-			'testOrder':TO, # CHANGE FROM PILOT: ask the three in any order.
+		# newuser = User(
+		# 	usernum=usernum,
+		# 	account=account,
+		# 	browser=browser,
+		# 	sex=0,
+		# 	ethnicity=0,
+		# 	race=0,
+		# 	age=0,
+		# 	bonusAmt=0,
+		# 	testOrder = testOrder,
+		# 	memOrder = memOrder,
+		# 	progress = 0);
+		scenario = self.session['scenario']
+		doRender(self, 'test.htm',{
+			'scenario': self.session['scenario'],
+			'frequency1': self.session['frequency1'],
+			'frequency2': self.session['frequency2'][scenario],
+			'condition': self.session['condition'],
+			'testOrder': self.session['testOrder'],
+			'disease': self.session['diseaseNames'][scenario],
+			'var1_Names_Left': self.session['var1_Names'][2*scenario],
+			'var1_Names_Right': self.session['var1_Names'][2*scenario+1],
+			'var2_Names_Left': self.session['var2_Names'][2*scenario],
+			'var2_Names_Right': self.session['var2_Names'][2*scenario+1],
+			'drugColor_Left': self.session['drugColors'][2*scenario],
+			'drugColor_Right': self.session['drugColors'][2*scenario+1],
+			'reloads':0, # testing
+			'position2': self.session['position2'],
+			# 'testOrder':testOrder, # CHANGE FROM PILOT: ask the three in any order.
 			'rewardAmount':rewardAmount})
+
+		# scenario = self.session['scenario']
+		# scenario = 0 # testing
+	# ,
+		# {'drugNames': self.session['drugNames'],
+		# 'diseaseNames': self.session['diseaseNames'],
+		# 'drugs': drugs,
+		# 'drugColors': drugColors,
+		# 'position1': position1,
+		# 'testOrder':self.session['testOrder'],
+		# 'frequency2':self.session['frequency2'][scenario],
+		# 'position2': self.session['position2'],
+		# 'memOrder':self.session['memOrder']})
+
+
+		# if scenario == 0:
+		# 	drugs = [self.session['drugNames'][0], self.session['drugNames'][1]]
+		# 	drugColors = [self.session['drugColors'][0], self.session['drugColors'][1]]
+		# else:
+		# 	drugs = [self.session['drugNames'][2], self.session['drugNames'][3]]
+		# 	drugColors = [self.session['drugColors'][2], self.session['drugColors'][3]]
+
+		# position1 = self.session['position1']
+
+		# self.session['testOrder'] = 1 # testing
+
+		logging.info('TEST ORDER: '+str(self.session['testOrder']))
+
+
+
+
 
 
 class InstructionsHandler(webapp.RequestHandler):
 	def get(self):
 		self.session = get_current_session()
 		doRender(self, 'task.htm',
-			{'position2':self.session['position2']})
+			{'position2':self.session['position2'],
+			'condition': self.session['condition']})
 
 class preScenarioHandler(webapp.RequestHandler):
 	def get(self):
 		self.session = get_current_session()
-		disease = self.session['diseaseNames'][0]
-		drugs = [self.session['drugNames'][0], self.session['drugNames'][1]]
-		position1 = self.session['position1']
-		valence = self.session['frequency2'][0]
+		scenario = self.session['scenario']
+		disease = self.session['diseaseNames'][scenario]
+		var1_Names_Left = self.session['var1_Names'][2*scenario]
+		var1_Names_Right = self.session['var1_Names'][2*scenario+1]
+		var2_Names_Left = self.session['var2_Names'][2*scenario]
+		var2_Names_Right = self.session['var2_Names'][2*scenario+1]
+
 
 		condition = self.session['condition'] # monetary, combined, story
+
 		logging.info("PRESCENARIO HANDLER")
 		doRender(self, 'prescenario.htm',
 			{'disease':disease,
-			'drugs': drugs,
-			'shapes':[0,1,2,3],
-			'valence':valence,
+			'scenario':scenario,
+			'var1_Left_Name': var1_Names_Left,
+			'var1_Right_Name': var1_Names_Right,
+			'var2_Left_Name': var2_Names_Left,
+			'var2_Right_Name': var2_Names_Right,
+			'frequency1': self.session['frequency1'],
+			'frequency2': self.session['frequency2'][0],
 			'condition':condition,
-			'drugColors':self.session['drugColors'],
-			'position1':position1}) # don't need scenario, it's always 0
+			'drugColor_Left': self.session['drugColors'][2*scenario],
+			'drugColor_Right': self.session['drugColors'][2*scenario+1],
+			'position2':self.session['position2']}) # don't need scenario, it's always 0
 
 class DataHandler(webapp.RequestHandler):
 	def get(self):
@@ -1083,7 +1143,7 @@ class MturkIDHandler(webapp.RequestHandler):
 			{'error':0})
 
 	def post(self):
-
+		self.session = get_current_session()
 		usernum = create_or_increment_NumOfUsers()
 
 		browser = self.request.get('browser')
@@ -1121,29 +1181,118 @@ class MturkIDHandler(webapp.RequestHandler):
 
 			# If user is qualified (http://www.mturk-qualify.appspot.com returns 1)
 			else:
-				#Create the User object and log the user in.
-				usernum = create_or_increment_NumOfUsers()
 
-				browser = self.request.get('browser')
-				# logging.info('BROWSER: '+browser)
+				# # order of test questions
+				testOrder = random.choice([1,2,3,4,5,6]) # all possible orders, not breaking down by memory vs causal
+
+				self.session['usernum'] = random.choice([1,2,3]) # testing
+				logging.info('USERNUM: '+str(self.session['usernum']))
+				# disease names
+				self.session['diseaseNames'] = ['Duastea', 'Stectosis']
+				random.shuffle(self.session['diseaseNames'])
+				# drugColors = ['blue', 'green', 'orange', 'purple']
+
+				self.session['drugColors'] = ['lightblue', 'darkblue', 'orange', 'purple']
+				random.shuffle(self.session['drugColors'])
+					# names and colors are the randomized visuals for var1 (position1, now randomized in this handler (below), no need to randomized further)
+
+				# position2 (valence)
+				self.session['position2'] = random.choice([0,1])
+				self.session['position2'] = 1 # testing
+					# if 0, left value of var2 is BAD, right is GOOD
+					# if 1, left is GOOD, right is BAD
+					# this is position2 (valence)
+					# position2 (visual): just randomize the presentation of the stimuli in Python, than read them into JS in the order that they're randomized in.
+						# for the story conditions this will have to be read in consistently both times.
+
+				# cover story counterbalance
+				if self.session['usernum'] % 3 == 0:
+					self.session['condition'] = 'combined'
+				elif self.session['usernum'] % 3 == 1:
+					self.session['condition'] = 'story'
+				elif self.session['usernum'] % 3 == 2:
+					self.session['condition'] = 'monetary'
+
+
+				# self.session['condition'] = 'monetary' # testing
+				# position1 and position2 (visual)
+				if self.session['condition'] == 'monetary':
+					# shapes
+					shapeNames = ['SQUARE', 'CIRCLE', 'STAR', 'TRIANGLE', 'OVAL', 'DIAMOND', 'RECTANGLE', 'PENTAGON']
+					# testing
+					# random.shuffle(shapeNames) # which shapes they see when. This takes care of position1 and position2 (visual) (commented out for testing)
+					self.session['var1_Names'] = shapeNames[0:4] # worked in python 3...we'll see
+						# the first two are the var1 shape names for the first scenario, in order (this is position1, no need to randomize further)
+
+
+					a = ['RED', 'BLUE', 'PURPLE', 'GREEN']
+
+					if random.choice([0,1]) == 1:
+						colorNames = [a[2], a[3], a[0], a[1]]
+					else:
+						colorNames = a
+
+					if random.choice([0,1]) == 1:
+						temp0 = colorNames[0]
+						temp1 = colorNames[1]
+						colorNames[0] = temp1
+						colorNames[1] = temp0
+					if random.choice([0,1]) == 1:
+						temp2 = colorNames[2]
+						temp3 = colorNames[3]
+						colorNames[2] = temp3
+						colorNames[3] = temp2
+
+					self.session['var2_Names'] = colorNames
+						# this changes it to colors.
+				else:
+
+					# drug names
+					self.session['var1_Names'] = ['XF702', 'BT339', 'GS596', 'PR242']
+					random.shuffle(self.session['var1_Names'])
+						# names and colors are the randomized visuals for var1 (position1, now randomized in python, no need to randomized further)
+
+
+
+					# valence and visual are the same for position2 in this condition
+					if self.session['position2'] == 0:
+						self.session['var2_Names'] = ['BAD', 'GOOD', 'BAD', 'GOOD']
+					else:
+						self.session['var2_Names'] = ['GOOD', 'BAD', 'GOOD', 'BAD']
+
+				self.session['frequency1'] = random.choice([0,1])
+				self.session['frequency2'] = [0,1] # is the left outcome common (0) or rare (1)
+
+				# in the story condition, if the bad outcome is on the left (position2 == 0) and the left outcome is common (frequency2 == 0), rare_positive valence.
+
+				random.shuffle(self.session['frequency2'])
+
 				#Make the data that this subject will see.
-
 				#It is made once and stored both in self.session and in database
 
+				# dataset 1
 				# new data method for E1
 				# Data1_var1 is the drug or shape1 in the first scenario: 0 is common, 1 is rare
-				a = [[0]*36, [1]*12]
-				a = [item for sublist in a for item in sublist]
+				if self.session['frequency1'] == 0:
+					a = [[0]*36, [1]*12] # 0 is common; 0 is the drug/shape on the left
+				else:
+					a = [[1]*36, [0]*12] # 1 is common
 
-				# Data1_var2 is the outcome/face or shape2: 0 is common, 1 is rare
-				b = [[0]*24, [1]*12, [0]*8, [1]*4]
-				b = [item for sublist in b for item in sublist]
+				a = [item for sublist in a for item in sublist] # flatten the list
+
+				# Data1_var2 is the outcome/face or shape2:
+				# 0 is ***always bad*** in our datasets
+				if self.session['frequency2'][0] == 0:
+					b = [[0]*24, [1]*12, [0]*8, [1]*4] # 0 is common
+				else:
+					b = [[1]*24, [0]*12, [1]*8, [0]*4] # 1 is common
+
+				b = [item for sublist in b for item in sublist] # flatten the list
 
 				# random data order
-				order = list(range[48])
+				order = list(range(48))
 				random.shuffle(order)
 
-				# first scenario
 				Data1_var1 = []
 				Data1_var2 = []
 
@@ -1151,121 +1300,43 @@ class MturkIDHandler(webapp.RequestHandler):
 					Data1_var1.append(a[i])
 					Data1_var2.append(b[i])
 
-				random.shuffle(order)
+				# dataset 2 (second scenario)
+				# Data1_var1 is the drug or shape1 in the first scenario: 0 is common, 1 is rare
+				if self.session['frequency1'] == 0:
+					a = [[0]*36, [1]*12] # 0 is common
+				else:
+					a = [[1]*36, [0]*12] # 1 is common
 
-				# second scenario
+				a = [item for sublist in a for item in sublist] # unlist
+
+				# Data1_var2 is the outcome/face or shape2
+				# 0 is ***always bad*** in our datasets
+				if self.session['frequency2'][1] == 0:
+					b = [[0]*24, [1]*12, [0]*8, [1]*4] # 0 is common
+				else:
+					b = [[1]*24, [0]*12, [1]*8, [0]*4] # 1 is common
+
+				b = [item for sublist in b for item in sublist] # unlist
+
+				random.shuffle(order)
 				Data2_var1 = []
 				Data2_var2 = []
 
 				for i in order:
-					Data1_var1.append(a[i])
-					Data1_var2.append(b[i])
+					Data2_var1.append(a[i])
+					Data2_var2.append(b[i])
 
-				v1_Data = [Data1_var1, Data2_var1]
-				v2_Data = [Data1_var2, Data2_var2]
+				self.session['v1_Data'] = [Data1_var1, Data2_var1]
+				self.session['v2_Data'] = [Data1_var2, Data2_var2]
 
-				# randomize left/right for drug A/B at the level of the scenario
-				# default is 0, A on the left. 1 is A on the right
-				# old code: this is now position1, randomized below
-				# position = []
-				# for i in range(0, NumScenarios):
-				# 	position.append(random.choice([0,1]))
 
-				# order of asking (memory vs causal)
-				testOrder = random.choice([0,1])
+				# order of test questions
+				self.session['testOrder'] = random.choice([1,2,3,4,5,6]) # all possible orders, not breaking down by memory vs causal
 
-				# within memory, order of asking C|E or E|C
-				# 0 is E|C first
-				memOrder = random.choice([0,1])
+				# running tally of bonuses
+				self.session['runningBonuses'] = [0,0]
 
-				# testOrder = 0: memory first
-				# memOrder = 0: ask about outcomes given drug first
-
-				# TO = 0, MO = 0: E|C, C|E, Causal
-				# TO = 0, MO = 1: C|E, E|C, Causal
-				# TO = 1, MO = 0: Causal, E|C, C|E
-				# TO = 1, MO = 1: Causal, C|E, E|C
-
-				# position1, position2, and frequency1 are counterbalanced at the participant level
-					# doesn't make sense to do this by scenario; if the square is common in scenario 1, that has
-					# nothing to do with whether the pentagon is common in scenario 2. Same with drug names/colors
-
-				# position1: is var 1 (drug, shape1) reversed on the screen? (what would be left is now on right)
-				# position2: is var 2 (face, shape2) reversed on the screen?
-				# frequency1: is the common state on the left or right?
-					# if 0, the shape/pill on the left is common. If 1, the shape/pill on the right is common.
-
-				# frequency2: is the common state of var 2 (face, shape2) reversed?
-					# THIS IS OUTCOME VALENCE, MANIPULATED WITHIN SUBJECTS
-
-				# randomly determine position1/position2/frequency1
-				t = round(time.time(), 0)
-
-				if usernum % 8 == 1:
-					position1 = 0
-					position2 = 0
-					frequency1 = 0
-				elif usernum % 8 == 2:
-					position1 = 0
-					position2 = 0
-					frequency1 = 1
-				elif usernum % 8 == 3:
-					position1 = 0
-					position2 = 1
-					frequency1 = 0
-				elif usernum % 8 == 4:
-					position1 = 0
-					position2 = 1
-					frequency1 = 1
-				elif usernum % 8 == 5:
-					position1 = 1
-					position2 = 0
-					frequency1 = 0
-				elif usernum % 8 == 6:
-					position1 = 1
-					position2 = 0
-					frequency1 = 1
-				elif usernum % 8 == 7:
-					position1 = 1
-					position2 = 1
-					frequency1 = 0
-				elif usernum % 8 == 0:
-					position1 = 1
-					position2 = 1
-					frequency1 = 1
-
-				frequency2 = [0,1] # base rates of var2; for story/combined, 0 is rare-positive, 1 is rare-negative
-				random.shuffle(frequency2) # conditions in random order
-
-				# cover story counterbalance
-				if usernum % 3 == 0:
-					condition = 'combined'
-				elif usernum % 3 == 1:
-					condition = 'story'
-				elif usernum % 3 == 2:
-					condition = 'monetary'
-
-				if condition == 'monetary':
-					# shapes
-					# shape names: 'SQUARE', 'CIRCLE', 'STAR', 'TRIANGLE', 'OVAL', 'DIAMOND', 'RECTANGLE', 'PENTAGON'
-					shapeNames = list(range(8))
-					random.shuffle(shapeNames) # which shapes they see when
-
-				else:
-
-					# disease names
-
-					diseaseNames = ['Duastea', 'Stectosis']
-					random.shuffle(diseaseNames)
-
-					# drug names
-					# drugNames = ['XF702', 'BT339', 'GS596', 'PR242']
-					drugNames = [0,1,2,3]
-					random.shuffle(drugNames)
-
-					# drugColors = ['blue', 'green', 'orange', 'purple']
-					drugColors = [0,1,2,3]
-					random.shuffle(drugColors)
+				self.session['scenario'] = 0
 
 				trialGuesses = [0]*LengthOfData
 
@@ -1282,7 +1353,6 @@ class MturkIDHandler(webapp.RequestHandler):
 					age=0,
 					bonusAmt=0,
 					testOrder = testOrder,
-					memOrder = memOrder,
 					progress = 0);
 
 				# dataframe modeling, but I'm not sure what exactly
@@ -1297,33 +1367,45 @@ class MturkIDHandler(webapp.RequestHandler):
 				self.session['account']				= account
 				self.session['BonusOne']			= 0
 				self.session['BonusTwo']			= 0
-				self.session['frequency1']			= frequency1
-				self.session['frequency2']			= frequency2 # this is an array, ex: [0,1]
-				self.session['diseaseNames']		= diseaseNames
-				self.session['drugColors']			= drugColors
-				self.session['drugNames']			= drugNames
-				self.session['position1']			= position1
-				self.session['position2']			= position2
-				self.session['v1_Data']				= v1_Data
-				self.session['v2_Data']				= v2_Data
-				self.session['shapeNames']			= shapeNames
-
-				# self.session['negGroupData']		= negGroupData
-				# self.session['negParadigmData']		= negParadigmData
-				# self.session['posGroupData']		= posGroupData
-				# self.session['posParadigmData']		= posParadigmData
-				self.session['runningBonuses']		= runningBonuses
 				self.session['scenario']			= 0
-				self.session['testOrder']			= testOrder
+				# order of test questions
+				self.session['testOrder'] = random.choice([1,2,3,4,5,6]) # all possible orders, not breaking down by memory vs causal
 				self.session['trialGuesses']		= trialGuesses
 				self.session['userkey']				= userkey
 				self.session['usernum']				= usernum
-				self.session['memOrder']			= memOrder
 				self.session['trialNumber']			= 0
 				self.session['reloads']				= 0
 
 
 				doRender(self, 'qualify.htm')
+
+
+				# session variables:
+				# account
+				# BonusOne
+				# BonusTwo
+				# scenario
+				# testOrder
+				# trialGuesses
+				# userkey
+				# usernum
+				# trialNumber
+				# reloads
+				# v1_Data
+				# v2_Data
+				# frequency1
+				# frequency2
+				# position2
+				# var1_Names
+				# var2_Names
+				# condition
+				# drugColors
+				# diseaseNames
+
+
+
+
+
 
 
 
@@ -1352,8 +1434,8 @@ application = webapp.WSGIApplication([
 	('/progressCheck', ProgressCheckHandler),
 	('/demographics', DemographicsHandler),
 	('/mturkid', MturkIDHandler),
-	# ('/.*',      MturkIDHandler)],  #default page
-	('/.*',      TestHandler)],  # testing
+	('/.*',      MturkIDHandler)],  #default page
+	# ('/.*',      TestHandler)],  # testing
 	debug=True)
 
 # IMPORTANT: PREVIOUS (PILOT) APP HAD SCENARIO DATA AND TEST ON THE SAME PAGE.

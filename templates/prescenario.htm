@@ -19,8 +19,8 @@
     <div id="containerDiv" style="width:700px; display: none" class="container well">
     	<h2>Scenarios:</h2>
 
-    	<p name="story">You will complete two scenarios, each about a different disease.
-			The diseases are unrelated. In the first scenario, you will view data about
+    	<p name="story"><span name="firstScenario">You will complete two scenarios, each about a different disease.
+			The diseases are unrelated. In the first scenario,</span><span name="secondScenario">In the next scenario,</span> you will view data about
 			the disease <span name="disease"></span>, which is
 			<span name="freq1a">most often</span> treated with
 			<span name="var1a"></span>, but is <span name="freq1b">sometimes</span>
@@ -53,65 +53,13 @@
 					</b>
                 </div>
 				<div id="var1a" class="col-xs-4" style="height:100px">
-					<svg name="monetary" height="50%" width="50%" viewBox="0,0,100,100">
-
-						<polygon name="SQUARE" points = "5,5 95,5 95,95 5,95"
-						style="display:none; fill:#F5F5F5; stroke-width:1; stroke:black"/>
-
-						<circle name="CIRCLE" cx="50", cy="50", r=45
-						style="display:none; fill:#F5F5F5; stroke-width:1; stroke:black"/>
-
-						<polygon name="STAR" points="50,6 62,39 95,39 68,61 80,99 50,75 20,99 32,61 5,39 38,39"
-						style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1"/>
-
-						<polygon name="TRIANGLE" points="50,6, 95,95, 5,95"
-						style="display:none; fill:#F5F5F5; stroke:black; stroke-width:1"/>
-
-						<ellipse name="OVAL" cx="50" cy="50" rx="45" ry="25"
-						style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1" />
-
-						<polygon name="DIAMOND" points ="50,5 95,50 50,95 5,50"
-						style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1" />
-
-						<polygon name="RECTANGLE" points = "5,20 95,20 95,80 5,80"
-						style="display:none;fill:#F5F5F5; stroke-width:1; stroke:black"/>
-
-						<polygon name="PENTAGON" points="50,5 95,39 80,95 20,95 5,39"
-						style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1"/>
-					</svg>
-					<img name="story" id="leftDrug" src="/static/images/LightBlue.png" style="height:40px"/>
-					<p><span name="var1a">Drug A</span></p>
+					<img id="var1aImg" src="/static/images/blank.png" style="height:40px; position:relative; top:15px"/>
+					<p style="position:relative; top:20px"><span name="var1a">Drug A</span></p>
 				</div>
 				<div class="col-xs-2 text-center"><p style="position:relative; top:30px">or</p></div>
 				<div id="var1b" class="col-xs-4"  style="height:100px">
-					<svg name="monetary" height="50%" width="50%" viewBox="0,0,100,100">
-
-						<polygon name="SQUARE" points = "5,5 95,5 95,95 5,95"
-						style="display:none; fill:#F5F5F5; stroke-width:1; stroke:black"/>
-
-						<circle name="CIRCLE" cx="50", cy="50", r=45
-						style="display:none; fill:#F5F5F5; stroke-width:1; stroke:black"/>
-
-						<polygon name="STAR" points="50,6 62,39 95,39 68,61 80,99 50,75 20,99 32,61 5,39 38,39"
-						style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1"/>
-
-						<polygon name="TRIANGLE" points="50,6, 95,95, 5,95"
-						style="display:none; fill:#F5F5F5; stroke:black; stroke-width:1"/>
-
-						<ellipse name="OVAL" cx="50" cy="50" rx="45" ry="25"
-						style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1" />
-
-						<polygon name="DIAMOND" points ="50,5 95,50 50,95 5,50"
-						style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1" />
-
-						<polygon name="RECTANGLE" points = "5,20 95,20 95,80 5,80"
-						style="display:none;fill:#F5F5F5; stroke-width:1; stroke:black"/>
-
-						<polygon name="PENTAGON" points="50,5 95,39 80,95 20,95 5,39"
-						style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1"/>
-					</svg>
-					<img name="story" id="rightDrug" src="/static/images/DarkBlue.png" style="height:40px"/>
-					<p><span name="var1b">Drug B</span></p>
+					<img id="var1bImg" src="/static/images/blank.png" style="height:40px; position:relative; top:15px"/>
+					<p style="position:relative; top:20px"><span name="var1b">Drug B</span></p>
 				</div>
             </div>
 
@@ -127,72 +75,27 @@
 					<b name="story">Outcome:</b>
 				</div>
 				<div id="var2a" class="col-xs-4" style="height:100px">
-					<svg name="monetary" height="50%" width="50%" viewBox="0,0,100,100">
-
-						<polygon name="SQUARE" points = "5,5 95,5 95,95 5,95"
-						style="display:none; fill:#F5F5F5; stroke-width:1; stroke:black"/>
-
-						<circle name="CIRCLE" cx="50", cy="50", r=45
-						style="display:none; fill:#F5F5F5; stroke-width:1; stroke:black"/>
-
-						<polygon name="STAR" points="50,6 62,39 95,39 68,61 80,99 50,75 20,99 32,61 5,39 38,39"
-						style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1"/>
-
-						<polygon name="TRIANGLE" points="50,6, 95,95, 5,95"
-						style="display:none; fill:#F5F5F5; stroke:black; stroke-width:1"/>
-
-						<ellipse name="OVAL" cx="50" cy="50" rx="45" ry="25"
-						style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1" />
-
-						<polygon name="DIAMOND" points ="50,5 95,50 50,95 5,50"
-						style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1" />
-
-						<polygon name="RECTANGLE" points = "5,20 95,20 95,80 5,80"
-						style="display:none;fill:#F5F5F5; stroke-width:1; stroke:black"/>
-
-						<polygon name="PENTAGON" points="50,5 95,39 80,95 20,95 5,39"
-						style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1"/>
-					</svg>
-					<img name="story" src="/static/images/bad.png" style="height:70px"/>
+					<img id="var2aImg" src="/static/images/bad.png" style="height:70px"/>
 					<p><span name="var2a">BAD</span></p>
 				</div>
 				<div class="col-xs-2 text-center"><p style="position:relative; top:30px">or</p></div>
 				<div id="var2b" class="col-xs-4" style="height:100px">
-					<svg name="monetary" height="50%" width="50%" viewBox="0,0,100,100">
-
-						<polygon name="SQUARE" points = "5,5 95,5 95,95 5,95"
-						style="display:none; fill:#F5F5F5; stroke-width:1; stroke:black"/>
-
-						<circle name="CIRCLE" cx="50", cy="50", r=45
-						style="display:none; fill:#F5F5F5; stroke-width:1; stroke:black"/>
-
-						<polygon name="STAR" points="50,6 62,39 95,39 68,61 80,99 50,75 20,99 32,61 5,39 38,39"
-						style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1"/>
-
-						<polygon name="TRIANGLE" points="50,6, 95,95, 5,95"
-						style="display:none; fill:#F5F5F5; stroke:black; stroke-width:1"/>
-
-						<ellipse name="OVAL" cx="50" cy="50" rx="45" ry="25"
-						style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1" />
-
-						<polygon name="DIAMOND" points ="50,5 95,50 50,95 5,50"
-						style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1" />
-
-						<polygon name="RECTANGLE" points = "5,20 95,20 95,80 5,80"
-						style="display:none;fill:#F5F5F5; stroke-width:1; stroke:black"/>
-
-						<polygon name="PENTAGON" points="50,5 95,39 80,95 20,95 5,39"
-						style="display:none; fill:#F5F5F5;stroke:black;stroke-width:1"/>
-					</svg>
-					<img name="story" src="/static/images/good.png" style="height:70px"/>
+					<img id="var2bImg" src="/static/images/good.png" style="height:70px"/>
 					<p><span name="var2b">GOOD</span></p>
 				</div>
             </div>
         </div>
+		<br>
+		<div class="row">
+			<div class="col-xs-6"></div>
+			<div class="col-xs-6">
+				<button id="submitButton" style="visibility: hidden">Continue</button>
+			</div>
+		</div>
 
     </div>
     <form id="submitForm" method="get" action="/scenario" class="hidden">
-    	<input type="submit" value="" class="hidden"/>
+		<input type="submit" value="" class="hidden"/>
 	</form>
 
 
@@ -211,20 +114,18 @@
 
         init: function(){
 			this.condition = '{{condition}}' // monetary or not, for render and bindEvents
-			main.condition = 'story'
 
+			main.scenario = {{scenario}}
 			this.drugNames = ['XF702', 'BT339', 'GS596', 'PR242']
             this.drugs = {{drugs}}
 
-            this.colors = {{drugColors}}
+            this.leftColor = '{{drugColor_Left}}'
+			main.rightColor = '{{drugColor_Right}}'
 
             main.drugColors = ['/static/images/LightBlue.png',
                 '/static/images/DarkBlue.png',
                 '/static/images/Orange.png',
                 '/static/images/Purple.png']
-
-            this.leftColor = String(main.drugColors[main.colors[0]])
-            this.rightColor = String(main.drugColors[main.colors[1]])
 
 			main.leftFace = '/static/images/bad.png'
 			main.rightFace = '/static/images/good.png'
@@ -232,22 +133,70 @@
 			this.shapeNames = ['SQUARE', 'CIRCLE', 'STAR', 'TRIANGLE', 'OVAL', 'DIAMOND', 'RECTANGLE', 'PENTAGON']
 			this.shapes = {{shapes}}
 
-			main.shape1a = main.shapeNames[{{shapes}}[0]]
-			main.shape1b = main.shapeNames[{{shapes}}[1]]
-			main.shape2a = main.shapeNames[{{shapes}}[2]]
-			main.shape2b = main.shapeNames[{{shapes}}[3]]
+			main.var1a = '{{var1_Left_Name}}'
+			main.var1b = '{{var1_Right_Name}}'
+			main.var2a = '{{var2_Left_Name}}'
+			main.var2b = '{{var2_Right_Name}}'
+
+			main.imageSources = ['/static/images/square.png',
+                '/static/images/circle.png',
+                '/static/images/star.png',
+                '/static/images/triangle.png',
+                '/static/images/oval.png',
+                '/static/images/diamond.png',
+                '/static/images/rectangle.png',
+                '/static/images/pentagon.png',
+                '/static/images/good.png',
+                '/static/images/bad.png',
+
+                '/static/images/lightblue.png',
+                '/static/images/darkblue.png',
+                '/static/images/orange.png',
+                '/static/images/purple.png']
+
+			for(var i = 0; i < main.imageSources.length; i++){
+                // 2a
+                if(main.imageSources[i].split('/')[3].split('.')[0] === main.var2a.toLowerCase()){
+                    main.var2a_img_src = main.imageSources[i]
+                }
+                // 2b
+                if(main.imageSources[i].split('/')[3].split('.')[0] === main.var2b.toLowerCase()){
+                    main.var2b_img_src = main.imageSources[i]
+                }
+
+                if(main.condition === 'monetary'){ // only for shapes
+
+                    // 1a
+                    if(main.imageSources[i].split('/')[3].split('.')[0] === main.var1a.toLowerCase()){
+                        main.var1a_img_src = main.imageSources[i]
+                    }
+                    // 1b
+                    if(main.imageSources[i].split('/')[3].split('.')[0] === main.var1b.toLowerCase()){
+                        main.var1b_img_src = main.imageSources[i]
+                    }
+                }else{ // colors
+                    // 1a
+                    if(main.imageSources[i].split('/')[3].split('.')[0] === '{{drugColor_Left}}'){
+                        main.var1a_img_src = main.imageSources[i]
+                    }
+
+                    if(main.imageSources[i].split('/')[3].split('.')[0] === '{{drugColor_Right}}'){
+                        main.var1b_img_src = main.imageSources[i]
+                    }
+                }
+            }
+
+            console.log(main.var1a_img_src)
+            console.log(main.var1b_img_src)
+            console.log(main.var2a_img_src)
+            console.log(main.var2b_img_src)
 
 
-            main.position1 = {{position1}}
-				// if 1, var1 shapes/pills are reversed (left/right presentation).
-				// Still code them as 1a on the left though; a always on left.
-			main.position2 = {{position2}}
-				// if 1, var2 shapes/faces are reversed (left/right presentation).
-				// Still code them as 2a on the left; a always on left.
+			main.position2 = {{position2}} // check that this is used correctly
 			main.frequency1 = {{frequency1}}
 				// if this is 0, common state of var1 in the data (0) is on the left.
 				// if 1, common state is on the right.
-			main.frequency2 = '{{frequency2}}'
+			main.frequency2 = {{frequency2}}
 				// if this is 0, common state of var2 in data (0) is on the left
 				// this interacts with position2 to form our manipulation:
 				// if position2 == 0 & frequency2 == 0: bad on left and the common state is the left (rare-positive)
@@ -264,48 +213,12 @@
 				main.valence = 'rare-negative'
 			}
 
-			console.log('position1: '+String(main.position1))
 			console.log('frequency1: '+String(main.frequency1))
 			console.log('position2: '+String(main.position2))
 			console.log('frequency2: '+String(main.frequency2))
 			console.log('condition: '+String(main.valence))
 				// rare-positive, but since we're just doing shapes,
 				// the more common state is the one on the left
-
-			// main.condition = 'combined'
-			if(main.condition == 'monetary'){
-				if(main.position1 === 0){
-					main.var1a = main.shape1a
-					main.var1b = main.shape1b
-				}else{
-					main.var1a = main.shape1b
-					main.var1b = main.shape1a
-				}
-				if(main.position2 === 0){
-					main.var2a = main.shape2a
-					main.var2b = main.shape2b
-				}else{
-					main.var2a = main.shape2b
-					main.var2b = main.shape2a
-				}
-
-			}else{
-				if(main.position1 === 0){
-					main.var1a = main.drugNames[main.drugs[0]]
-					main.var1b = main.drugNames[main.drugs[1]]
-				}else{
-					main.var1a = main.drugNames[main.drugs[1]]
-					main.var1b = main.drugNames[main.drugs[0]]
-				}
-
-				if(main.position2 === 0){
-					main.var2a = 'BAD'
-					main.var2b = 'GOOD'
-				}else{
-					main.var2a = 'GOOD'
-					main.var2b = 'BAD'
-				}
-			}
 
 			main.progressClicks = [0,0]
 
@@ -339,164 +252,63 @@
 			main.$var2bDiv = $('#var2b')
 
 			// images
-			main.$var1aImg = main.$var1aDiv.children('img')
-			main.$var1bImg = main.$var1bDiv.children('img')
-			main.$var2aImg = main.$var2aDiv.children('img')
-			main.$var2bImg = main.$var2bDiv.children('img')
+			main.$var1aImg = $('#var1aImg')
+			main.$var1bImg = $('#var1bImg')
+			main.$var2aImg = $('#var2aImg')
+			main.$var2bImg = $('#var2bImg')
 
             main.$submitForm = $('#submitForm')
 
 			main.$monetary = $('[name="monetary"]')
 			main.$story = $('[name="story"]')
 
-			if(main.position1 === 1){
-				main.$shape1a = main.$var1aDiv.find('[name="'+main.shape1b+'"]')
-				main.$shape1b = main.$var1bDiv.find('[name="'+main.shape1a+'"]')
-			}else{
-				main.$shape1a = main.$var1aDiv.find('[name="'+main.shape1a+'"]')
-				main.$shape1b = main.$var1bDiv.find('[name="'+main.shape1b+'"]')
-			}
-
-			if(main.position2 === 1){
-				main.$shape2a = main.$var2aDiv.find('[name="'+main.shape2b+'"]')
-				main.$shape2b = main.$var2bDiv.find('[name="'+main.shape2a+'"]')
-			}else{
-				main.$shape2a = main.$var2aDiv.find('[name="'+main.shape2a+'"]')
-				main.$shape2b = main.$var2bDiv.find('[name="'+main.shape2b+'"]')
-			}
-
-
         },
 
         render: function(){
+			if(main.scenario === 0){
+				$('[name="secondScenario"]').hide()
+				$('[name="firstScenario"]').show()
+			}else{
+				$('[name="firstScenario"]').hide()
+				$('[name="secondScenario"]').show()
+			}
 			if(main.condition == 'monetary'){
 				main.$story.hide()
 				main.$monetary.show()
-
-				// show specific $shape
-				main.$shape1a.show()
-				main.$shape1b.show()
-				main.$shape2a.show()
-				main.$shape2b.show()
-
-
-				if(main.position2 === 1){ // switch position for faces/shape2
-					$(main.$var2a_Spans).text(main.var2b)
-	                $(main.$var2b_Spans).text(main.var2a)
-				}
-
-				if(main.frequency1 === 1){ // switch rarity for drug/shape1
-	                $('[name="freq1a"]').text('sometimes')
-	                $('[name="freq1b"]').text('most often')
-	            }
-
-				// default is that positive is the most common ('negative' condition)
-				// if this is the case, change nothing
-				if((main.position2 === 1)){
-					$('[name="freq2a"]').text('sometimes')
-					$('[name="freq2b"]').text('most often')
-				}
-
-
-
-				// ?/////////////
-
-
-				// show correct drug labels and colors
-				if(main.position1 === 1){ // switch position for drugs
-					$(main.$var1a_Spans).text(main.var1b)
-	                $(main.$var1b_Spans).text(main.var1a)
-					// main.$var1aImg.attr('src', main.rightColor)
-		            // main.$var1bImg.attr('src', main.leftColor)
-				}else{
-					$(main.$var1a_Spans).text(main.var1a)
-	                $(main.$var1b_Spans).text(main.var1b)
-					// main.$var1aImg.attr('src', main.leftColor)
-		            // main.$var1bImg.attr('src', main.rightColor)
-				}
-
-				if(main.frequency1 === 1){
-					$('[name="freq1a"]').text('sometimes')
-					$('[name="freq1b"]').text('most often')
-				}else{
-					$('[name="freq1a"]').text('most often')
-					$('[name="freq1b"]').text('sometimes')
-				}
-
-				// show correct drug labels and colors
-				if(main.position2 === 1){ // switch position for drugs
-					$(main.$var2a_Spans).text(main.var2b)
-	                $(main.$var2b_Spans).text(main.var2a)
-					// main.$var2aImg.attr('src', main.rightFace)
-		            // main.$var2bImg.attr('src', main.leftFace)
-				}else{
-					$(main.$var2a_Spans).text(main.var2a)
-	                $(main.$var2b_Spans).text(main.var2b)
-					// main.$var2aImg.attr('src', main.leftFace)
-		            // main.$var2bImg.attr('src', main.rightFace)
-				}
-
-				if(main.frequency2 === 1){
-					$('[name="freq2a"]').text('sometimes')
-					$('[name="freq2b"]').text('most often')
-				}else{
-					$('[name="freq2a"]').text('most often')
-					$('[name="freq2b"]').text('sometimes')
-				}
-
 			}else{
 				main.$monetary.hide()
 				main.$story.show()
-
-				main.$diseaseSpans.text('{{disease}}')
-
-				// show correct drug labels and colors
-				if(main.position1 === 1){ // switch position for drugs
-					$(main.$var1a_Spans).text(main.var1b)
-	                $(main.$var1b_Spans).text(main.var1a)
-					main.$var1aImg.attr('src', main.rightColor)
-		            main.$var1bImg.attr('src', main.leftColor)
-				}else{
-					$(main.$var1a_Spans).text(main.var1a)
-	                $(main.$var1b_Spans).text(main.var1b)
-					main.$var1aImg.attr('src', main.leftColor)
-		            main.$var1bImg.attr('src', main.rightColor)
-				}
-
-				if(main.frequency1 === 1){
-					$('[name="freq1a"]').text('sometimes')
-					$('[name="freq1b"]').text('most often')
-				}else{
-					$('[name="freq1a"]').text('most often')
-					$('[name="freq1b"]').text('sometimes')
-				}
-
-				// show correct drug labels and colors
-				if(main.position2 === 1){ // switch position for drugs
-					$(main.$var2a_Spans).text(main.var2b)
-	                $(main.$var2b_Spans).text(main.var2a)
-					main.$var2aImg.attr('src', main.rightFace)
-		            main.$var2bImg.attr('src', main.leftFace)
-				}else{
-					$(main.$var2a_Spans).text(main.var2a)
-	                $(main.$var2b_Spans).text(main.var2b)
-					main.$var2aImg.attr('src', main.leftFace)
-		            main.$var2bImg.attr('src', main.rightFace)
-				}
-
-				if(main.frequency2 === 1){
-					$('[name="freq2a"]').text('sometimes')
-					$('[name="freq2b"]').text('most often')
-				}else{
-					$('[name="freq2a"]').text('most often')
-					$('[name="freq2b"]').text('sometimes')
-				}
-
-
-
-
 			}
-			// borders (so the shapes don't change sizes)
+			// show correct drug labels and colors
+
+			main.$var1a_Spans.text(main.var1a)
+			main.$var1b_Spans.text(main.var1b)
+			main.$var2a_Spans.text(main.var2a)
+			main.$var2b_Spans.text(main.var2b)
+
+			main.$var1aImg.attr('src', main.var1a_img_src)
+			main.$var1bImg.attr('src', main.var1b_img_src)
+			main.$var2aImg.attr('src', main.var2a_img_src)
+			main.$var2bImg.attr('src', main.var2b_img_src)
+
+
+			if(main.frequency1 === 1){
+				$('[name="freq1a"]').text('sometimes')
+				$('[name="freq1b"]').text('most often')
+			}else{
+				$('[name="freq1a"]').text('most often')
+				$('[name="freq1b"]').text('sometimes')
+			}
+
+			if(main.frequency2 === 1){
+				$('[name="freq2a"]').text('sometimes')
+				$('[name="freq2b"]').text('most often')
+			}else{
+				$('[name="freq2a"]').text('most often')
+				$('[name="freq2b"]').text('sometimes')
+			}
+			main.$diseaseSpans.text('{{disease}}')
+
 			main.removeBorder(main.$var1aDiv)
 			main.removeBorder(main.$var1bDiv)
 			main.removeBorder(main.$var2aDiv)
@@ -532,6 +344,7 @@
 				})
 			}
 
+
 			if(main.frequency2 === 0){
 				main.$var2aDiv.unbind().on('click', function(){
 					main.insertBorder(main.$var2aDiv)
@@ -548,6 +361,11 @@
 				})
 			}
 
+			$('#submitButton').unbind().on('click', function(){
+				$('#submitForm').submit()
+				// alert('submitting')
+			})
+
 
         },
 
@@ -563,8 +381,7 @@
 
 		progressCheck: function(){
 			if(main.progressClicks[0] === 1 & main.progressClicks[1] === 1){
-				// main.$submitForm.submit()
-				// alert('submitting form')
+				$('#submitButton').css('visibility', 'visible')
 				return
 			}
 		}

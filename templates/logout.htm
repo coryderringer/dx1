@@ -11,16 +11,16 @@
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<p class="navbar-text">Debrief</p> 
+				<p class="navbar-text">Debrief</p>
 			</div>
 		</div>
 	</nav>
 	<!-- Display instructions in well -->
 	<div id= "container" style="width:800px" class="container well">
-		
+
 		<h1>Thank you!</h1>
-		
-		<p>Thank you for participating in this experiment. Your earnings total is <span id="bonusAmount">EARNINGS</span>. Please contact the experiment administrator (cjd78@pitt.edu) to arrange payment.</p>
+
+		<p>Thank you for participating in this experiment. Your earnings total is <span id="bonusAmount">EARNINGS</span>.</p>
 
 		<br>
 		<h3>What is the goal of this experiment?</h3>
@@ -49,7 +49,7 @@
 		<p>If you have further questions about the study, or would like to withdraw retrospectively, feel free to contact Cory Derringer (cjd78@pitt.edu) or Dr. Benjamin Rottman (rottman@pitt.edu). If you choose to withdraw at this point, you will be able to keep your participation credit for the experiment.</p>
 
 		<p><b>Please do not share this information.</b> It is very important for the integrity of this experiment that our participants do not know our hypotheses ahead of time. To protect against this, please do not share this document with anyone else.</p>
-	</div>  
+	</div>
 </body>
 <script>
 
@@ -60,7 +60,7 @@ function creditRender(credits){
     if(credits % 100 == 0){
         var displayCredits = String(credits/100) + '.00';
     }else if(credits %10 == 0){
-        displayCredits = String(credits/100) +'0'; 
+        displayCredits = String(credits/100) +'0';
     }else{
         displayCredits = credits/100;
     }
@@ -73,7 +73,3 @@ $('#bonusAmount').text('$'+creditRender(bonus))
 </script>
 
 {% endblock %}
-
-
-
-
