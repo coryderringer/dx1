@@ -26,7 +26,7 @@
                     <div style="height:175px">
                         <h3>Overview</h3>
                         <p name="story">For this task, imagine that you work in a hospital, and your job is to make sure that the patients have GOOD outcomes after treatment. You will see two scenarios, each containing information about patients who were treated for a fictional disease. You are responsible for finding out if the different medications are effective or not. Keep in mind that different diseases have different success rates for treatment. Before seeing data about each disease, you will be told which treatment is the most common, and whether the outcomes for the disease are typically GOOD or BAD.</p>
-                        <p name="monetary" style="display:none">For this task, you will learn about the relationships between shapes. You will see two scenarios, each containing information about two sets of shape pairs. You are responsible for finding out if the shape pairs are related or not. Keep in mind that some shapes are more common than others. Before seeing the shape combinations, you will be told which shapes are the most common.</p>
+                        <p name="monetary" style="display:none">For this task, you will learn about the relationships between shapes and colors. You will see two scenarios, each containing information about two sets of shapes and colors. You are responsible for finding out if there are relationships between the shapes and colors. Keep in mind that some shapes are more common than others, and some colors are more common than others. Before seeing the shape/color combinations, you will be told which shapes and colors are the most common.</p>
                     </div>
 
                     <button id="next1" class="btn btn-default" data-toggle="tab" href="#instructions2">
@@ -38,7 +38,7 @@
                     <div style="height:175px">
                         <h3>Overview</h3>
                         <p name="story">For each patient, you will first see whether their outcome was GOOD or BAD. You will be asked to confirm the outcome by clicking the appropriate face. <span name="combinedCondition">Each GOOD or BAD outcome is added or subtracted from the bonus you will receive after completing this experiment. Each GOOD outcome (like this one) adds 6 cents to your baseline bonus of $1.00, while each BAD outcome subtracts 6 cents. (See "Treatment Bonus" on the right side.)</span></p>
-                        <p name="monetary" style="display:none">On each trial, you will first see whether Shape 1 was a <span name="var1a">SQUARE</span> or a <span name="var1b">CIRCLE</span>. You will be asked to confirm by clicking the matching shape in the top row. Your bonus amount is affected by these shapes. In this case, each <span name="var1a">SQUARE</span> (like this one) adds 6 cents to your baseline bonus of $1.00, while each <span name="var1b">CIRCLE</span> subtracts 6 cents. (See "Bonus" on the right side.)</p>
+                        <p name="monetary" style="display:none">On each trial, you will first see whether the shape was a <span name="var2a">SQUARE</span> or a <span name="var2b">CIRCLE</span>. You will be asked to confirm by clicking the matching shape in the top row. Your bonus amount is affected by these shapes. In this case, each <span name="var2a">SQUARE</span> (like this one) adds 6 cents to your baseline bonus of $1.00, while each <span name="var2b">CIRCLE</span> subtracts 6 cents. (See "Bonus" on the right side.)</p>
                     </div>
 
                     <button id="previous1" class="btn btn-default" data-toggle="tab" href="#instructions1">Previous</button>
@@ -53,8 +53,8 @@
                         <p name="story">You will also <b>guess</b> which of two treatments the patient received by clicking on one of the pills below. In this case the options are TW405 or HL376. You will be told the names of the drugs, as well as which one is more commonly used, before each disease scenario.
                             <br><br>For now, let's say you guess TW405.
                         </p>
-                        <p name="monetary" style="display:none">You will also <b>guess</b> what Shape 2 will be. In this case the options are <span name="var2a">SQUARE</span> or <span name="var2b">CIRCLE</span>. You will be told the shape options, as well as which one is more common, before each scenario.
-                            <br><br>For now, let's say you guess <span name="var2a">SQUARE</span>.</p>
+                        <p name="monetary" style="display:none">You will also <b>guess</b> what the color will be. In this case the options are <span name="var1a">COLOR</span> or <span name="var1b">COLOR</span>. You will be told the color options, as well as which one is more common, before each scenario.
+                            <br><br>For now, let's say you guess <span name="var1a">COLOR</span>.</p>
                     </div>
                     <button id="previous2" class="btn btn-default" data-toggle="tab" href="#instructions2">Previous</button>
                     <button id="next3" class="btn btn-default" data-toggle="tab" href="#instructions4">
@@ -66,7 +66,7 @@
                     <div style="height:175px">
                         <h3>Example Task</h3>
                         <p name="story">After making your guess, you will receive immediate feedback about which drug the patient received. For each patient, if you correctly guess which drug they received, you will get a 3 cent accuracy bonus. The total bonus <span name="combinedCondition">(Treatment Bonus + Accuracy Bonus) is the amount that will be paid to you at the end of the study, and </span>is continually updated in the "Bonus" box on the right.</p>
-                        <p name="monetary" style="display:none">After making your guess, you will receive immediate feedback about Shape 2. For each trial, if you correctly guess Shape 2, you will get a 3 cent accuracy bonus. The total bonus is the amount that will be paid to you at the end of the study, and is continually updated in the "Bonus" box on the right.</p>
+                        <p name="monetary" style="display:none">After making your guess, you will receive immediate feedback about the color, and you will be asked to click on the correct color. For each trial, if you correctly guess the color, you will get a 3 cent accuracy bonus. The total bonus is the amount that will be paid to you at the end of the study, and is continually updated in the "Bonus" box on the right.</p>
                     </div>
                     <button id="previous3" class="btn btn-default" data-toggle="tab" href="#instructions3">Previous</button>
                     <button id="next4" class="btn btn-info" data-toggle="tab">
@@ -89,7 +89,7 @@
                         <!-- find a place for the patient impact info here -->
                         <div>
                             <p name="story">The patient's outcome was <span name="outcomeSpan">GOOD</span>.</p>
-                            <p name="monetary" style="display:none">Shape 1 is a <span name="var1a">SHAPE</span>.</p>
+                            <p name="monetary" style="display:none">Shape is <span name="var2a">SHAPE</span>.</p>
                         </div>
 
                         <div class="text-center" style="height:100px; border-bottom: 1px solid grey"> <!-- this is the div that we want split up vertically -->
@@ -110,15 +110,15 @@
 
                         <div class="text-center">
                             <p name="story" id="effectPrompt">Was the patient's outcome GOOD or BAD?</p>
-                            <p name="monetary">Was Shape 1 a <span name="var1a"></span> or a <span name="var1b"></span>?</p>
+                            <p name="monetary">Was the shape <span name="var2a"></span> or <span name="var2b"></span>?</p>
 
                         </div>
 
                         <div style="height:50px" class="row">
 
                             <div id="leftFace" class="col-xs-5">
-                                <div id="var1a" class="text-center">
-                                    <img id="var1aImg" src="/static/images/blank.png" style="height:50px"/>
+                                <div id="var2a" class="text-center">
+                                    <img id="var2aImg" src="/static/images/blank.png" style="height:50px"/>
                                 </div>
                             </div>
 
@@ -126,8 +126,8 @@
                             <div id="rightBorderDiv" style="height:50px" class="col-xs-1"></div>
 
                             <div id="rightFace" class="col-xs-5">
-                                <div id="var1b" class="text-center">
-                                    <img id="var1bImg" src="/static/images/blank.png" style="height:50px"/>
+                                <div id="var2b" class="text-center">
+                                    <img id="var2bImg" src="/static/images/blank.png" style="height:50px"/>
                                 </div>
                             </div>
 
@@ -138,20 +138,20 @@
                     <br>
                     <div id="causeDiv" class = "text-center">
                         <p name="story" id="causePrompt">Guess whether the patient received TW405 or HL376:</p>
-                        <p name="monetary">Guess whether Shape 2 will be a <span name="var2a"></span> or a <span name="var2b"></span>:</p>
+                        <p name="monetary">Guess whether the color will be <span name="var1a"></span> or <span name="var1b"></span>:</p>
 
                         <div class="row" id="pillDiv" style="height:75px">
-                            <div id="var2a" class="col-xs-5 text-center">
+                            <div id="var1a" class="col-xs-5 text-center">
                                 <p name ="story">TW405</p>
-                                <img id="var2aImg" src="/static/images/blank.png" style="width:100px"/>
+                                <img id="var1aImg" src="/static/images/blank.png" style="width:100px"/>
                             </div>
                             <div class="col-xs-2 text-center">
                                 <div style="height:10px"></div>
                                 <div name="feedbackDiv" style="font-size: 10pt; padding: 5px; height: 75px"></div>
                             </div>
-                            <div id="var2b" class="col-xs-5 text-center">
+                            <div id="var1b" class="col-xs-5 text-center">
                                 <p name ="story">HL376</p>
-                                <img id="var2bImg" src="/static/images/blank.png" style="width:100px"/>
+                                <img id="var1bImg" src="/static/images/blank.png" style="width:100px"/>
                             </div>
                         </div>
 
@@ -208,15 +208,15 @@
             // main.condition = "combined" // testing; either "combined", "monetary", or "story"
 
             if(main.condition === 'monetary'){
-                main.var1a = 'RECTANGLE'
-                main.var1b = 'TRIANGLE'
-                main.var2a = 'CIRCLE'
-                main.var2b = 'PENTAGON'
+                main.var1a = 'ORANGE'
+                main.var1b = 'YELLOW'
+                main.var2a = 'RECTANGLE'
+                main.var2b = 'TRIANGLE'
             }else{
-                main.var1a = 'GOOD'
-                main.var1b = 'BAD'
-                main.var2a = 'TW405'
-                main.var2b = 'HL376'
+                main.var2a = 'GOOD'
+                main.var2b = 'BAD'
+                main.var1a = 'TW405'
+                main.var1b = 'HL376'
             }
 
             main.position2 = {{position2}}
@@ -241,21 +241,21 @@
 
             // this.$backButton = main.$co.find('#backButton')
             // this.$nextButton = main.$co.find('#nextButton')
-            main.$var1aImg = $('#var1aImg')
-            main.$var1bImg = $('#var1bImg')
             main.$var2aImg = $('#var2aImg')
             main.$var2bImg = $('#var2bImg')
+            main.$var1aImg = $('#var1aImg')
+            main.$var1bImg = $('#var1bImg')
             main.$var2_outcome_image = $('#var2_outcome_image')
 
-            main.$var1a_Spans = $('[name="var1a"]')
-            main.$var1b_Spans = $('[name="var1b"]')
             main.$var2a_Spans = $('[name="var2a"]')
             main.$var2b_Spans = $('[name="var2b"]')
+            main.$var1a_Spans = $('[name="var1a"]')
+            main.$var1b_Spans = $('[name="var1b"]')
 
-            main.$var1a = main.$co.find('#var1a')
-            main.$var1b = main.$co.find('#var1b')
             main.$var2a = main.$co.find('#var2a')
             main.$var2b = main.$co.find('#var2b')
+            main.$var1a = main.$co.find('#var1a')
+            main.$var1b = main.$co.find('#var1b')
 
             this.$next1 = main.$co.find('#next1')
             this.$next2 = main.$co.find('#next2')
@@ -299,10 +299,10 @@
         },
 
         render: function(stage){
-            main.$var1a_Spans.text(main.var1a)
-            main.$var1b_Spans.text(main.var1b)
             main.$var2a_Spans.text(main.var2a)
             main.$var2b_Spans.text(main.var2b)
+            main.$var1a_Spans.text(main.var1a)
+            main.$var1b_Spans.text(main.var1b)
 
             if(main.condition == 'story'){
                 main.$outcomePercentageSpan.hide()
@@ -317,10 +317,10 @@
                     $('[name="monetary"]').show()
 
                     // images
-                    main.$var1aImg.attr('src', '/static/images/rectangle.png')
-                    main.$var1bImg.attr('src', '/static/images/triangle.png')
-                    main.$var2aImg.attr('src', '/static/images/circle.png').css('height', '60px').css('width', '60px')
-                    main.$var2bImg.attr('src', '/static/images/pentagon.png').css('height', '60px').css('width', '60px')
+                    main.$var2aImg.attr('src', '/static/images/rectangle.png')
+                    main.$var2bImg.attr('src', '/static/images/triangle.png')
+                    main.$var1aImg.attr('src', '/static/images/Orange.Square.png').css('height', '60px').css('width', '60px')
+                    main.$var1bImg.attr('src', '/static/images/Yellow.Square.png').css('height', '60px').css('width', '60px')
                     main.$var2_outcome_image.attr('src', '/static/images/rectangle.png')
 
                     // everything opaque
@@ -337,8 +337,8 @@
                     main.$effectDiv.css('opacity', '1.0')
 
                     // if coming backward:
-                    main.$var1b.css('opacity', '1.0')
-                    main.removeBorder(main.$var1a)
+                    main.$var2b.css('opacity', '1.0')
+                    main.removeBorder(main.$var2a)
                     main.$causeDiv.css('opacity', '0.2')
 
                     main.$treatmentBonusDiv.css('opacity', '1.0')
@@ -350,11 +350,11 @@
 
                 }else if(stage == 2){
                     main.$causeDiv.css('opacity', '1.0')
-                    main.$var1b.css('opacity', '0.2')
-                    main.insertBorder(main.$var1a)
+                    main.$var2b.css('opacity', '0.2')
+                    main.insertBorder(main.$var2a)
 
                     main.$drugB.css('opacity', '1.0')
-                    main.removeBorder(main.$var2a)
+                    main.removeBorder(main.$var1a)
                     main.$feedbackDiv.text('')
 
                     // if coming backwards
@@ -367,7 +367,7 @@
 
                 }else if(stage == 3){
                     main.$drugB.css('opacity', '0.2')
-                    main.insertBorder(main.$var2a)
+                    main.insertBorder(main.$var1a)
                     main.$feedbackDiv.html('Correct!<br>+3 cents!')
 
 
@@ -385,10 +385,10 @@
                 if(stage == 0){ // very beginning, opacity of 0.2 for the example div
 
                     // images
-                    main.$var1aImg.attr('src', '/static/images/good.png')
-                    main.$var1bImg.attr('src', '/static/images/bad.png')
-                    main.$var2aImg.attr('src', '/static/images/red.png')
-                    main.$var2bImg.attr('src', '/static/images/white.png')
+                    main.$var2aImg.attr('src', '/static/images/good.png')
+                    main.$var2bImg.attr('src', '/static/images/bad.png')
+                    main.$var1aImg.attr('src', '/static/images/red.png')
+                    main.$var1bImg.attr('src', '/static/images/white.png')
                     main.$var2_outcome_image.attr('src', '/static/images/good.png')
 
 
@@ -408,8 +408,8 @@
                     main.$effectDiv.css('opacity', '1.0')
 
                     // if coming backward:
-                    main.$var1b.css('opacity', '1.0')
-                    main.removeBorder(main.$var1a)
+                    main.$var2b.css('opacity', '1.0')
+                    main.removeBorder(main.$var2a)
                     main.$causeDiv.css('opacity', '0.2')
 
                     main.$treatmentBonusDiv.css('opacity', '1.0')
@@ -421,11 +421,11 @@
 
                 }else if(stage == 2){
                     main.$causeDiv.css('opacity', '1.0')
-                    main.$var1b.css('opacity', '0.2')
-                    main.insertBorder(main.$var1a)
+                    main.$var2b.css('opacity', '0.2')
+                    main.insertBorder(main.$var2a)
 
                     main.$drugB.css('opacity', '1.0')
-                    main.removeBorder(main.$var2a)
+                    main.removeBorder(main.$var1a)
                     main.$feedbackDiv.text('')
 
                     // if coming backwards
@@ -442,7 +442,7 @@
 
                 }else if(stage == 3){
                     main.$drugB.css('opacity', '0.2')
-                    main.insertBorder(main.$var2a)
+                    main.insertBorder(main.$var1a)
                     main.$feedbackDiv.html('Correct!<br>+3 cents!')
 
 
@@ -490,8 +490,8 @@
 
 
             if(stage == 1){
-                main.$var1a.unbind().on('click', main.effectiveAlert)
-                main.$var1b.unbind().on('click', main.ineffectiveAlert)
+                main.$var2a.unbind().on('click', main.effectiveAlert)
+                main.$var2b.unbind().on('click', main.ineffectiveAlert)
                 if(main.position2 == 0){
                     main.$leftBorderDiv.unbind().on('click', main.effectiveAlert)
                     main.$rightBorderDiv.unbind().on('click', main.ineffectiveAlert)
@@ -501,16 +501,16 @@
 
                 }
             }else{
-                main.$var1a.unbind()
-                main.$var1b.unbind()
+                main.$var2a.unbind()
+                main.$var2b.unbind()
             }
 
             if(stage == 2){
-                main.$var2a.unbind().on('click', main.drugA_Click)
-                main.$var2b.unbind().on('click', main.drugB_Click)
+                main.$var1a.unbind().on('click', main.drugA_Click)
+                main.$var1b.unbind().on('click', main.drugB_Click)
             }else{
-                main.$var2a.unbind()
-                main.$var2b.unbind()
+                main.$var1a.unbind()
+                main.$var1b.unbind()
             }
 
             main.$next1.unbind().on('click', main.incrementInstructions)
@@ -545,7 +545,7 @@
             if(main.condition != 'monetary'){
                 alert('Great! During the experiment, you will need to click here to indicate that the outcome was GOOD!')
             }else{
-                alert('Great! During the experiment, you will need to click here to indicate that Shape 1 was a RECTANGLE!')
+                alert('Great! During the experiment, you will need to click here to indicate that the shape was RECTANGLE!')
             }
         },
 
@@ -553,7 +553,7 @@
             if(main.condition != 'monetary'){
                 alert('Whoops! That face would indicate that the outcome was BAD!')
             }else{
-                alert('Whoops! Clicking here would indicate that Shape 1 was a TRIANGLE!')
+                alert('Whoops! Clicking here would indicate that the shape was TRIANGLE!')
             }
         },
 
@@ -561,7 +561,7 @@
             if(main.condition != 'monetary'){
                 alert('Great! During the experiment, clicking here is a guess that the patient received TW405!')
             }else{
-                alert('Great! During the experiment, clicking here is a guess that Shape 2 will be a CIRCLE!')
+                alert('Great! During the experiment, clicking here is a guess that the color will be ORANGE!')
             }
         },
 
@@ -569,7 +569,7 @@
             if(main.condition != 'monetary'){
                 alert('Whoops! During the experiment, clicking here is a guess that the patient received HL376.')
             }else{
-                alert('Whoops! During the experiment, clicking here is a guess that Shape 2 will be a PENTAGON!')
+                alert('Whoops! During the experiment, clicking here is a guess that the color will be YELLOW!')
             }
         },
 

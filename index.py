@@ -1214,17 +1214,9 @@ class MturkIDHandler(webapp.RequestHandler):
 					self.session['condition'] = 'monetary'
 
 
-				# self.session['condition'] = 'monetary' # testing
+				self.session['condition'] = 'monetary' # testing
 				# position1 and position2 (visual)
 				if self.session['condition'] == 'monetary':
-					# shapes
-					shapeNames = ['SQUARE', 'CIRCLE', 'STAR', 'TRIANGLE', 'OVAL', 'DIAMOND', 'RECTANGLE', 'PENTAGON']
-					# testing
-					# random.shuffle(shapeNames) # which shapes they see when. This takes care of position1 and position2 (visual) (commented out for testing)
-					self.session['var1_Names'] = shapeNames[0:4] # worked in python 3...we'll see
-						# the first two are the var1 shape names for the first scenario, in order (this is position1, no need to randomize further)
-
-
 					a = ['RED', 'BLUE', 'PURPLE', 'GREEN']
 
 					if random.choice([0,1]) == 1:
@@ -1243,8 +1235,15 @@ class MturkIDHandler(webapp.RequestHandler):
 						colorNames[2] = temp3
 						colorNames[3] = temp2
 
-					self.session['var2_Names'] = colorNames
-						# this changes it to colors.
+					self.session['var1_Names'] = colorNames
+						# this changes it to colors. If I did this right it will always be red vs blue and green vs purple
+
+					# shapes
+					shapeNames = ['SQUARE', 'CIRCLE', 'STAR', 'TRIANGLE', 'OVAL', 'DIAMOND', 'RECTANGLE', 'PENTAGON']
+					# testing
+					# random.shuffle(shapeNames) # which shapes they see when. This takes care of position1 and position2 (visual) (commented out for testing)
+					self.session['var2_Names'] = shapeNames[0:4] # worked in python 3...we'll see
+						# the first two are the var1 shape names for the first scenario, in order (this is position1, no need to randomize further)
 				else:
 
 					# drug names

@@ -35,7 +35,7 @@
                         <!-- find a place for the patient impact info here -->
                         <div>
                             <p name="story">The patient's outcome was <span name="outcomeSpan">BAD</span>.</p>
-                            <p name="monetary">Shape 1: <span id="var2_feedback">SHAPE NAME</span>.</p>
+                            <p name="monetary">Shape is <span id="var2_feedback">SHAPE NAME</span>.</p>
                         </div>
 
                         <div class="text-center" style="height:100px; border-bottom: 1px solid grey"> <!-- this is the div that we want split up vertically -->
@@ -56,7 +56,7 @@
 
                         <p id="v2_Prompt">
                             <span name="story">Was the patient's outcome <span name="var2a">GOOD</span> or <span name="var2b">BAD</span>?</span>
-                            <span name="monetary">Shape 1: <span name="var2a">SHAPE NAME 1</span> or <span name="var2b">SHAPE NAME 2</span>?</span>
+                            <span name="monetary">Was the shape <span name="var2a">SHAPE NAME 1</span> or <span name="var2b">SHAPE NAME 2</span>?</span>
                         </p>
 
 
@@ -81,7 +81,7 @@
                     <div id="causeDiv" class = "text-center">
                         <p id="v1_Prompt">
                             <span name="story">Guess whether the patient received <span name="var1a">Drug A</span> or <span name="var1b">Drug B</span>?</span>
-                            <span name="monetary">Guess Shape 2: <span name="var1a">SHAPE NAME 1</span> or <span name="var1b">SHAPE NAME 2</span>?</span>
+                            <span name="monetary">Guess whether the color will be <span name="var1a">SHAPE NAME 1</span> or <span name="var1b">SHAPE NAME 2</span>:</span>
                         </p>
                         <div class = "row" id="pillDiv" style="height:75px">
                             <div id="var1a" class="col-xs-5 text-center" style="height:100px">
@@ -244,7 +244,12 @@
                 '/static/images/lightblue.png',
                 '/static/images/darkblue.png',
                 '/static/images/orange.png',
-                '/static/images/purple.png']
+                '/static/images/purple.png',
+
+				'/static/images/Red.Square.png',
+				'/static/images/Purple.Square.png',
+				'/static/images/Green.Square.png',
+				'/static/images/Blue.Square.png']
 
             main.var1a = '{{var1_Names_Left}}'
             main.var1b = '{{var1_Names_Right}}'
@@ -269,17 +274,22 @@
                     main.var2b_img_src = main.imageSources[i]
                 }
 
-                if(main.condition === 'monetary'){ // only for shapes
+                if(main.condition === 'monetary'){ // square colors
 
                     // 1a
-                    if(main.imageSources[i].split('/')[3].split('.')[0] === main.var1a.toLowerCase()){
-                        main.var1a_img_src = main.imageSources[i]
+                    if(main.imageSources[i].toLowerCase().split('/')[3].split('.')[0] === main.var1a.toLowerCase()){
+						if(main.imageSources[i].split('/')[3].split('.')[1] === 'Square'){
+							main.var1a_img_src = main.imageSources[i]
+						}
+
                     }
                     // 1b
-                    if(main.imageSources[i].split('/')[3].split('.')[0] === main.var1b.toLowerCase()){
-                        main.var1b_img_src = main.imageSources[i]
+                    if(main.imageSources[i].toLowerCase().split('/')[3].split('.')[0] === main.var1b.toLowerCase()){
+                        if(main.imageSources[i].split('/')[3].split('.')[1] === 'Square'){
+							main.var1b_img_src = main.imageSources[i]
+						}
                     }
-                }else{ // colors
+                }else{ // pill colors
                     // 1a
                     if(main.imageSources[i].split('/')[3].split('.')[0] === '{{drugColor_Left}}'){
                         main.var1a_img_src = main.imageSources[i]

@@ -25,30 +25,30 @@
 			<span name="freq1a">most often</span> treated with
 			<span name="var1a"></span>, but is <span name="freq1b">sometimes</span>
 			treated with <span name="var1b"></span>. Patients
-			<span name="freq2a">most often</span> have <span name="var2a">GOOD</span>
+			<b><span name="freq2a">most often</span> have <span name="var2a">GOOD</span>
 			treatment outcomes for this disease, but
-			<span name="freq2b">sometimes</span> have <span name="var2b">BAD</span> outcomes.
+			<span name="freq2b">sometimes</span> have <span name="var2b">BAD</span> outcomes.</b>
 		</p>
 
 		<p name="monetary" style="display:none">You will complete two scenarios,
 			each about different shapes. The scenarios are unrelated. In the first
-			scenario, Shape 1 is <b><span name="freq1a">most often</span> a
+			scenario, the color is <b><span name="freq1a">most often</span>
 			<span name="var1a"></span>, but is <span name="freq1b">sometimes</span>
-			a <span name="var1b"></span></b>. Shape 2 is
-			<span name="freq2a">most often</span> a <span name="var2a"></span>,
-			but is <span name="freq2b">sometimes</span> a
-			<span name="var2b"></span>
+			 <span name="var1b"></span></b>. The shape is
+			<b><span name="freq2a">most often</span> <span name="var2a"></span>,
+			but is <span name="freq2b">sometimes</span>
+			<span name="var2b"></span></b>
 		</p>
         <br>
 
 		<div class = "text-center">
-            <p name="monetary">To begin, click the <b>most common</b> forms of Shape 1 and Shape 2.</p>
+            <p name="monetary">To begin, click the <b>most common</b> color and shape.</p>
 			<p name="story">To begin, click the <b>most common</b> drug and outcome.</p>
 			<br>
             <div class = "row" id="var1Div" style="height:100px">
 				<div class = "col-xs-2 text-center">
                     <b>
-						<p name="monetary">Shape 1:</p>
+						<p name="monetary">Color:</p>
 						<p name="story">Drug:</p>
 					</b>
                 </div>
@@ -71,7 +71,7 @@
 
 			<div class = "row" id="shape2Div" style="height:100px">
 				<div class = "col-xs-2 text-center">
-					<b name="monetary">Shape 2:</b>
+					<b name="monetary">Shape:</b>
 					<b name="story">Outcome:</b>
 				</div>
 				<div id="var2a" class="col-xs-4" style="height:100px">
@@ -152,7 +152,12 @@
                 '/static/images/lightblue.png',
                 '/static/images/darkblue.png',
                 '/static/images/orange.png',
-                '/static/images/purple.png']
+                '/static/images/purple.png',
+
+				'/static/images/Red.Square.png',
+				'/static/images/Purple.Square.png',
+				'/static/images/Green.Square.png',
+				'/static/images/Blue.Square.png']
 
 			for(var i = 0; i < main.imageSources.length; i++){
                 // 2a
@@ -167,14 +172,20 @@
                 if(main.condition === 'monetary'){ // only for shapes
 
                     // 1a
-                    if(main.imageSources[i].split('/')[3].split('.')[0] === main.var1a.toLowerCase()){
-                        main.var1a_img_src = main.imageSources[i]
+                    if(main.imageSources[i].toLowerCase().split('/')[3].split('.')[0] === main.var1a.toLowerCase()){
+						if(main.imageSources[i].split('/')[3].split('.')[1] === 'Square'){
+							main.var1a_img_src = main.imageSources[i]
+						}
+
                     }
                     // 1b
-                    if(main.imageSources[i].split('/')[3].split('.')[0] === main.var1b.toLowerCase()){
-                        main.var1b_img_src = main.imageSources[i]
+                    if(main.imageSources[i].toLowerCase().split('/')[3].split('.')[0] === main.var1b.toLowerCase()){
+                        if(main.imageSources[i].split('/')[3].split('.')[1] === 'Square'){
+							main.var1b_img_src = main.imageSources[i]
+						}
                     }
-                }else{ // colors
+
+                }else{ // pill colors
                     // 1a
                     if(main.imageSources[i].split('/')[3].split('.')[0] === '{{drugColor_Left}}'){
                         main.var1a_img_src = main.imageSources[i]

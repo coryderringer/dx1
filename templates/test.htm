@@ -33,16 +33,15 @@
                     <div id="judgment1Div" class="text-center">
                         <h2>
                             <span name="story">Which drug would YOU rather take?</span>
-                            <span name="monetary">Which shape leads to better/worse monetary outcomes?</span>
+                            <span name="monetary">Which color would you choose?</span>
                         </h2>
                         <!-- find a place for the patient impact info here -->
                         <div id="causalSlider">
                             <p name="story">Now imagine that you have been diagnosed with {{disease}}.
                                 Which of these two drugs would you prefer to take?</p>
-                            <p name="monetary">Now imagine a scenario in which you could pick Shape 1 (
-                                <span name="var1a"></span> or <span name="var1b"></span>), and the corresponding Shape 2 (
-                                    <span name="var2a"></span> or <span name="var2b"></span>)
-                                    would result in a gain or loss of $1000. Which value of Shape 1 would you prefer?</p>
+                            <p name="monetary">Now imagine a scenario in which you had to pick a color (
+                                <span name="var1a"></span> or <span name="var1b"></span>), and win or lose money based on the corresponding shape. In this scenario, you would <u>win</u> $1000 if the the resulting shape was
+                                    <span name="goodShape"></span>, but you would <u>lose</u> $1000 if it was <span name="badShape"></span>. Which color would you prefer to choose, if you want the shape to be <span name="goodShape"></span>?</p>
 
                             <div class="row">
                                 <div class="col-xs-2"></div>
@@ -105,10 +104,10 @@
                             <div class="col-xs-6" name="left_Div">
                                 <p>
                                     <span name="story">Of the patients you just saw, <span name="var1a_Total"><b>NUMBER</b></span> received <b><span name="var1a">OUTCOME</span></b>. How many of them had a <span name="var2a"></span>/<span name="var2b"></span> outcome?</span>
-                                    <span name="monetary">Shape 1 was a <b><span name="top_left_var_Name">SHAPE</span></b>
+                                    <span name="monetary">The color was <b><span name="top_left_var_Name">SHAPE</span></b>
                                         <span name="top_left_var_Total"><b>NUMBER</b></span>
                                         times.
-                                        When Shape 2 was a <span name="top_left_var_Name">SHAPE</span>, how many times was Shape 1 a
+                                        When the color was <span name="top_left_var_Name">SHAPE</span>, how many times was the shape
                                         <span name="bottom_left_var_Name">SHAPE1</span>/
                                         <span name="bottom_right_var_Name">SHAPE2</span>?</span>
                                 </p>
@@ -116,11 +115,10 @@
                             <div class="col-xs-6" name="right_Div">
                                 <p>
                                     <span name="story">Of the patients you just saw, <span name="var1b_Total"><b>NUMBER</b></span> received <b><span name="var1b">OUTCOME</span></b>. How many of them had a <span name="var2a"></span>/<span name="var2b"></span> outcome?</span>
-                                    <span name="monetary">Shape 1 was a <b><span name="top_right_var_Name">SHAPE</span></b>
+                                    <span name="monetary">The color was <b><span name="top_right_var_Name">SHAPE</span></b>
                                         <span name="top_right_var_Total"><b>NUMBER</b></span>
                                         times.
-                                        When Shape 2 was a <span name="top_right_var_Name">SHAPE</span>, how many times was Shape 1 a
-                                        <span name="bottom_left_var_Name">SHAPE1</span>/
+                                        When the color was <span name="top_right_var_Name">SHAPE</span>, how many times was the shape                                         <span name="bottom_left_var_Name">SHAPE1</span>/
                                         <span name="bottom_right_var_Name">SHAPE2</span>?</span>
                                 </p>
                             </div>
@@ -129,10 +127,10 @@
                             <div class="col-xs-6" name="left_Div">
                                 <p>
                                     <span name="story">Of the patients you just saw, <span name="var2a_Total"><b>NUMBER</b></span> had <b><span name="var2a">OUTCOME</span> outcomes</b>. How many of them received <span name="var1a"></span>/<span name="var1b"></span>?</span>
-                                    <span name="monetary">Shape 2 was a <b><span name="top_left_var_Name">SHAPE</span></b>
+                                    <span name="monetary">The shape was <b><span name="top_left_var_Name">SHAPE</span></b>
                                         <span name="top_left_var_Total"><b>NUMBER</b></span>
                                         times.
-                                        When Shape 2 was a <span name="top_left_var_Name">SHAPE</span>, how many times was Shape 1 a
+                                        When the shape was <span name="top_left_var_Name">SHAPE</span>, how many times was the color
                                         <span name="bottom_left_var_Name">SHAPE1</span>/
                                         <span name="bottom_right_var_Name">SHAPE2</span>?</span>
                                 </p>
@@ -140,10 +138,10 @@
                             <div class="col-xs-6" name="right_Div">
                                 <p>
                                     <span name="story">Of the patients you just saw, <span name="var2b_Total"><b>NUMBER</b></span> had <b><span name="var2b">OUTCOME</span> outcomes</b>. How many of them received <span name="var1a"></span>/<span name="var1b"></span>?</span>
-                                    <span name="monetary">Shape 1 was a <b><span name="top_right_var_Name">SHAPE</span></b>
+                                    <span name="monetary">The shape was <b><span name="top_right_var_Name">SHAPE</span></b>
                                         <span name="top_right_var_Total"><b>NUMBER</b></span>
                                         times.
-                                        When Shape 2 was a <span name="top_right_var_Name">SHAPE</span>, how many times was Shape 1 a
+                                        When the shape was <span name="top_right_var_Name">SHAPE</span>, how many times was the color
                                         <span name="bottom_left_var_Name">SHAPE1</span>/
                                         <span name="bottom_right_var_Name">SHAPE2</span>?</span>
                                 </p>
@@ -345,7 +343,12 @@
                 '/static/images/lightblue.png',
                 '/static/images/darkblue.png',
                 '/static/images/orange.png',
-                '/static/images/purple.png']
+                '/static/images/purple.png',
+
+				'/static/images/Red.Square.png',
+				'/static/images/Purple.Square.png',
+				'/static/images/Green.Square.png',
+				'/static/images/Blue.Square.png']
 
             test.colors = ['{{drugColor_Left}}', '{{drugColor_Right}}'] // this is the order from the backend, something like [3,1]
 
@@ -359,15 +362,20 @@
                     test.var2b_img_src = test.imageSources[i]
                 }
 
-                if(test.condition === 'monetary'){ // only for shapes
+                if(test.condition === 'monetary'){ // only for color squares
 
                     // 1a
-                    if(test.imageSources[i].split('/')[3].split('.')[0] === test.var1a.toLowerCase()){
-                        test.var1a_img_src = test.imageSources[i]
+                    if(test.imageSources[i].toLowerCase().split('/')[3].split('.')[0] === test.var1a.toLowerCase()){
+						if(test.imageSources[i].split('/')[3].split('.')[1] === 'Square'){
+							test.var1a_img_src = test.imageSources[i]
+						}
+
                     }
                     // 1b
-                    if(test.imageSources[i].split('/')[3].split('.')[0] === test.var1b.toLowerCase()){
-                        test.var1b_img_src = test.imageSources[i]
+                    if(test.imageSources[i].toLowerCase().split('/')[3].split('.')[0] === test.var1b.toLowerCase()){
+                        if(test.imageSources[i].split('/')[3].split('.')[1] === 'Square'){
+							test.var1b_img_src = test.imageSources[i]
+						}
                     }
                 }else{ // colors
                     // 1a
@@ -545,6 +553,16 @@
             // spans
             test.$var1a_Spans.text(String(test.var1a))
             test.$var1b_Spans.text(String(test.var1b))
+            test.$var2a_Spans.text(String(test.var2a))
+            test.$var2b_Spans.text(String(test.var2b))
+
+            if(test.position2 === 0){
+                $('[name="goodShape"]').text(test.var2a)
+                $('[name="badShape"]').text(test.var2b)
+            }else{
+                $('[name="goodShape"]').text(test.var2b)
+                $('[name="badShape"]').text(test.var2a)
+            }
 
             // frequency1 (drugs/shape1), 36 and 12
             if(test.frequency1 === 1){
