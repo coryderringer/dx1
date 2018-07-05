@@ -1,4 +1,4 @@
-import os, logging, wsgiref.handlers, datetime, random, math, string, urllib, csv, json, time
+import os, logging, wsgiref.handlers, datetime, random, math, string, urllib, csv, json, time, hashlib
 
 from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp.util import run_wsgi_app
@@ -49,9 +49,48 @@ class User(db.Model):
 	ethnicity =			db.IntegerProperty()
 	race =				db.IntegerProperty()
 	age = 				db.IntegerProperty()
-	bonusAmt =			db.IntegerProperty()
-	testOrder =			db.IntegerProperty() # 0 is memory first, 1 is causal first
-	progress = 			db.IntegerProperty()
+	BonusOne =			db.IntegerProperty()
+	BonusTwo =			db.IntegerProperty()
+	testOrder =			db.IntegerProperty()
+	reloads =			db.IntegerProperty()
+	v1_Data =			db.ListProperty(int)
+	v2_Data =			db.ListProperty(int)
+	frequency1 =		db.IntegerProperty()
+	frequency2 =		db.ListProperty(int)
+	position2 =			db.IntegerProperty()
+	var1_Names =		db.ListProperty(str)
+	var2_Names =		db.ListProperty(str)
+	condition =			db.StringProperty()
+	drugColors =		db.ListProperty(str)
+	diseaseNames =		db.ListProperty(str)
+	progress =			db.IntegerProperty()
+
+
+# newuser = User(
+# 	usernum=usernum,
+# 	account=account,
+# 	browser=browser,
+# 	sex=0,
+# 	ethnicity=0,
+# 	race=0,
+# 	age=0,
+# 	BonusOne=0,
+# 	BonusTwo = 0,
+# 	testOrder = testOrder,
+# 	reloads = 0,
+# 	v1_Data = self.session['v1_Data'],
+# 	v2_Data = self.session['v2_Data'],
+# 	frequency1 = self.session['frequency1'],
+# 	frequency2 = self.session['frequency2'],
+# 	position2 = self.session['position2'],
+# 	var1_Names = self.session['var1_Names'],
+# 	var2_Names = self.session['var2_Names'],
+# 	condition = self.session['condition'],
+# 	drugColors = self.session['drugColors'],
+# 	diseaseNames = self.session['diseaseNames'],
+# 	progress = 0);
+
+
 
 
 class ScenarioData(db.Model):
@@ -84,6 +123,11 @@ class ScenarioData(db.Model):
 	profitImpact = 		db.IntegerProperty()
 	valence = 			db.StringProperty() # within-subs condition; 0 means rare-positive, 1 means rare-negative
 	condition = 		db.StringProperty() # between-subs cover story condition; monetary, story, combined
+
+
+
+
+
 
 
 class FinalJudgmentData(db.Model):
@@ -197,6 +241,8 @@ class AjaxHandler(webapp.RequestHandler):
 	def post(self):
 		self.session=get_current_session()
 
+		scenario = self.session['scenario']
+
   		trialTime = int(self.request.get('timeInput'))
   		attentionFails = int(self.request.get('attentionFailsInput'))
 		trialNumber = int(self.request.get('trialInput'))
@@ -208,10 +254,35 @@ class AjaxHandler(webapp.RequestHandler):
 		self.session['trialNumber'] = int(self.request.get('trialNumberInput'))
 		self.session['reloads'] = int(self.request.get('reloadsInput'))
 
+		var1_Left = self.session['var1_Names'][2*scenario]
+		var1_Right = self.session['var1_Names'][2*scenario+1]
+		var2_Left = self.session['var2_Names'][2*scenario]
+		var2_Right = self.session['var2_Names'][2*scenario+1]
+		# logging.info('RELOADS: '+str(self.session['reloads']))
+		logging.info('user: '+str(self.session['userkey']))
+		logging.info('usernum: ' +str(self.session['usernum']))
 
-		logging.info('RELOADS: '+str(self.session['reloads']))
+		logging.info('account: '+str(self.session['account']))
+		logging.info('scenario: '+str(self.session['scenario']))
+		# 'var1_Left': self.session['var1_Names'][2*scenario],
+		# 'var1_Right': self.session['var1_Names'][2*scenario+1],
+		logging.info('condition: '+self.session['condition'])
+		logging.info('var1_leftName: '+var1_Left)
+		logging.info('var1_rightName: '+var1_Right)
+		logging.info('var2_leftName: '+var2_Left)
+		logging.info('var2_rightName: '+var2_Right)
 
-		logging.info('BONUS!!!!!! '+str(totalBonus))
+
+		logging.info('trialTime: '+str(trialTime))
+		logging.info('attentionFails: '+str(attentionFails))
+		logging.info('trialNumber: '+str(trialNumber))
+		logging.info('reloads: '+str(self.session['reloads']))
+		logging.info('trialGuess: '+str(trialGuess))
+		logging.info('trialCorrect: '+str(trialCorrect))
+		logging.info('profitImpact: '+str(profitImpact))
+		logging.info('valence: '+str(valence))
+
+		# logging.info('BONUS!!!!!! '+str(totalBonus))
 
 
 		if self.session['scenario'] == 0:
@@ -219,8 +290,8 @@ class AjaxHandler(webapp.RequestHandler):
 		else:
 			self.session['BonusTwo'] = totalBonus
 
-		logging.info('BONUS TEST!' + str(self.session['BonusOne']))
-		logging.info('SCENARIO IS '+str(self.session['scenario']))
+		# logging.info('BONUS TEST!' + str(self.session['BonusOne']))
+		# logging.info('SCENARIO IS '+str(self.session['scenario']))
 
 		# how to check if there are example rows in the datastore
 		que = db.Query(ScenarioData).filter('usernum =', self.session['usernum']).filter('scenario =', self.session['scenario']).filter('trialNumber =', trialNumber)
@@ -549,6 +620,7 @@ class ScenarioHandler(webapp.RequestHandler):
 				'trialGuesses':self.session['trialGuesses'],
 				'trialNumber':0, # testing
 				'reloads':0, # testing
+				'frequency1': self.session['frequency1'],
 				'frequency2': self.session['frequency2'][scenario],
 				'position2': self.session['position2'],
 				# 'testOrder':testOrder, # CHANGE FROM PILOT: ask the three in any order.
@@ -971,18 +1043,19 @@ class preScenarioHandler(webapp.RequestHandler):
 
 class DataHandler(webapp.RequestHandler):
 	def get(self):
-
+		self.session = get_current_session()
+	
 		doRender(self, 'datalogin.htm')
 
 
 	def post(self):
 		self.session = get_current_session()
-		password=self.request.get('password')
+		password=str(self.request.get('password'))
 		page = self.request.get('whichPage')
 
-
-		if password == "gZ2BYJxfCY5SiyttS8zl":
-		# if password == "": # testing
+		output = str(hashlib.sha1(password).hexdigest())
+		# much more secure method of password protecting our data
+		if output == '3fcfd14762bd3087e8563832e048945e50df7f80':
 
 			que=db.Query(ScenarioData)
 			que.order("usernum").order("scenario").order("trialNumber")
@@ -1176,7 +1249,7 @@ class MturkIDHandler(webapp.RequestHandler):
 			que = db.Query(User).filter('account =',ID)
 			results = que.fetch(limit=1)
 
-			if (len(results) > 0) & (ID!='ben'):
+			if (len(results) > 0) & (ID!='ben') & (ID!= 'ben1'):
 				doRender(self, 'do_not_qualify.htm')
 
 			# If user is qualified (http://www.mturk-qualify.appspot.com returns 1)
@@ -1214,7 +1287,8 @@ class MturkIDHandler(webapp.RequestHandler):
 					self.session['condition'] = 'monetary'
 
 
-				self.session['condition'] = 'monetary' # testing
+
+				# self.session['condition'] = 'story' # testing
 				# position1 and position2 (visual)
 				if self.session['condition'] == 'monetary':
 					a = ['RED', 'BLUE', 'PURPLE', 'GREEN']
@@ -1244,6 +1318,8 @@ class MturkIDHandler(webapp.RequestHandler):
 					# random.shuffle(shapeNames) # which shapes they see when. This takes care of position1 and position2 (visual) (commented out for testing)
 					self.session['var2_Names'] = shapeNames[0:4] # worked in python 3...we'll see
 						# the first two are the var1 shape names for the first scenario, in order (this is position1, no need to randomize further)
+					self.session['diseaseNames'] = ['','']
+					self.session['drugColors'] = ['','','','']
 				else:
 
 					# drug names
@@ -1280,11 +1356,20 @@ class MturkIDHandler(webapp.RequestHandler):
 				a = [item for sublist in a for item in sublist] # flatten the list
 
 				# Data1_var2 is the outcome/face or shape2:
+				# frequency2 is whether the *left/right* value is common or rare
+				# position2 is whether the *left/right* value is GOOD or BAD
+				# to create v2 we need both
 				# 0 is ***always bad*** in our datasets
-				if self.session['frequency2'][0] == 0:
-					b = [[0]*24, [1]*12, [0]*8, [1]*4] # 0 is common
-				else:
-					b = [[1]*24, [0]*12, [1]*8, [0]*4] # 1 is common
+				if self.session['position2'] == 0: # left is bad, right is good
+					if self.session['frequency2'][0] == 0: # left is common; if left is bad, more zeroes
+						b = [[0]*24, [1]*12, [0]*8, [1]*4] # 0 is common
+					else: # left is rare, bad is rare, more 1s
+						b = [[1]*24, [0]*12, [1]*8, [0]*4] # 1 is common
+				else: # left is good, right is bad
+					if self.session['frequency2'][0] == 0: # left is common; if left is good, more ones
+						b = [[1]*24, [0]*12, [1]*8, [0]*4] # 1 is common
+					else: # left is rare, left is good, more zeroes
+						b = [[0]*24, [1]*12, [0]*8, [1]*4] # 0 is common
 
 				b = [item for sublist in b for item in sublist] # flatten the list
 
@@ -1309,13 +1394,23 @@ class MturkIDHandler(webapp.RequestHandler):
 				a = [item for sublist in a for item in sublist] # unlist
 
 				# Data1_var2 is the outcome/face or shape2
+				# frequency2 is whether the *left/right* value is common or rare
+				# position2 is whether the *left/right* value is GOOD or BAD
+				# to create v2 we need both
 				# 0 is ***always bad*** in our datasets
-				if self.session['frequency2'][1] == 0:
-					b = [[0]*24, [1]*12, [0]*8, [1]*4] # 0 is common
-				else:
-					b = [[1]*24, [0]*12, [1]*8, [0]*4] # 1 is common
+				if self.session['position2'] == 0: # left is bad, right is good
+					if self.session['frequency2'][1] == 0: # left is common; if left is bad, more zeroes
+						b = [[0]*24, [1]*12, [0]*8, [1]*4] # 0 is common
+					else: # left is rare, bad is rare, more 1s
+						b = [[1]*24, [0]*12, [1]*8, [0]*4] # 1 is common
+				else: # left is good, right is bad
+					if self.session['frequency2'][1] == 0: # left is common; if left is good, more ones
+						b = [[1]*24, [0]*12, [1]*8, [0]*4] # 1 is common
+					else: # left is rare, left is good, more zeroes
+						b = [[0]*24, [1]*12, [0]*8, [1]*4] # 0 is common
 
-				b = [item for sublist in b for item in sublist] # unlist
+				b = [item for sublist in b for item in sublist] # flatten the list
+
 
 				random.shuffle(order)
 				Data2_var1 = []
@@ -1342,6 +1437,12 @@ class MturkIDHandler(webapp.RequestHandler):
 				# running tally of bonuses
 				runningBonuses = [0,0]
 
+				a = self.session['v1_Data']
+				a = [item for sublist in a for item in sublist]
+
+				b = self.session['v2_Data']
+				b = [item for sublist in b for item in sublist]
+
 				newuser = User(
 					usernum=usernum,
 					account=account,
@@ -1350,8 +1451,20 @@ class MturkIDHandler(webapp.RequestHandler):
 					ethnicity=0,
 					race=0,
 					age=0,
-					bonusAmt=0,
+					BonusOne=0,
+					BonusTwo = 0,
 					testOrder = testOrder,
+					reloads = 0,
+					v1_Data = a,
+					v2_Data = b,
+					frequency1 = self.session['frequency1'],
+					frequency2 = self.session['frequency2'],
+					position2 = self.session['position2'],
+					var1_Names = self.session['var1_Names'],
+					var2_Names = self.session['var2_Names'],
+					condition = self.session['condition'],
+					drugColors = self.session['drugColors'],
+					diseaseNames = self.session['diseaseNames'],
 					progress = 0);
 
 				# dataframe modeling, but I'm not sure what exactly
@@ -1376,7 +1489,9 @@ class MturkIDHandler(webapp.RequestHandler):
 				self.session['reloads']				= 0
 
 
-				doRender(self, 'qualify.htm')
+				doRender(self, 'qualify.htm',{
+					'condition':self.session['condition']
+				})
 
 
 				# session variables:

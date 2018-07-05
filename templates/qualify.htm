@@ -37,10 +37,10 @@
 
 <script>
 
-$(document).ready(function(){
-	// var condition = {{condition}}
-	var condition = 'combined'
 
+$(document).ready(function(){
+	var condition = '{{condition}}'
+	console.log(condition)
 	// change purpose depending on condition
 	if(condition != 'monetary'){
 		$('#purpose').text('Welcome to the study! In this study, we are interested in how people learn about medications.')

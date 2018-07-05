@@ -90,7 +90,10 @@
                             </div>
                             <div class = "col-xs-2 text-center">
                                 <div style="height:10px"></div>
-                                <div id="feedbackDiv" class="text-center" style="font-size: 10pt; padding:0px; height:75px"></div>
+                                <div id="feedbackDiv" class="text-center" style="font-size: 10pt; padding:0px; height:75px">
+                                    <span id="feedbackSpan"></span>
+                                    <span id="clickInstruction"></span>
+                                </div>
                             </div>
                             <div id="var1b" class="col-xs-5 text-center" style="height:100px">
                                 <p><span name="var1b">Drug B</span></p>
@@ -103,10 +106,10 @@
 
 
 
-                        <div style="height:20px"></div>
+                        <!-- <div style="height:20px"></div>
                         <div id="feedbackButtonDiv" style="visibility: hidden">
                             <button id="feedbackButton">Next</button>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div id="scoreDiv" class="col-xs-4 text-center">
@@ -129,8 +132,7 @@
             <input id="trialInput" name="trialInput" type="hidden">
             <input id="guessInput" name="guessInput" type="hidden">
             <input id="correctInput" name="correctInput" type="hidden">
-            <input id="leftSliderInput" name="leftSliderInput" type="hidden">
-            <input id="rightSliderInput" name="rightSliderInput" type="hidden">
+            <input id="valenceInput" name="valenceInput" type="hidden">
             <input id="profitImpactInput" name="profitImpactInput" type="hidden">
             <input id="runningBonusInput" name="runningBonusInput" type="hidden">
             <input id="trialNumberInput" name="trialNumberInput" type="hidden">
@@ -203,6 +205,8 @@
             // testing:
             main.position2 = {{position2}} // if 0, left is bad. if 1, left is good
             main.frequency2 = {{frequency2}} // if 0, mostly bad
+            main.frequency1 = {{frequency1}}
+            // main.frequency1 = 0 // testing
 
             if(main.position2 === main.frequency2){
                 main.valence = 'rare-positive'
@@ -420,8 +424,9 @@
             // main.$rangeRight = main.$co.find('#rangeRight')
 
             main.$feedbackDiv = main.$co.find('#feedbackDiv')
-            main.$feedbackButton = main.$co.find('#feedbackButton')
-            main.$feedbackButtonDiv = main.$co.find('#feedbackButtonDiv')
+            main.$feedbackSpan = main.$co.find('#feedbackSpan')
+            // main.$feedbackButton = main.$co.find('#feedbackButton')
+            // main.$feedbackButtonDiv = main.$co.find('#feedbackButtonDiv')
 
             main.$buttonRow = main.$co.find('#buttonRow')
             main.$displayDiv = main.$co.find('#displayDiv')
@@ -456,7 +461,7 @@
             main.$patientImpact = main.$co.find('#patientImpact')
             main.$outcomeSpans = main.$co.find('span[name=outcomeSpan]')
             main.$outcomePercentageSpan = main.$co.find('#outcomePercentageSpan')
-            main.$feedbackButton = main.$co.find('#feedbackButton')
+            // main.$feedbackButton = main.$co.find('#feedbackButton')
             main.$effectClick = main.$co.find('#effectClick') // this is the whole bottom left div
             main.$v2_Prompt = main.$co.find('#v2_Prompt')
 
@@ -478,28 +483,28 @@
 
             // svgs
             // now that we're using images this might be unnecessary code
-            if(main.position1 === 1){
-				main.$shape1a = main.$var1aDiv.find('[name="'+main.var1b+'"]')
-				main.$shape1b = main.$var1bDiv.find('[name="'+main.var1a+'"]')
-			}else{
-				main.$shape1a = main.$var1aDiv.find('[name="'+main.var1a+'"]')
-				main.$shape1b = main.$var1bDiv.find('[name="'+main.var1b+'"]')
-			}
-
-			if(main.position2 === 1){
-				main.$shape2a = main.$var2aDiv.find('[name="'+main.var2b+'"]')
-				main.$shape2b = main.$var2bDiv.find('[name="'+main.var2a+'"]')
-                main.$outcomeA = main.$var2_outcome.find('[name="'+main.var2b+'"]')
-                main.$outcomeB = main.$var2_outcome.find('[name="'+main.var2a+'"]')
-
-                main.$var2a_Click.children('img').attr('src', '/static/images/good.png')
-                main.$var2b_Click.children('img').attr('src', '/static/images/bad.png')
-			}else{
-				main.$shape2a = main.$var2aDiv.find('[name="'+main.var2a+'"]')
-				main.$shape2b = main.$var2bDiv.find('[name="'+main.var2b+'"]')
-                main.$outcomeA = main.$var2_outcome.find('[name="'+main.var2a+'"]')
-                main.$outcomeB = main.$var2_outcome.find('[name="'+main.var2b+'"]')
-			}
+            // if(main.position1 === 1){
+			// 	main.$shape1a = main.$var1aDiv.find('[name="'+main.var1b+'"]')
+			// 	main.$shape1b = main.$var1bDiv.find('[name="'+main.var1a+'"]')
+			// }else{
+			// 	main.$shape1a = main.$var1aDiv.find('[name="'+main.var1a+'"]')
+			// 	main.$shape1b = main.$var1bDiv.find('[name="'+main.var1b+'"]')
+			// }
+            //
+			// if(main.position2 === 1){
+			// 	main.$shape2a = main.$var2aDiv.find('[name="'+main.var2b+'"]')
+			// 	main.$shape2b = main.$var2bDiv.find('[name="'+main.var2a+'"]')
+            //     main.$outcomeA = main.$var2_outcome.find('[name="'+main.var2b+'"]')
+            //     main.$outcomeB = main.$var2_outcome.find('[name="'+main.var2a+'"]')
+            //
+            //     main.$var2a_Click.children('img').attr('src', '/static/images/good.png')
+            //     main.$var2b_Click.children('img').attr('src', '/static/images/bad.png')
+			// }else{
+			// 	main.$shape2a = main.$var2aDiv.find('[name="'+main.var2a+'"]')
+			// 	main.$shape2b = main.$var2bDiv.find('[name="'+main.var2b+'"]')
+            //     main.$outcomeA = main.$var2_outcome.find('[name="'+main.var2a+'"]')
+            //     main.$outcomeB = main.$var2_outcome.find('[name="'+main.var2b+'"]')
+			// }
 
 
 
@@ -568,7 +573,7 @@
                 main.$var1b.css('opacity', '1.0')
                 main.$v1_Prompt.css('opacity', '1.0')
                 main.$feedbackDiv.css('visibility', 'hidden')
-                main.$feedbackButtonDiv.css('visibility', 'hidden')
+                // main.$feedbackButtonDiv.css('visibility', 'hidden')
 
 
                 console.log('outcome: '+main.v2_Data[main.trialNumber])
@@ -645,11 +650,11 @@
 
 
                     // feedback text
-                    if(main.guesses[main.guesses.length-1] == 'A'){ // correctly guess A
-                        main.$feedbackDiv.html('Correct!<br>+3 cents!')
+                    if(main.guesses[main.guesses.length-1] == main.var1a){ // correctly guess A
+                        main.$feedbackSpan.html('Correct!<br>+3 cents!')
 
                     }else{ // incorrectly guess B
-                        main.$feedbackDiv.html('Incorrect!')
+                        main.$feedbackSpan.html('Incorrect!')
                     }
 
                 }else{
@@ -660,10 +665,10 @@
                     main.insertBorder(main.$var1b)
 
                     // feedback text
-                    if(main.guesses[main.guesses.length-1] == 'B'){
-                        main.$feedbackDiv.html('Correct!<br>+3 cents!')
+                    if(main.guesses[main.guesses.length-1] == main.var1b){
+                        main.$feedbackSpan.html('Correct!<br>+3 cents!')
                     }else{
-                        main.$feedbackDiv.html('Incorrect!')
+                        main.$feedbackSpan.html('Incorrect!')
                     }
                 }
                 main.$feedbackDiv.css('visibility', 'visible')
@@ -675,7 +680,7 @@
                 // main.$treatmentBonusSpan.text(main.creditRender(main.assets))
                 // main.$accuracyBonusSpan.text(main.creditRender(main.accuracyBonus))
                 main.$totalBonusSpan.text(main.creditRender(main.accuracyBonus+main.assets))
-                main.$feedbackButtonDiv.css('visibility', 'visible')
+                // main.$feedbackButtonDiv.css('visibility', 'visible')
 
             }else if(stage == 'rating'){
                 console.log('change rating now')
@@ -721,12 +726,22 @@
                 main.$var1a.unbind().on('click', main.var1a_Function)
                 main.$var1b.unbind().on('click', main.var1b_Function)
             }else{
-                main.$var1a.unbind()
-                main.$var1b.unbind()
+                // if the left is correct
+                if(main.$correctInput.val() === main.var1a){
+                    main.$var1a.unbind().on('click', main.newTrial)
+                    $('#clickInstruction').text('Click '+main.var1a+' to continue.')
+                }else{
+                    // if the right is correct
+                    main.$var1b.unbind().on('click', main.newTrial)
+                    $('#clickInstruction').text('Click '+main.var1b+' to continue.')
+                }
+
+
+
 
             }
 
-            main.$feedbackButton.unbind().on('click', main.newTrial)
+            // main.$feedbackButton.unbind().on('click', main.newTrial)
 
 
 
@@ -851,6 +866,24 @@
 
         },
 
+        scoreGuess: function(){
+            if(main.frequency1 === 0){
+                // correct input: 0 is the common value, frequency1 is whether common is left or right
+                if(main.v1_Data[main.trialNumber] == 0){
+                    main.$correctInput.val(main.var1a)
+                }else{
+                    main.$correctInput.val(main.var1b)
+                }
+            }else if(main.frequency1 === 1){
+                // correct input: 0 is always left for var1.
+                if(main.v1_Data[main.trialNumber] == 0){
+                    main.$correctInput.val(main.var1b)
+                }else{
+                    main.$correctInput.val(main.var1a)
+                }
+            }
+        },
+
         newTrial: function(){
             // this function fires when they click the feedback button ('next' button)
             // if the scenario is over, it goes to the next page, otherwise it resets everything.
@@ -914,13 +947,6 @@
             // guess
             main.$guessInput.val(main.guesses[main.guesses.length-1])
 
-            // correct
-            if(main.v1_Data[main.trialNumber] == 0){
-                main.$correctInput.val('A') // 0 is A
-            }else{
-                main.$correctInput.val('B')
-            }
-
             // bonus total
             var bonus = main.accuracyBonus + main.assets
             $('#runningBonusInput').val(bonus)
@@ -928,30 +954,35 @@
             // profit impact
             main.$profitImpactInput.val(main.v2_Data[main.trialNumber])
 
+            // valence input
+            $('#valenceInput').val(main.valence)
 
-            // // send to back end with ajax
-            // $.ajax({
-            //  url:"/ajax",
-            //  data: main.$dataform.serialize(),
-            //  dataType: 'json',
-            //  type: "POST",
-            //  cache: false,
-            //  // error: function() {alert("Error")},
-            //  // success: function() {alert("Success")}
-            // });
+            
+            // send to back end with ajax
+            $.ajax({
+             url:"/ajax",
+             data: main.$dataform.serialize(),
+             dataType: 'json',
+             type: "POST",
+             cache: false,
+             error: function() {alert("Error")},
+             success: function() {alert("Success")}
+            });
         },
 
         var1a_Function: function(){
             // this function is bound to the pill on the left
 
-            main.guesses.push('A')
+            main.guesses.push(main.var1a)
+            main.scoreGuess()
             main.feedback()
         },
 
         var1b_Function: function(){
             // this function is bound to the pill on the right
 
-            main.guesses.push('B')
+            main.guesses.push(main.var1b)
+            main.scoreGuess()
             main.feedback()
         },
 
@@ -967,12 +998,10 @@
             main.bindEvents(2)
 
 
+
             // score answer
-            if(main.guesses[main.guesses.length-1] == 'A' & main.v1_Data[main.trialNumber] == 0){
+            if(main.guesses[main.guesses.length-1] == main.$correctInput.val()){
                 // correct
-                main.accuracyBonus += main.accuracyBonusAmt
-            }else if(main.guesses[main.guesses.length-1] == 'B' & main.v1_Data[main.trialNumber] == 1){
-                // also correct
                 main.accuracyBonus += main.accuracyBonusAmt
             }
 

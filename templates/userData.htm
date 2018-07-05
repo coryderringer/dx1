@@ -17,16 +17,39 @@
 
 		<!-- Header Row -->
 		<tr>
+			<!-- condition info -->
 			<th>Usernum</th>
 			<th>Participant ID</th>
+			<th>condition</th>
+
+			<!-- ppt info -->
 			<th>Browser</th>
-			<th>Bonus</th>
 			<th>Sex</th>
 			<th>Ethnicity</th>
 			<th>Race</th>
 			<th>Age</th>
-			<th>Test Order</th>
 
+			<!-- randomizations -->
+			<th>Test Order</th>
+			<th>frequency1</th>
+			<th colspan=2>frequency2</th>
+			<th>position2</th>
+
+			<!-- Var names they saw -->
+			<th colspan=4>var1_Names</th>
+			<th colspan=4>var2_Names</th>
+			<th colspan=4>drugColors</th>
+			<th colspan=2>diseaseNames</th>
+
+			<!-- progress through app -->
+			<th>progress</th>
+			<th>Bonus One</th>
+			<th>Bonus Two</th>
+			<th>Reloads</th>
+
+			<!-- data they saw -->
+			<th colspan=96>v1_Data</th>
+			<th colspan=96>v2_Data</th>
 		</tr>
 
 		<!-- Subsequent Rows -->
@@ -34,24 +57,58 @@
 		<tr>
 			<th>{{ i.usernum }}</th>
 			<th>{{ i.account }}</th>
+			<th>{{ i.condition }}</th>
+
 			<th>{{ i.browser }}</th>
-			<th>{{ i.bonusAmt }}</th>
 			<th>{{ i.sex }}</th>
 			<th>{{ i.ethnicity }}</th>
 			<th>{{ i.race }}</th>
 			<th>{{ i.age }}</th>
+
 			<th>{{ i.testOrder }}</th>
+			<th>{{ i.frequency1 }}</th>
+			{% for j in i.frequency2 %}
+				<th>{{ j }}</th>
+			{% endfor %}
+
+			<th>{{ i.position2 }}</th>
+
+			{% for j in i.var1_Names %}
+				<th>{{ j }}</th>
+			{% endfor %}
+
+			{% for j in i.var2_Names %}
+				<th>{{ j }}</th>
+			{% endfor %}
+
+			{% for j in i.drugColors %}
+				<th>{{ j }}</th>
+			{% endfor %}
+
+			{% for j in i.diseaseNames %}
+				<th>{{ j }}</th>
+			{% endfor %}
+
+			<th>{{ i.progress }}</th>
+			<th>{{ i.BonusOne }}</th>
+			<th>{{ i.BonusTwo }}</th>
+			<th>{{ i.Reloads }}</th>
+
+			{% for j in i.v1_Data %}
+				<th>{{ j }}</th>
+			{% endfor %}
+
+			{% for j in i.v2_Data %}
+				<th>{{ j }}</th>
+			{% endfor %}
+
+
 		</tr>
 		{% endfor %}
 	</table>
-	
+
 </div>
 
 
 </body>
 {% endblock %}
-
-
-
-
-
