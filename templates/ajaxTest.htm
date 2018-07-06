@@ -21,46 +21,64 @@
 		<th>Usernum</th>
 		<th>Account</th>
 		<th>Scenario</th>
-		<th>Condition</th>	<!-- "positive" means rare positive -->
-		<th>Left Drug Name</th>
-		<th>Right Drug Name</th>
-		<th>Left Drug Rarity</th>
-		<th>Right Drug Rarity</th>
-		<th>Left Drug Color</th>
-		<th>Right Drug Color</th>
-		<th>Left Drug Bad Outcomes</th>
-		<th>Right Drug Bad Outcomes</th>
-		<th>Good Outcomes Left</th>
-		<th>Good Outcomes Right</th>
-		<th>Bad Outcomes Left</th>
-		<th>Bad Outcomes Right</th>
-		<th>Causal Judgment</th>
-		<th>Judgment Order</th>
-	
+		<th>Valence</th>
+		<th>Condition</th>
+
+		<th>var1_Left</th>
+		<th>var1_Right</th>
+		<th>var2_Left</th>
+		<th>var2_Right</th>
+
+
+		<th>drugColor_Left</th>
+		<th>drugColor_Right</th>
+
+		<th>frequency1</th>
+		<th>frequency2</th>
+		<th>position2</th>
+
+		<th>var2a_given_var1a</th>
+		<th>var2b_given_var1a</th>
+		<th>var2a_given_var1b</th>
+		<th>var2b_given_var1b</th>
+
+		<th>var1a_given_var2a</th>
+		<th>var1b_given_var2a</th>
+		<th>var1a_given_var2b</th>
+		<th>var1b_given_var2b</th>
+
+		<th>causalJudgment</th>
+		<th>testOrder</th>
+
 	</tr>
 
 	<!-- Subsequent Rows -->
 	{% for i in t %}
 	<tr>
-		<th> {{ i.usernum }}</th> 
-		<th> {{ i.account }}</th> 
-		<th> {{ i.scenario }}</th> 
-		<th> {{ i.condition }}</th> 
-		<th> {{ i.leftDrugName }}</th> 
-		<th> {{ i.rightDrugName }}</th> 
-		<th> {{ i.leftDrugRarity }}</th> 
-		<th> {{ i.rightDrugRarity }}</th> 
-		<th> {{ i.leftDrugColor }}</th> 
-		<th> {{ i.rightDrugColor }}</th> 
-		<th> {{ i.leftNumberBad }}</th> 
-		<th> {{ i.rightNumberBad }}</th> 
-		<th> {{ i.goodOutcomesLeft }}</th> 
-		<th> {{ i.goodOutcomesRight }}</th> 
-		<th> {{ i.badOutcomesLeft }}</th> 
-		<th> {{ i.badOutcomesRight }}</th> 
+		<th> {{ i.usernum }}</th>
+		<th> {{ i.account }}</th>
+		<th> {{ i.scenario }}</th>
+		<th> {{ i.valence }}</th>
+		<th> {{ i.condition }}</th>
+		<th> {{ i.var1_Left }}</th>
+		<th> {{ i.var1_Right }}</th>
+		<th> {{ i.var2_Left }}</th>
+		<th> {{ i.var2_Right }}</th>
+		<th> {{ i.drugColor_Left }}</th>
+		<th> {{ i.drugColor_Right }}</th>
+		<th> {{ i.frequency1 }}</th>
+		<th> {{ i.frequency2 }}</th>
+		<th> {{ i.position2 }}</th>
+		<th> {{ i.var2a_given_var1a }}</th>
+		<th> {{ i.var2b_given_var1a }}</th>
+		<th> {{ i.var2a_given_var1b }}</th>
+		<th> {{ i.var2b_given_var1b }}</th>
+		<th> {{ i.var1a_given_var2a }}</th>
+		<th> {{ i.var1b_given_var2a }}</th>
+		<th> {{ i.var1a_given_var2b }}</th>
+		<th> {{ i.var1b_given_var2b }}</th>
 		<th> {{ i.causalJudgment }}</th>
-		<th> {{ i.judgmentOrder }}</th>
-
+		<th> {{ i.testOrder }}</th>
 
 	</tr>
 	{% endfor %}
@@ -73,8 +91,3 @@
 
 </body>
 {% endblock %}
-
-
-
-
-

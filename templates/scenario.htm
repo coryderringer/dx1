@@ -137,6 +137,8 @@
             <input id="runningBonusInput" name="runningBonusInput" type="hidden">
             <input id="trialNumberInput" name="trialNumberInput" type="hidden">
             <input id="reloadsInput" name="reloadsInput" type="hidden">
+            <input id="var1_value" name="var1_value" type="hidden">
+            <input id="var2_value" name="var2_value" type="hidden">
 
 
                 <!-- data[13] -->
@@ -214,7 +216,7 @@
                 main.valence = 'rare-negative'
             }
 
-            console.log('VALENCE: '+main.valence)
+            // console.log('VALENCE: '+main.valence)
             // track number of reloads
             if(main.trialNumber == 0){
                 main.reloads = {{reloads}}
@@ -261,12 +263,12 @@
             main.var2b = '{{var2_Names_Right}}'
 
 
-            console.log(main.var1a)
-            console.log(main.var1b)
-            console.log(main.var2a)
-            console.log(main.var2b)
+            // console.log(main.var1a)
+            // console.log(main.var1b)
+            // console.log(main.var2a)
+            // console.log(main.var2b)
 
-            // console.log(main.shapeSources[0].split('/')[3].split('.')[0])
+            // // console.log(main.shapeSources[0].split('/')[3].split('.')[0])
 
             for(var i = 0; i < main.imageSources.length; i++){
                 // 2a
@@ -305,10 +307,10 @@
                 }
             }
 
-            console.log(main.var1a_img_src)
-            console.log(main.var1b_img_src)
-            console.log(main.var2a_img_src)
-            console.log(main.var2b_img_src)
+            // console.log(main.var1a_img_src)
+            // console.log(main.var1b_img_src)
+            // console.log(main.var2a_img_src)
+            // console.log(main.var2b_img_src)
 
 
             // main.var1a = String(main.drugNames[main.drugs[0]])
@@ -326,13 +328,13 @@
 
             main.assets = 100
 
-            console.log('')
-            console.log(String(main.position2)+ ' (if 0, 0 in data is bad, 1 is good)')
-            console.log('data: '+String(main.v2_Data[main.trialNumber]))
+            // console.log('')
+            // console.log(String(main.position2)+ ' (if 0, 0 in data is bad, 1 is good)')
+            // console.log('data: '+String(main.v2_Data[main.trialNumber]))
 
 
             // don't know if this is the best place for this (testing)
-            if(main.v2_Data[main.trialNumber] === 0){ // common outcome
+            if(main.v2_Data[main.trialNumber] === 0){ // 0 is always bad
                 main.assets -= main.rewardAmount
             }else{
                 main.assets += main.rewardAmount
@@ -346,8 +348,8 @@
 
 
 
-            console.log('position 2: '+String(main.position2))
-            console.log('frequency 2: '+String(main.frequency2))
+            // console.log('position 2: '+String(main.position2))
+            // console.log('frequency 2: '+String(main.frequency2))
 
             // weird out of place thing that is really terrible in practice... #don'tTryThisAtHome
             // find another way to do this because now it's messing other stuff up.
@@ -535,7 +537,7 @@
 
 
             if(stage == 'reset'){ // new trial
-                ////// console.log('render reset')
+                ////// // console.log('render reset')
                 // Patient Number
 
                 // remove borders from prev trial
@@ -576,7 +578,7 @@
                 // main.$feedbackButtonDiv.css('visibility', 'hidden')
 
 
-                console.log('outcome: '+main.v2_Data[main.trialNumber])
+                // console.log('outcome: '+main.v2_Data[main.trialNumber])
                 // 0 is always bad
                 // if position2 === 0, left is bad, and 0 is left
                 // don't have to worry about frequency2 *visually*; it's just about rarity (done in Python)
@@ -586,12 +588,14 @@
                         $('#var2_outcome_image').attr('src', main.var2b_img_src)
                         $('#var2_feedback').text(main.var2b)
                         main.$outcomeSpans.text('GOOD')
+                        $('#var2_value').val(main.var2b)
                         main.$outcomePercentageSpan.text('+6 cents!')
 
                     }else{ // bad outcome, so left image
                         $('#var2_outcome_image').attr('src', main.var2a_img_src)
                         $('#var2_feedback').text(main.var2a)
                         main.$outcomeSpans.text('BAD')
+                        $('#var2_value').val(main.var2a)
                         main.$outcomePercentageSpan.text('-6 cents!')
                     }
 
@@ -600,12 +604,14 @@
                         $('#var2_outcome_image').attr('src', main.var2a_img_src)
                         $('#var2_feedback').text(main.var2a)
                         main.$outcomeSpans.text('GOOD')
+                        $('#var2_value').val(main.var2a)
                         main.$outcomePercentageSpan.text('+6 cents!')
 
                     }else{ // bad outcome, so left image
                         $('#var2_outcome_image').attr('src', main.var2b_img_src)
                         $('#var2_feedback').text(main.var2b)
                         main.$outcomeSpans.text('BAD')
+                        $('#var2_value').val(main.var2b)
                         main.$outcomePercentageSpan.text('-6 cents!')
                     }
                 }
@@ -613,7 +619,7 @@
 
             }else if(stage == 'guess'){
 
-                ////// console.log('render guess')
+                ////// // console.log('render guess')
 
                 if(main.v2_Data[main.trialNumber] > 0){ // 0 is bad
                     main.$var2b_Click.css('opacity', '0.2')
@@ -636,7 +642,7 @@
 
 
             }else if(stage == 'feedback'){
-                ////// console.log('render feedback')
+                ////// // console.log('render feedback')
                 main.$v1_Prompt.css('opacity', '0.25')
                 // main.$leftRange.css('opacity', '1.0')
                 // main.$rightRange.css('opacity', '1.0')
@@ -683,7 +689,7 @@
                 // main.$feedbackButtonDiv.css('visibility', 'visible')
 
             }else if(stage == 'rating'){
-                console.log('change rating now')
+                // console.log('change rating now')
             }
 
 
@@ -726,7 +732,7 @@
                 main.$var1a.unbind().on('click', main.var1a_Function)
                 main.$var1b.unbind().on('click', main.var1b_Function)
             }else{
-                // if the left is correct
+
                 if(main.$correctInput.val() === main.var1a){
                     main.$var1a.unbind().on('click', main.newTrial)
                     $('#clickInstruction').text('Click '+main.var1a+' to continue.')
@@ -867,21 +873,29 @@
         },
 
         scoreGuess: function(){
-            if(main.frequency1 === 0){
-                // correct input: 0 is the common value, frequency1 is whether common is left or right
-                if(main.v1_Data[main.trialNumber] == 0){
-                    main.$correctInput.val(main.var1a)
-                }else{
-                    main.$correctInput.val(main.var1b)
-                }
-            }else if(main.frequency1 === 1){
-                // correct input: 0 is always left for var1.
-                if(main.v1_Data[main.trialNumber] == 0){
-                    main.$correctInput.val(main.var1b)
-                }else{
-                    main.$correctInput.val(main.var1a)
-                }
+            // if(main.frequency1 === 0){
+                // left value of var1a is common ()
+
+            // this is weird but correct. frequency1 is whether the left or right value is common.
+            // this is taken care of in the back end with 0s and 1s (either 0 is more common or 1)
+            // the name positions are randomized separately
+            // so if data == 0 is always the left and data == 1 is always the right, this works out fine.
+            if(main.v1_Data[main.trialNumber] == 0){
+                // redundant...
+                main.$correctInput.val(main.var1a)
+                $('#var1_value').val(main.var1a)
+            }else{
+                main.$correctInput.val(main.var1b)
+                $('#var1_value').val(main.var1b)
             }
+            // }else if(main.frequency1 === 1){
+            //     // correct input: 0 is always left for var1.
+            //     if(main.v1_Data[main.trialNumber] == 0){
+            //         main.$correctInput.val(main.var1b)
+            //     }else{
+            //         main.$correctInput.val(main.var1a)
+            //     }
+            // }
         },
 
         newTrial: function(){
@@ -894,23 +908,17 @@
                 main.mySubmit()
             }else{
                 // new trial:
-                console.log("NEW TRIAL")
+                // console.log("NEW TRIAL")
                 main.trialNumber += 1
 
 
-                if(main.valence == 'rare-positive'){
-                    if(main.v2_Data[main.trialNumber] === 0){ // common outcome
-                        main.assets -= main.rewardAmount
-                    }else{
-                        main.assets += main.rewardAmount
-                    }
-                }else if(main.valence == 'rare-negative'){
-                    if(main.v2_Data[main.trialNumber] === 0){ // common outcome
-                        main.assets += main.rewardAmount
-                    }else{
-                        main.assets -= main.rewardAmount
-                    }
+
+                if(main.v2_Data[main.trialNumber] === 0){ // common outcome
+                    main.assets -= main.rewardAmount
+                }else{
+                    main.assets += main.rewardAmount
                 }
+                
 
                 main.render('reset')
                 main.getTrialStartTime()
@@ -952,22 +960,44 @@
             $('#runningBonusInput').val(bonus)
 
             // profit impact
-            main.$profitImpactInput.val(main.v2_Data[main.trialNumber])
+            main.$profitImpactInput.val(0)
+            if(main.v2_Data[main.trialNumber] === 0){
+                if(main.condition != 'story'){
+                    main.$profitImpactInput.val(-6)
+                }
+            }else{
+                if(main.condition != 'story'){
+                    main.$profitImpactInput.val(6)
+                }
+            }
+
 
             // valence input
             $('#valenceInput').val(main.valence)
 
-            
+
+
+
             // send to back end with ajax
             $.ajax({
              url:"/ajax",
              data: main.$dataform.serialize(),
-             dataType: 'json',
+             // dataType: 'json',
              type: "POST",
              cache: false,
-             error: function() {alert("Error")},
-             success: function() {alert("Success")}
+             // error: main.AjaxFail,
+             // success: main.AjaxSuccess
             });
+        },
+
+        AjaxFail: function(result){
+            alert('fail')
+            alert(result.status + ' ' + result.statusText)
+        },
+
+        AjaxSuccess: function(result){
+            alert('success')
+            // alert(result.d)
         },
 
         var1a_Function: function(){

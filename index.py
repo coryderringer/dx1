@@ -119,11 +119,14 @@ class ScenarioData(db.Model):
 	# actual data
 	trialNumber = 		db.IntegerProperty()
 	trialGuess = 		db.StringProperty()
-	trialCorrect = 		db.StringProperty()
 	profitImpact = 		db.IntegerProperty()
 	valence = 			db.StringProperty() # within-subs condition; 0 means rare-positive, 1 means rare-negative
 	condition = 		db.StringProperty() # between-subs cover story condition; monetary, story, combined
-
+	var1_value = 		db.StringProperty()
+	var2_value =		db.StringProperty()
+	frequency1 =		db.IntegerProperty()
+	frequency2 = 		db.IntegerProperty()
+	position2 = 		db.IntegerProperty()
 
 
 
@@ -149,28 +152,29 @@ class FinalJudgmentData(db.Model):
 	var2_Left =			db.StringProperty()
 	var2_Right =		db.StringProperty()
 
-	leftDrugRarity =	db.StringProperty()
-	rightDrugRarity =	db.StringProperty()
+	drugColor_Left =	db.StringProperty()
+	drugColor_Right =	db.StringProperty()
 
-	# if story condition
-	leftDrugColor = 	db.StringProperty()
-	rightDrugColor = 	db.StringProperty()
+	frequency1 =		db.IntegerProperty() # which var1 value is common (left or right)
+	frequency2 =		db.IntegerProperty() # which var2 value is common (left or right)
+	position2 =			db.IntegerProperty() # more of a sanity check than anything
 
-	# number of bad outcomes for each drug
-	leftNumberBad =		db.IntegerProperty()
-	rightNumberBad =	db.IntegerProperty()
+	# given var1, estimates of var2
+	var2a_given_var1a = 	db.IntegerProperty()
+	var2b_given_var1a = 	db.IntegerProperty()
+	var2a_given_var1b =		db.IntegerProperty()
+	var2b_given_var1b =		db.IntegerProperty()
 
-	# given a good outcome, how many got the left drug?
-	goodOutcomesLeft =	db.IntegerProperty()
-	goodOutcomesRight =	db.IntegerProperty()
-	badOutcomesLeft =	db.IntegerProperty()
-	badOutcomesRight = 	db.IntegerProperty()
+	# given var2, estimates of var1
+	var1a_given_var2a =		db.IntegerProperty()
+	var1b_given_var2a =		db.IntegerProperty()
+	var1a_given_var2b =		db.IntegerProperty()
+	var1b_given_var2b =		db.IntegerProperty()
 
 	# causal judgment; this is changing for E1
-	# which drug is worse? higher numbers mean the right side is worse
+	# which var1 would you prefer? lower outcomes are preferences for left value
 	causalJudgment =	db.IntegerProperty()
-	judgmentOrder =		db.IntegerProperty() # will have to make a code for this, list possible orders, assign one
-
+	testOrder =			db.IntegerProperty()
 
 
 #This stores the current number of participants who have ever taken the study.
@@ -247,10 +251,12 @@ class AjaxHandler(webapp.RequestHandler):
   		attentionFails = int(self.request.get('attentionFailsInput'))
 		trialNumber = int(self.request.get('trialInput'))
 		trialGuess = str(self.request.get('guessInput'))
-		trialCorrect = str(self.request.get('correctInput')) # gives the correct answer (A or B)
 		profitImpact = int(self.request.get('profitImpactInput'))
 		totalBonus = int(self.request.get('runningBonusInput'))
 		valence = self.request.get('valenceInput')
+		var1_value = str(self.request.get('var1_value'))
+		var2_value = str(self.request.get('var2_value'))
+
 		self.session['trialNumber'] = int(self.request.get('trialNumberInput'))
 		self.session['reloads'] = int(self.request.get('reloadsInput'))
 
@@ -278,9 +284,11 @@ class AjaxHandler(webapp.RequestHandler):
 		logging.info('trialNumber: '+str(trialNumber))
 		logging.info('reloads: '+str(self.session['reloads']))
 		logging.info('trialGuess: '+str(trialGuess))
-		logging.info('trialCorrect: '+str(trialCorrect))
+		# logging.info('trialCorrect: '+str(trialCorrect))
 		logging.info('profitImpact: '+str(profitImpact))
 		logging.info('valence: '+str(valence))
+		logging.info('var1 was '+var1_value)
+		logging.info('var2 was '+var2_value)
 
 		# logging.info('BONUS!!!!!! '+str(totalBonus))
 
@@ -304,18 +312,28 @@ class AjaxHandler(webapp.RequestHandler):
 				usernum = self.session['usernum'],
 				account = self.session['account'],
 				scenario = self.session['scenario'],
+				var1_Left = var1_Left,
+				var1_Right = var1_Right,
+				var2_Left = var2_Left,
+				var2_Right = var2_Right,
 				trialTime = trialTime,
 				attentionFails = attentionFails,
 				trialNumber = trialNumber,
 				reloads		= self.session['reloads'],
 				trialGuess = trialGuess,
-				trialCorrect = trialCorrect,
+				# trialCorrect = trialCorrect,
 				profitImpact = profitImpact,
-				valence = valence); # this is the match between position2 and frequency2; sent to this handler as 'rare-positive' or 'rare-negative'
+				valence = valence,
+				condition = self.session['condition'],
+				var1_value = str(var1_value),
+				var2_value = str(var2_value),
+				frequency1 = self.session['frequency1'],
+				frequency2 = self.session['frequency2'][scenario],
+				position2 = self.session['position2']); # this is the match between position2 and frequency2; sent to this handler as 'rare-positive' or 'rare-negative'
 
 
 			newajaxmessage.put()
-			self.response.out.write(json.dumps(({'blah': 'blah'}))) # not sure what this does?
+			self.response.out.write({}) # not sure what this does?
 
 		else:
 
@@ -324,27 +342,41 @@ class AjaxHandler(webapp.RequestHandler):
 			obj.usernum = self.session['usernum']
 			obj.account = self.session['account']
 			obj.scenario = self.session['scenario']
+
+			obj.var1_Left = var1_Left
+			obj.var1_Right = var1_Right
+			obj.var2_Left = var2_Left
+			obj.var2_Right = var2_Right
+
 			obj.trialTime = trialTime
 			obj.attentionFails = attentionFails
 			obj.trialNumber = trialNumber
 			obj.reloads = self.session['reloads']
 			obj.trialGuess = trialGuess
-			obj.trialCorrect = trialCorrect
+			# obj.trialCorrect = trialCorrect
 			obj.profitImpact = profitImpact
 			obj.valence = valence
+			obj.var1_value = var1_value
+			obj.var2_value = var2_value
+			obj.condition = self.session['condition']
+
+			obj.frequency1 = self.session['frequency1']
+			obj.frequency2 = self.session['frequency2'][scenario]
+			obj.position2 = self.session['position2']
 
 			obj.put()
-			self.response.out.write(json.dumps(({'blah': 'blah'}))) # ?
+			self.response.out.write({}) # ?
 
 		que2 = db.Query(User).filter('usernum =', self.session['usernum'])
 		results = que2.fetch(limit=10000)
 
 		obj = que2.get()
 
-		obj.bonusAmt = self.session['BonusOne']+self.session['BonusTwo']
+		obj.BonusOne = self.session['BonusOne']
+		obj.BonusTwo = self.session['BonusTwo']
 
 		obj.put()
-		self.response.out.write(json.dumps(({'blah': 'blah'}))) # ?
+		self.response.out.write({}) # ?
 
 
 class AjaxMemoryHandler(webapp.RequestHandler):
@@ -453,7 +485,7 @@ class AjaxMemoryHandler(webapp.RequestHandler):
 				judgmentOrder = judgmentOrder);
 
 			newajaxmessage.put()
-			self.response.out.write(json.dumps(({'blah': 'blah'}))) # not sure what this does?
+			self.response.out.write({}) # not sure what this does?
 
 		else:
 			logging.info('UPDATING CURRENT')
@@ -486,7 +518,7 @@ class AjaxMemoryHandler(webapp.RequestHandler):
 			obj.judgmentOrder = judgmentOrder
 
 			obj.put()
-			self.response.out.write(json.dumps(({'blah': 'blah'}))) # ?
+			self.response.out.write({}) # ?
 
 
 class AjaxCausalHandler(webapp.RequestHandler):
@@ -548,7 +580,7 @@ class AjaxCausalHandler(webapp.RequestHandler):
 				# judgmentOrder = judgmentOrder);
 
 			newajaxmessage.put()
-			self.response.out.write(json.dumps(({'blah': 'blah'}))) # not sure what this does?
+			self.response.out.write({}) # not sure what this does?
 
 		else:
 			logging.info('UPDATING CURRENT')
@@ -578,7 +610,7 @@ class AjaxCausalHandler(webapp.RequestHandler):
 			# obj.judgmentOrder = judgmentOrder
 
 			obj.put()
-			self.response.out.write(json.dumps(({'blah': 'blah'}))) # ?
+			self.response.out.write({}) # ?
 
 
 ###############################################################################
@@ -716,15 +748,99 @@ class FinalJudgmentHandler(webapp.RequestHandler):
 
 		self.session = get_current_session()
 
+		# write data
 
+		scenario = self.session['scenario']
+
+
+
+		# logging.info('valence: '+valence)
+		obj = FinalJudgmentData(
+			user = self.session['userkey'],
+			account = self.session['account'],
+			scenario = self.session['scenario'],
+			valence = self.request.get('valence'),
+			condition = self.session['condition'],
+
+			var1_Left = self.request.get('var1a_Name'),
+			var1_Right = self.request.get('var1b_Name'),
+			var2_Left = self.request.get('var2a_Name'),
+			var2_Right = self.request.get('var2b_Name'),
+
+			drugColor_Left = self.request.get('leftDrugColor'),
+			drugColor_Right = self.request.get('rightDrugColor'),
+
+			frequency1 = self.session['frequency1'],
+			frequency2 = self.session['frequency2'][scenario],
+			position2 = self.session['position2'],
+
+			var2a_given_var1a = int(self.request.get('var2a_given_var1a')),
+			var2b_given_var1a = int(self.request.get('var2b_given_var1a')),
+			var2a_given_var1b = int(self.request.get('var2a_given_var1b')),
+			var2b_given_var1b = int(self.request.get('var2b_given_var1b')),
+			var1a_given_var2a = int(self.request.get('var1a_given_var2a')),
+			var1b_given_var2a = int(self.request.get('var1b_given_var2a')),
+			var1a_given_var2b = int(self.request.get('var1a_given_var2b')),
+			var1b_given_var2b = int(self.request.get('var1b_given_var2b')),
+
+			causalJudgment = int(self.request.get('causalJudgment')),
+			testOrder = int(self.request.get('testOrder'))
+		);
+
+		obj.put()
 
 		self.session['scenario'] += 1
-		self.session['scenario'] = 1 # testing
+		# self.session['scenario'] = 1 # testing
 
 		scenario=self.session['scenario']
 
+		# class FinalJudgmentData(db.Model):
+		# 	user  =				db.ReferenceProperty(User)
+		# 	account = 			db.StringProperty()
+		# 	usernum =			db.IntegerProperty()
+		# 	scenario = 			db.IntegerProperty()
+		# 	valence = 			db.StringProperty() # 0 means rare-positive
+		# 	condition = 		db.StringProperty() # monetary, story, combined
+		#
+		# 	# visuals
+		# 	# in the story conditions these are drug names
+		# 	# in the monetary conditions, they are shapes
+		# 	var1_Left = 		db.StringProperty()
+		# 	var1_Right = 		db.StringProperty()
+		#
+		# 	# in the story conditions these are faces
+		# 	# in the monetary condition they are shapes
+		# 	var2_Left =			db.StringProperty()
+		# 	var2_Right =		db.StringProperty()
+		#
+		# 	drugColor_Left =	db.StringProperty()
+		# 	drugColor_Right =	db.StringProperty()
+		#
+		# 	frequency1 =		db.StringProperty() # which var1 value is common (left or right)
+		# 	frequency2 =		db.StringProperty() # which var2 value is common (left or right)
+		# 	position2 =			db.StringProperty() # more of a sanity check than anything
+		#
+		# 	# given var1, estimates of var2
+		# 	var2a_given_var1a = 	db.IntegerProperty()
+		# 	var2b_given_var1a = 	db.IntegerProperty()
+		# 	var2a_given_var1b =		db.IntegerProperty()
+		# 	var2b_given_var1b =		db.IntegerProperty()
+		#
+		# 	# given var2, estimates of var1
+		# 	var1a_given_var2a =		db.IntegerProperty()
+		# 	var1b_given_var2a =		db.IntegerProperty()
+		# 	var1a_given_var2b =		db.IntegerProperty()
+		# 	var1b_given_var2b =		db.IntegerProperty()
+		#
+		# 	# causal judgment; this is changing for E1
+		# 	# which var1 would you prefer? lower outcomes are preferences for left value
+		# 	causalJudgment =	db.IntegerProperty()
+		# 	testOrder =			db.IntegerProperty()
 
-		# # does it make sense to have multiple scenarios? How long should our datasets be?
+
+
+
+
 		if scenario<=NumScenarios-1: #have more scenarios to go
 			obj = User.get(self.session['userkey']);
 			obj.progress = 2
@@ -1044,18 +1160,19 @@ class preScenarioHandler(webapp.RequestHandler):
 class DataHandler(webapp.RequestHandler):
 	def get(self):
 		self.session = get_current_session()
-	
+
 		doRender(self, 'datalogin.htm')
 
 
 	def post(self):
 		self.session = get_current_session()
-		password=str(self.request.get('password'))
+
 		page = self.request.get('whichPage')
 
-		output = str(hashlib.sha1(password).hexdigest())
 		# much more secure method of password protecting our data
-		if output == '3fcfd14762bd3087e8563832e048945e50df7f80':
+		password=str(self.request.get('password'))
+		output = str(hashlib.sha1(password).hexdigest())
+		if output == '3fcfd14762bd3087e8563832e048945e50df7f80': # matching password, access data
 
 			que=db.Query(ScenarioData)
 			que.order("usernum").order("scenario").order("trialNumber")
