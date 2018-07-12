@@ -116,7 +116,7 @@
 
                     <p><b>Current bonus:</b></p>
                     <div id="totalBonusDiv" class="scoreDisplay">
-                        $<span id="totalBonusSpan">1.00</span>
+                        $<span id="totalBonusSpan">0.30</span>
                     </div>
                 </div>
             </div>
@@ -252,10 +252,10 @@
                 '/static/images/orange.png',
                 '/static/images/purple.png',
 
-				'/static/images/Red.Square.png',
-				'/static/images/Purple.Square.png',
-				'/static/images/Green.Square.png',
-				'/static/images/Blue.Square.png']
+				'/static/images/red.square.png',
+				'/static/images/purple.square.png',
+				'/static/images/green.square.png',
+				'/static/images/blue.square.png']
 
             main.var1a = '{{var1_Names_Left}}'
             main.var1b = '{{var1_Names_Right}}'
@@ -326,7 +326,7 @@
 
             main.scenario = {{scenario}}
 
-            main.assets = 100
+            main.assets = 30
 
             // console.log('')
             // console.log(String(main.position2)+ ' (if 0, 0 in data is bad, 1 is good)')
@@ -918,7 +918,7 @@
                 }else{
                     main.assets += main.rewardAmount
                 }
-                
+
 
                 main.render('reset')
                 main.getTrialStartTime()
