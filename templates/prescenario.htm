@@ -149,10 +149,10 @@
                 '/static/images/good.png',
                 '/static/images/bad.png',
 
-                '/static/images/lightblue.png',
-                '/static/images/darkblue.png',
-                '/static/images/orange.png',
-                '/static/images/purple.png',
+                '/static/images/lightblue.pill.png',
+                '/static/images/darkblue.pill.png',
+                '/static/images/orange.pill.png',
+                '/static/images/purple.pill.png',
 
 				'/static/images/red.square.png',
 				'/static/images/purple.square.png',
@@ -173,26 +173,30 @@
 
                     // 1a
                     if(main.imageSources[i].toLowerCase().split('/')[3].split('.')[0] === main.var1a.toLowerCase()){
-						if(main.imageSources[i].split('/')[3].split('.')[1] === 'Square'){
+						if(main.imageSources[i].split('/')[3].split('.')[1] === 'square'){
 							main.var1a_img_src = main.imageSources[i]
 						}
 
                     }
                     // 1b
                     if(main.imageSources[i].toLowerCase().split('/')[3].split('.')[0] === main.var1b.toLowerCase()){
-                        if(main.imageSources[i].split('/')[3].split('.')[1] === 'Square'){
+                        if(main.imageSources[i].split('/')[3].split('.')[1] === 'square'){
 							main.var1b_img_src = main.imageSources[i]
 						}
                     }
 
                 }else{ // pill colors
                     // 1a
-                    if(main.imageSources[i].split('/')[3].split('.')[0] === '{{drugColor_Left}}'){
-                        main.var1a_img_src = main.imageSources[i]
+                    if(main.imageSources[i].toLowerCase().split('/')[3].split('.')[0] === '{{drugColor_Left}}'.toLowerCase()){
+                        if(main.imageSources[i].split('/')[3].split('.')[1] === 'pill'){
+							main.var1a_img_src = main.imageSources[i]
+						}
                     }
 
-                    if(main.imageSources[i].split('/')[3].split('.')[0] === '{{drugColor_Right}}'){
-                        main.var1b_img_src = main.imageSources[i]
+                    if(main.imageSources[i].toLowerCase().split('/')[3].split('.')[0] === '{{drugColor_Right}}'.toLowerCase()){
+                        if(main.imageSources[i].split('/')[3].split('.')[1] === 'pill'){
+							main.var1b_img_src = main.imageSources[i]
+						}
                     }
                 }
             }

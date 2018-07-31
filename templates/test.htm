@@ -32,43 +32,82 @@
                 <div class="text-center">
                     <div id="judgment1Div" class="text-center" style="display:none">
                         <h2>
-                            <span name="story">Which drug would YOU rather take?</span>
+                            <span name="story">Which drug will YOU prescribe?</span>
                             <span name="monetary">Which color would you choose?</span>
                         </h2>
                         <!-- find a place for the patient impact info here -->
                         <div id="causalSlider">
-                            <p name="story">Now imagine that you have been diagnosed with {{disease}}.
-                                Which of these two drugs would you prefer to take?</p>
-                            <p name="monetary">Now imagine a scenario in which you had to pick a color (
-                                <span name="var1a"></span> or <span name="var1b"></span>), and win or lose money based on the corresponding shape. In this scenario, you would <u>win</u> $1000 if the the resulting shape was
-                                    <span name="goodShape"></span>, but you would <u>lose</u> $1000 if it was <span name="badShape"></span>. Which color would you prefer to choose, if you want the shape to be <span name="goodShape"></span>?</p>
 
-                            <div class="row">
-                                <div class="col-xs-2"></div>
-                                <div id="causal_left_div" class="col-xs-2 text-center" style="height:100px">
-                                    <div style="height:15px"></div>
-                                    <p><span name="var1a">Drug A</span></p>
-                                    <img name="var1a_image" src="/static/images/blank.png" style="width:100px"/>
-                                </div>
-                                <div class="col-xs-4">
-                                    <div style="height:45px"></div>
+                            <p name="story">Now imagine that you have a patient who has been diagnosed with {{disease}}. If your patient has a <b>GOOD</b> outcome, we will add a dollar to your bonus. If they have a <b>BAD</b> outcome, we will subtract $1.00 from your bonus. (If you end the experiment with a negative bonus, your bonus will be rounded up to zero.)</p>
+                            <p name="monetary">Now imagine a scenario in which you had to pick a color (<span name="var1a"></span> or <span name="var1b"></span>), and win or lose money based on the corresponding shape. In this scenario, you would <u>win</u> $1000 if the the resulting shape was <span name="goodShape"></span>, but you would <u>lose</u> $1000 if it was <span name="badShape"></span>. Which color would you prefer to choose, if you want the shape to be <span name="goodShape"></span>?</p>
+                            <br>
+                            <div class="row" id="taskDisplay">
+                                <div class="col-xs-8" class="text-center">
+                                    <div id="causeDiv" class = "text-center">
+                                        <p id="v1_Prompt">
+                                            <span name="story">Will you prescribe <span name="var1a">Drug A</span> or <span name="var1b">Drug B</span>?</span>
+                                            <span name="monetary">Guess whether the color will be <span name="var1a">SHAPE NAME 1</span> or <span name="var1b">SHAPE NAME 2</span>:</span>
+                                        </p>
+                                        <div class = "row" id="pillDiv" style="height:75px">
+                                            <div id="var1a" class="col-xs-5 text-center" style="height:100px">
+                                                <p><span name="var1a">Drug A</span></p>
+                                                <img name="var1a_image" src="/static/images/blank.png" style="width:100px"/>
+                                            </div>
+                                            <div class = "col-xs-2 text-center">
+                                                <div style="height:10px"></div>
+                                                <div id="feedbackDiv" class="text-center" style="font-size: 10pt; padding:0px; height:75px">
+                                                    <span id="feedbackSpan" style="visibility: hidden;">You have chosen</span>
+                                                    <span id="clickInstruction"></span>
+                                                </div>
+                                            </div>
+                                            <div id="var1b" class="col-xs-5 text-center" style="height:100px">
+                                                <p><span name="var1b">Drug B</span></p>
+                                                <img name="var1b_image" src="/static/images/blank.png" style="width:100px"/>
 
-                                    <input id="strengthSlider" style="display:none"data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="10"/>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div id="causal_right_div" class="col-xs-2 text-center" style="height:100px">
-                                    <div style="height:15px"></div>
-                                    <p><span name="var1b">Drug A</span></p>
-                                    <img name="var1b_image" src="/static/images/blank.png" style="width:100px"/>
+                                <div id="scoreDiv" class="col-xs-4 text-center">
+
+                                    <p><b>Current bonus:</b></p>
+                                    <div id="totalBonusDiv" class="scoreDisplay">
+                                        $<span id="totalBonusSpan">0.30</span>
+                                    </div>
                                 </div>
-                                <div class="col-xs-2"></div>
+                            </div>
+
+                            <br><br>
+
+                            <div id="causalSliderDiv" class="row" style="opacity:0.2">
+                                <div class="col-xs-8">
+                                    <p>How confident are you about your decision?</p>
+                                    <div class="row">
+                                        <div id="causal_left_div" class="col-xs-3 text-center" style="height:100px">
+                                            <p><span name="var1a">Drug A</span></p>
+                                            <img name="var1a_image" src="/static/images/blank.png" style="width:100px"/>
+                                        </div>
+                                        <div class="col-xs-6">
+                                            <div style="height:45px"></div>
+
+                                            <input id="strengthSlider" style="display:none"data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="10"/>
+                                        </div>
+                                        <div id="causal_right_div" class="col-xs-3 text-center" style="height:100px">
+                                            <p><span name="var1b">Drug A</span></p>
+                                            <img name="var1b_image" src="/static/images/blank.png" style="width:100px"/>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div id="buttonDiv" class="text-center">
+                                        <button id="nextButton" disabled="true" class="btn btn-default">Next</button>
+                                    </div>
+                                </div>
+                                <div class="col-xs-4"></div>
 
                             </div>
 
                         </div>
-                        <br>
-                        <div id="buttonDiv" class="text-center">
-                            <button id="nextButton" class="btn btn-default">Next</button>
-                        </div>
+                        
 
                     </div>
 
@@ -349,10 +388,10 @@
                 '/static/images/good.png',
                 '/static/images/bad.png',
 
-                '/static/images/lightblue.png',
-                '/static/images/darkblue.png',
-                '/static/images/orange.png',
-                '/static/images/purple.png',
+                '/static/images/lightblue.pill.png',
+                '/static/images/darkblue.pill.png',
+                '/static/images/orange.pill.png',
+                '/static/images/purple.pill.png',
 
 				'/static/images/red.square.png',
 				'/static/images/purple.square.png',
@@ -386,14 +425,18 @@
 							test.var1b_img_src = test.imageSources[i]
 						}
                     }
-                }else{ // colors
+                }else{ // pills
                     // 1a
                     if(test.imageSources[i].split('/')[3].split('.')[0] === '{{drugColor_Left}}'){
-                        test.var1a_img_src = test.imageSources[i]
+                        if(test.imageSources[i].split('/')[3].split('.')[1] === 'pill'){
+                            test.var1a_img_src = test.imageSources[i]
+                        }
                     }
 
                     if(test.imageSources[i].split('/')[3].split('.')[0] === '{{drugColor_Right}}'){
-                        test.var1b_img_src = test.imageSources[i]
+                        if(test.imageSources[i].split('/')[3].split('.')[1] === 'pill'){
+                            test.var1b_img_src = test.imageSources[i]
+                        }
                     }
                 }
             }
@@ -476,6 +519,8 @@
             test.$co = $('#testContainer') // container div
             test.$causal_div = test.$co.find('#judgment1Div')
 
+            test.$var1a = test.$co.find('#var1a')
+            test.$var1b = test.$co.find('#var1b')
 
             test.$memory1_div = test.$co.find('#memoryDiv')
             test.$memory2_div = test.$co.find('#memoryDiv')
@@ -784,30 +829,58 @@
         bindEvents: function(leftName, rightName){
             // buttons
             test.$nextButton.unbind().on('click', function(){
-                test.sendAjax('causal')
+                
+                if(Number($('#strengthSlider').val()) < 10){
+                    if($('#clickInstruction').text() === test.var1a){
+                        test.sendAjax('causal')
+                    }else{
+                        alert('Your choice and confidence judgment do not match!')
+                    }
+                }else if(Number($('#strengthSlider').val()) > 10){
+                    if($('#clickInstruction').text() == test.var1b){
+                        test.sendAjax('causal')
+                    }else{
+                        console.log(Number($('#strengthSlider').val()) > 10)
+                        console.log($('#clickInstruction').text() === test.var1b)
+                        alert('Your choice and confidence judgment do not match!')
+                    }
+                }else{
+                    test.sendAjax('causal')    
+                }
+
+                
             })
+
+            test.$var1a.unbind().on('click', causal.leftClick)
+            test.$var1b.unbind().on('click', causal.rightClick)
+
+
+
 
             var leftName = test.var1a
             var rightName = test.var1b
-
 
             // sliders
             $('#strengthSlider').slider({
                 formatter: function(value) {
                     if(value < 4){
-                        return 'I would strongly prefer '+leftName
+                        return 'I am very confident about '+leftName
                     }else if(value < 10){
-                        return 'I would somewhat prefer '+leftName
+                        return 'I am somewhat confident about '+leftName
                     }else if(value == 10){
-                        return 'I would have no preference'
+                        return 'I am not sure at all'
                     }else if(value > 16){
-                        return 'I would strongly prefer '+rightName
+                        return 'I am very confident about '+rightName
                     }else{
-                        return 'I would somewhat prefer '+rightName
+                        return 'I am somewhat confident about '+rightName
                     }
 
                 }
-            });
+            })//.on('click', function(){
+            //     test.$nextButton.attr('disabled', false)
+            // });
+
+
 
 
 
@@ -824,6 +897,9 @@
                 $('[name="var1b_image"]').attr('src', test.var1b_img_src)
             }
 
+            // removeBorder to prevent jumping when we insert borders
+            causal.removeBorder(test.$var1a)
+            causal.removeBorder(test.$var1b)
 
             // unfade divs from prev
             $('#top_left_div').css('opacity', '1.0')
@@ -836,7 +912,41 @@
             test.$memory2_div.hide()
             test.$causal_div.show()
             $('#strengthSlider').slider('refresh') // clunky way to get the tooltip in the right place
+            $('#strengthSlider').slider('disable')
         },
+
+        leftClick: function(){
+            $('#feedbackSpan').css('visibility', 'visible')
+            $('#clickInstruction').text(test.var1a)
+            causal.removeBorder(test.$var1b)
+            causal.insertBorder(test.$var1a)
+            $('#strengthSlider').slider('enable')
+            $('#causalSliderDiv').css('opacity', '1.0')
+            $('#nextButton').attr('disabled', false)
+        },
+        rightClick: function(){
+            $('#feedbackSpan').css('visibility', 'visible')
+            $('#clickInstruction').text(test.var1b)
+            causal.removeBorder(test.$var1a)
+            causal.insertBorder(test.$var1b)
+            $('#strengthSlider').slider('enable')
+            $('#causalSliderDiv').css('opacity', '1.0')
+            $('#nextButton').attr('disabled', false)
+        },
+
+        insertBorder: function(object){
+            object.css('border', '5px solid grey')
+            object.css('-moz-border-radius', '20px')
+            object.css('border-radius', '15px')
+        },
+
+        removeBorder: function(object){
+            // doesn't really remove the border, because that creates weird visual jumps.
+            // instead makes the border the same color as a bootstrap well
+
+            object.css('border', '5px solid #F5F5F5')
+        },
+
         unbindEvents: function(){
             //console.log('unbind causal')
             test.$nextButton.unbind()
