@@ -47,9 +47,9 @@
 
                             </div>
 
-                            <div id="outcomePercentageText" class="col-xs-4 text-left">
+                            <!-- <div id="outcomePercentageText" class="col-xs-4 text-left">
                                 <p style="font-size: 14pt"><span id="outcomePercentageSpan">-3 cents!</span></p>
-                            </div>
+                            </div> -->
 
                         </div>
 
@@ -62,16 +62,22 @@
 
                         <div id="effectClick" style="height:50px" class="row">
 
-                            <div id="var2a" class="col-xs-5" style="height:100px">
-                                <div id="var2a_Click" class="text-center" style="height:100px">
+                            <div id="var2a" class="col-xs-5" style="height:100px; padding:5px">
+                               
+                                <div id="var2a_Click" style="height:100px">
                                     <img name="var2a_image" src="/static/images/blank.png" style="height:66%; position:relative; top:15px"/>
+                                    <p id="var2a_outcome_text" style="text-align:right;position:relative; top:-20px; visibility:hidden">+1 cents!</p>
                                 </div>
+                                    
+                            
                             </div>
-                            <div id="leftBorderDiv" class="col-xs-1" style="border-right: 1px solid black; height:50px"></div>
-                            <div id="rightBorderDiv" style="height:50px" class="col-xs-1"></div>
-                            <div id="var2b" class="col-xs-5">
-                                <div id="var2b_Click" class="text-center" style="height:100px">
+                            <div id="leftBorderDiv" class="col-xs-1" style="border-right: 1px solid black; height:75px"></div>
+                            <div id="rightBorderDiv" style="height:75px" class="col-xs-1"></div>
+                            <div id="var2b" class="col-xs-5" style="height:100px; padding-right:15px">
+                                <div id="var2b_Click" style="height:100px">
                                     <img name="var2b_image" src="/static/images/blank.png" style="height:66%; position:relative; top:15px"/>
+
+                                    <p id="var2b_outcome_text" style="text-align:right;position:relative; top:-20px; visibility:hidden">+1 cents!</p>
                                 </div>
                             </div>
 
@@ -83,6 +89,7 @@
                             <span name="story">Guess whether the patient received <span name="var1a">Drug A</span> or <span name="var1b">Drug B</span>?</span>
                             <span name="monetary">Guess whether the color will be <span name="var1a">SHAPE NAME 1</span> or <span name="var1b">SHAPE NAME 2</span>:</span>
                         </p>
+                        <br>
                         <div class = "row" id="pillDiv" style="height:75px">
                             <div id="var1a" class="col-xs-5 text-center" style="height:100px">
                                 <p><span name="var1a">Drug A</span></p>
@@ -338,11 +345,11 @@
 
 
             // don't know if this is the best place for this (testing)
-            if(main.v2_Data[main.trialNumber] === 0){ // 0 is always bad
-                main.assets -= main.rewardAmount
-            }else{
-                main.assets += main.rewardAmount
-            }
+            // if(main.v2_Data[main.trialNumber] === 0){ // 0 is always bad
+            //     main.assets -= main.rewardAmount
+            // }else{
+            //     main.assets += main.rewardAmount
+            // }
 
 
             main.accuracyBonus = 0
@@ -550,6 +557,8 @@
                 main.removeBorder(main.$var1b)
                 main.removeBorder(main.$var2a_Click)
                 main.removeBorder(main.$var2b_Click)
+                $('#var2a_outcome_text').css('visibility', 'hidden')
+                $('#var2b_outcome_text').css('visibility', 'hidden')
 
                 // story only
                 if(main.condition === 'story'){
@@ -593,14 +602,19 @@
                         $('#var2_feedback').text(main.var2b)
                         main.$outcomeSpans.text('GOOD')
                         $('#var2_value').val(main.var2b)
-                        main.$outcomePercentageSpan.text('+6 cents!')
+                        if(main.condition != 'story'){
+                            main.$outcomePercentageSpan.text('+6 cents!')    
+                        }
+                        
 
                     }else{ // bad outcome, so left image
                         $('#var2_outcome_image').attr('src', main.var2a_img_src)
                         $('#var2_feedback').text(main.var2a)
                         main.$outcomeSpans.text('BAD')
                         $('#var2_value').val(main.var2a)
-                        main.$outcomePercentageSpan.text('-6 cents!')
+                        if(main.condition != 'story'){
+                            main.$outcomePercentageSpan.text('-6 cents!')
+                        }
                     }
 
                 }else{ // right is bad (0 is always bad)
@@ -609,29 +623,58 @@
                         $('#var2_feedback').text(main.var2a)
                         main.$outcomeSpans.text('GOOD')
                         $('#var2_value').val(main.var2a)
-                        main.$outcomePercentageSpan.text('+6 cents!')
+                        if(main.condition != 'story'){
+                            main.$outcomePercentageSpan.text('+6 cents!')
+                        }
 
                     }else{ // bad outcome, so left image
                         $('#var2_outcome_image').attr('src', main.var2b_img_src)
                         $('#var2_feedback').text(main.var2b)
                         main.$outcomeSpans.text('BAD')
                         $('#var2_value').val(main.var2b)
-                        main.$outcomePercentageSpan.text('-6 cents!')
+                        if(main.condition != 'story'){
+                            main.$outcomePercentageSpan.text('-6 cents!')
+                        }
                     }
                 }
 
 
             }else if(stage == 'guess'){
 
-                ////// // console.log('render guess')
+                console.log('render guess')
 
-                if(main.v2_Data[main.trialNumber] > 0){ // 0 is bad
-                    main.$var2b_Click.css('opacity', '0.2')
-                    main.insertBorder(main.$var2a_Click)
-                }else{
-                    main.$var2a_Click.css('opacity', '0.2')
-                    main.insertBorder(main.$var2b_Click)
+                if(main.v2_Data[main.trialNumber] === 0){ // if it's a BAD outcome
+                    main.assets -= main.rewardAmount
+                    if(main.position2 === 0){ // if bad outcomes are on the left
+                        // it's a bad outcome on the left
+                        main.$var2b_Click.css('opacity', '0.2')
+                        main.insertBorder(main.$var2a_Click)
+                        $('#var2a_outcome_text').text('-6 cents!').css('visibility', 'visible')
+
+                    }else{
+                        // it's a bad outcome on the right
+                        main.$var2a_Click.css('opacity', '0.2')
+                        main.insertBorder(main.$var2b_Click)    
+                        $('#var2b_outcome_text').text('-6 cents!').css('visibility', 'visible')
+                    }
+                    
+                }else{ // if it's a GOOD outcome
+                    main.assets += main.rewardAmount
+                    if(main.position2 === 0){ // if bad outcomes are on the left
+                        // it's a good outcome on the right
+                        main.$var2a_Click.css('opacity', '0.2')
+                        main.insertBorder(main.$var2b_Click)
+                        $('#var2b_outcome_text').text('+6 cents!').css('visibility', 'visible')  
+                    }else{
+                        // it's a good outcome on the left
+                        main.$var2b_Click.css('opacity', '0.2')
+                        main.insertBorder(main.$var2a_Click)
+                        $('#var2a_outcome_text').text('+6 cents!').css('visibility', 'visible')  
+                    }
+                    
                 }
+             
+
                 main.$v2_Prompt.css('opacity', '0.2')
 
                 // // kind of sloppy, these should probably just be their own div
@@ -651,7 +694,7 @@
                 // main.$leftRange.css('opacity', '1.0')
                 // main.$rightRange.css('opacity', '1.0')
                 // opacity to .25 for the incorrect answer
-                if(main.v1_Data[main.trialNumber] == 0){ // 0 is A
+                if(main.v1_Data[main.trialNumber] == 0){ // 0 is A for v1
                     main.$feedbackDrugName.text(main.var1a)
                     main.$var1b.css('opacity', '0.25')
 
@@ -917,17 +960,16 @@
 
 
 
-                if(main.v2_Data[main.trialNumber] === 0){ // common outcome
-                    main.assets -= main.rewardAmount
-                }else{
-                    main.assets += main.rewardAmount
-                }
-
-
-                main.render('reset')
-                main.getTrialStartTime()
-                main.bindEvents(0)
-                main.attentionFails = 0
+                main.unbindEvents()
+                main.$co.css('opacity', '0.2')
+                setTimeout(function(){
+                    main.$co.css('opacity', '1.0')
+                    main.render('reset')
+                    main.getTrialStartTime()
+                    main.bindEvents(0)
+                    main.attentionFails = 0    
+                }, 300)
+                
             }
         },
 
@@ -1056,6 +1098,7 @@
         },
 
         insertBorder: function(object){
+            object.css('padding', '5px')
             object.css('border', '5px solid grey')
             object.css('-moz-border-radius', '20px')
             object.css('border-radius', '15px')
@@ -1064,7 +1107,7 @@
         removeBorder: function(object){
             // doesn't really remove the border, because that creates weird visual jumps.
             // instead makes the border the same color as a bootstrap well
-
+            object.css('padding', '5px')
             object.css('border', '5px solid #F5F5F5')
         }
 

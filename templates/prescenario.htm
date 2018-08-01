@@ -21,23 +21,19 @@
 
     	<p name="story"><span name="firstScenario">You will complete two scenarios, each about a different disease.
 			The diseases are unrelated. In the first scenario,</span><span name="secondScenario">In the next scenario,</span> you will view data about
-			the disease <span name="disease"></span>, which is
-			<span name="freq1a">most often</span> treated with
-			<span name="var1a"></span>, but is <span name="freq1b">sometimes</span>
-			treated with <span name="var1b"></span>. Patients
+			the disease <span name="disease"></span>. Patients
 			<b><span name="freq2a">most often</span> have <span name="var2a">GOOD</span>
 			treatment outcomes for this disease, but
-			<span name="freq2b">sometimes</span> have <span name="var2b">BAD</span> outcomes.</b>
+			<span name="freq2b">sometimes</span> have <span name="var2b">BAD</span> outcomes.</b>. The disease is
+			<b><span name="freq1a">most often</span> treated with
+			<span name="var1a"></span>, but is <span name="freq1b">sometimes</span>
+			treated with <span name="var1b"></span></b>. 
 		</p>
 
 		<p name="monetary" style="display:none">You will complete two scenarios,
 			each about different shapes. The scenarios are unrelated. In the first
-			scenario, the color is <b><span name="freq1a">most often</span>
-			<span name="var1a"></span>, but is <span name="freq1b">sometimes</span>
-			 <span name="var1b"></span></b>. The shape is
-			<b><span name="freq2a">most often</span> <span name="var2a"></span>,
-			but is <span name="freq2b">sometimes</span>
-			<span name="var2b"></span></b>
+			scenario, the shape is <b><span name="freq2a">most often</span> <span name="var2a"></span>, but is <span name="freq2b">sometimes</span> 
+			<span name="var2b"></span></b>. The color is <b><span name="freq1a">most often</span> <span name="var1a"></span>, but is <span name="freq1b">sometimes</span> <span name="var1b"></span></b>.  
 		</p>
         <br>
 
@@ -45,6 +41,23 @@
             <p name="monetary">To begin, click the <b>most common</b> color and shape.</p>
 			<p name="story">To begin, click the <b>most common</b> drug and outcome.</p>
 			<br>
+            
+			<div class = "row" id="var2Div" style="height:100px">
+				<div class = "col-xs-2 text-center">
+					<b name="monetary">Shape:</b>
+					<b name="story">Outcome:</b>
+				</div>
+				<div id="var2a" class="col-xs-4" style="height:100px">
+					<img id="var2aImg" src="/static/images/bad.png" style="height:70px"/>
+					<p><span name="var2a">BAD</span></p>
+				</div>
+				<div class="col-xs-2 text-center"><p style="position:relative; top:30px">or</p></div>
+				<div id="var2b" class="col-xs-4" style="height:100px">
+					<img id="var2bImg" src="/static/images/good.png" style="height:70px"/>
+					<p><span name="var2b">GOOD</span></p>
+				</div>
+            </div>
+
             <div class = "row" id="var1Div" style="height:100px">
 				<div class = "col-xs-2 text-center">
                     <b>
@@ -69,21 +82,7 @@
 				<div class="col-xs-1"></div>
 			</div>
 
-			<div class = "row" id="shape2Div" style="height:100px">
-				<div class = "col-xs-2 text-center">
-					<b name="monetary">Shape:</b>
-					<b name="story">Outcome:</b>
-				</div>
-				<div id="var2a" class="col-xs-4" style="height:100px">
-					<img id="var2aImg" src="/static/images/bad.png" style="height:70px"/>
-					<p><span name="var2a">BAD</span></p>
-				</div>
-				<div class="col-xs-2 text-center"><p style="position:relative; top:30px">or</p></div>
-				<div id="var2b" class="col-xs-4" style="height:100px">
-					<img id="var2bImg" src="/static/images/good.png" style="height:70px"/>
-					<p><span name="var2b">GOOD</span></p>
-				</div>
-            </div>
+			
         </div>
 		<br>
 		<div class="row">
@@ -308,19 +307,19 @@
 
 
 			if(main.frequency1 === 1){
-				$('[name="freq1a"]').text('sometimes')
+				$('[name="freq1a"]').text('occasionally')
 				$('[name="freq1b"]').text('most often')
 			}else{
 				$('[name="freq1a"]').text('most often')
-				$('[name="freq1b"]').text('sometimes')
+				$('[name="freq1b"]').text('occasionally')
 			}
 
 			if(main.frequency2 === 1){
-				$('[name="freq2a"]').text('sometimes')
+				$('[name="freq2a"]').text('occasionally')
 				$('[name="freq2b"]').text('most often')
 			}else{
 				$('[name="freq2a"]').text('most often')
-				$('[name="freq2b"]').text('sometimes')
+				$('[name="freq2b"]').text('occasionally')
 			}
 			main.$diseaseSpans.text('{{disease}}')
 
@@ -385,12 +384,14 @@
         },
 
 		insertBorder: function(object){
+			object.css('padding', '5px')
             object.css('border', '5px solid grey')
             object.css('-moz-border-radius', '20px')
             object.css('border-radius', '15px')
         },
 
         removeBorder: function(object){
+        	object.css('padding', '5px')
             object.css('border', '5px solid #F5F5F5')
         },
 

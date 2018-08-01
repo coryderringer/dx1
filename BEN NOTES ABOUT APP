@@ -1,0 +1,21 @@
+BEN NOTES ABOUT APP
+
+In the pre scenario the drug is at the top and the outcome is at the bottom. But in the real task the outcome is at the top and the drug is at the bottom. I would keep it consistent.
+	=> DONE
+
+In the version I saw they got 3 cents for the correct prediction. If they didn't get it correct it didn't say anything. Would it be better to say +0 cents? But I guess this way it is less obtrusive. Also, please correct me if I am wrong, this +3 for correct prediction doesn't actually have to do with the main part of your study - it is just to encourage them to pay attention, right? So in this case I guess it doesn't matter what you do about the 0 cents so long as it is the same across conditions.
+	NOT WORRIED
+
+For the +6 or -6 cents related to the outcome - it didn't really catch my attention about whether I would be getting +6 or -6 cents. I might put +6 cents next to the button of the smile face and -6 cents next to the button of the frown so that the user sees it as they are confirming the outcome. Does this make sense? 
+	=> DONE
+
+Another thing you could do - after each trial (e.g., after "click purple to continue") you could make the outcome from the prior trial disappear, and then then the outcome for the new trial appear after .5 seconds or something like that. I think that when the new outcome appears, having the +6 or -6 appear next to it will make it more salient.
+	=> This seems like it will be difficult...come back to this.
+
+
+In one of the scenarios on the screen that said "You will complete two scenarios, each about different shapes. The scenarios are unrelated. In the first scenario, the color is sometimes GREEN, but is most often PURPLE. The shape is most often SQUARE, but is sometimes CIRCLE" the green and purple colors were missing - it just said "GREEN" and "PURPLE". This persisted onto the next screen - there are no colors. See the screenshot below:
+	=> FIXED (should be fixed now that I have disambiguated the picture file names)
+
+
+I find it confusing how you say. "In the first scenario, the color is sometimes GREEN, but is most often PURPLE. The shape is most often SQUARE, but is sometimes CIRCLE". The first sentence gives the rare item and then the common item. The second sentence gives the common item and then the rare item. It would be easier if you did it common, then rare, for both sentences.
+	=> Try this both ways, see what ZCK say about it
