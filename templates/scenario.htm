@@ -60,30 +60,31 @@
                         </p>
 
 
-                        <div id="effectClick" style="height:50px" class="row">
+                        <div id="effectClick" class="row">
 
-                            <div id="var2a" class="col-xs-5" style="height:100px; padding:5px">
+                            <div id="var2a" class="col-xs-5">
                                
-                                <div id="var2a_Click" style="height:100px">
-                                    <img name="var2a_image" src="/static/images/blank.png" style="height:66%; position:relative; top:15px"/>
-                                    <p id="var2a_outcome_text" style="text-align:right;position:relative; top:-20px; visibility:hidden">+1 cents!</p>
+                                <div id="var2a_Click">
+                                    <img name="var2a_image" src="/static/images/blank.png" style="height:70px"/>
+                                    <p id="var2a_outcome_text">+1 cents!</p>
                                 </div>
                                     
                             
                             </div>
-                            <div id="leftBorderDiv" class="col-xs-1" style="border-right: 1px solid black; height:75px"></div>
-                            <div id="rightBorderDiv" style="height:75px" class="col-xs-1"></div>
-                            <div id="var2b" class="col-xs-5" style="height:100px; padding-right:15px">
-                                <div id="var2b_Click" style="height:100px">
-                                    <img name="var2b_image" src="/static/images/blank.png" style="height:66%; position:relative; top:15px"/>
+                            <div id="leftBorderDiv" class="col-xs-1" style="border-right: 1px solid black; height:70px"></div>
+                            <div id="rightBorderDiv" class="col-xs-1"></div>
 
-                                    <p id="var2b_outcome_text" style="text-align:right;position:relative; top:-20px; visibility:hidden">+1 cents!</p>
+                            <div id="var2b" class="col-xs-5">
+                                <div id="var2b_Click" style="height:100px">
+                                    <img name="var2b_image" src="/static/images/blank.png" style="height:70px"/>
+
+                                    <p id="var2b_outcome_text">+1 cents!</p>
                                 </div>
                             </div>
 
                         </div>
                     </div>
-                    <br>
+                   
                     <div id="causeDiv" class = "text-center">
                         <p id="v1_Prompt">
                             <span name="story">Guess whether the patient received <span name="var1a">Drug A</span> or <span name="var1b">Drug B</span>?</span>
@@ -94,17 +95,18 @@
                             <div id="var1a" class="col-xs-5 text-center" style="height:100px">
                                 <p><span name="var1a">Drug A</span></p>
                                 <img name="var1a_image" src="/static/images/blank.png" style="width:100px"/>
+                                <p id="continue_Left" style="visibility:hidden">Click to Continue</p>
                             </div>
                             <div class = "col-xs-2 text-center">
                                 <div style="height:10px"></div>
                                 <div id="feedbackDiv" class="text-center" style="font-size: 10pt; padding:0px; height:75px">
-                                    <span id="feedbackSpan"></span>
-                                    <span id="clickInstruction"></span>
+                                    <span id="feedbackSpan" style="position:relative; top:30px"></span>
                                 </div>
                             </div>
                             <div id="var1b" class="col-xs-5 text-center" style="height:100px">
                                 <p><span name="var1b">Drug B</span></p>
                                 <img name="var1b_image" src="/static/images/blank.png" style="width:100px"/>
+                                <p id="continue_Right" style="visibility:hidden">Click to Continue</p>
 
                             </div>
                         </div>
@@ -197,7 +199,7 @@
 
         init: function(){
             // MAKE SURE "0" in the v2 data is always bad
-
+            main.test = 0
             // variables
             // main.trialNumber = {{trialNumber}}
             main.trialNumber = 0
@@ -291,15 +293,19 @@
 
                     // 1a
                     if(main.imageSources[i].toLowerCase().split('/')[3].split('.')[0] === main.var1a.toLowerCase()){
-						if(main.imageSources[i].split('/')[3].split('.')[1] === 'Square'){
-							main.var1a_img_src = main.imageSources[i]
+						console.log('found var1a')
+                        if(main.imageSources[i].split('/')[3].split('.')[1] === 'square'){
+                            main.var1a_img_src = main.imageSources[i]
+                            console.log('assigned var1a: '+main.var1a_img_src)
 						}
 
                     }
                     // 1b
                     if(main.imageSources[i].toLowerCase().split('/')[3].split('.')[0] === main.var1b.toLowerCase()){
-                        if(main.imageSources[i].split('/')[3].split('.')[1] === 'Square'){
+                        console.log('found var1b')
+                        if(main.imageSources[i].split('/')[3].split('.')[1] === 'square'){
 							main.var1b_img_src = main.imageSources[i]
+                            console.log('assigned var1b: '+main.var1b_img_src)
 						}
                     }
                 }else{ // pill colors
@@ -480,8 +486,8 @@
 
 
             // "buttons"
-            main.$var2a_Click = main.$co.find('#var2a_Click')
-            main.$var2b_Click = main.$co.find('#var2b_Click')
+            main.$var2a = main.$co.find('#var2a_Click')
+            main.$var2b = main.$co.find('#var2b_Click')
 
             main.$var1aDiv = main.$co.find('#var1a')
             main.$var1bDiv = main.$co.find('#var1b')
@@ -510,8 +516,8 @@
             //     main.$outcomeA = main.$var2_outcome.find('[name="'+main.var2b+'"]')
             //     main.$outcomeB = main.$var2_outcome.find('[name="'+main.var2a+'"]')
             //
-            //     main.$var2a_Click.children('img').attr('src', '/static/images/good.png')
-            //     main.$var2b_Click.children('img').attr('src', '/static/images/bad.png')
+            //     main.$var2a.children('img').attr('src', '/static/images/good.png')
+            //     main.$var2b.children('img').attr('src', '/static/images/bad.png')
 			// }else{
 			// 	main.$shape2a = main.$var2aDiv.find('[name="'+main.var2a+'"]')
 			// 	main.$shape2b = main.$var2bDiv.find('[name="'+main.var2b+'"]')
@@ -555,10 +561,12 @@
                 main.$patientNumber.text(main.trialNumber+1)
                 main.removeBorder(main.$var1a)
                 main.removeBorder(main.$var1b)
-                main.removeBorder(main.$var2a_Click)
-                main.removeBorder(main.$var2b_Click)
+                main.removeBorder(main.$var2a)
+                main.removeBorder(main.$var2b)
                 $('#var2a_outcome_text').css('visibility', 'hidden')
                 $('#var2b_outcome_text').css('visibility', 'hidden')
+                $('#continue_Left').css('visibility', 'hidden')
+                $('#continue_Right').css('visibility', 'hidden')
 
                 // story only
                 if(main.condition === 'story'){
@@ -567,8 +575,8 @@
 
                 // effect div
                 main.$v2_Prompt.css('opacity', '1.0')
-                main.$var2a_Click.css('opacity', '1.0')
-                main.$var2b_Click.css('opacity', '1.0')
+                main.$var2a.css('opacity', '1.0')
+                main.$var2b.css('opacity', '1.0')
 
                 if(main.condition == 'monetary'){
                     main.$var1a_image.attr('src', main.var1a_img_src).css('width', '55px')
@@ -647,14 +655,14 @@
                     main.assets -= main.rewardAmount
                     if(main.position2 === 0){ // if bad outcomes are on the left
                         // it's a bad outcome on the left
-                        main.$var2b_Click.css('opacity', '0.2')
-                        main.insertBorder(main.$var2a_Click)
+                        main.$var2b.css('opacity', '0.2')
+                        main.insertBorder(main.$var2a)
                         $('#var2a_outcome_text').text('-6 cents!').css('visibility', 'visible')
 
                     }else{
                         // it's a bad outcome on the right
-                        main.$var2a_Click.css('opacity', '0.2')
-                        main.insertBorder(main.$var2b_Click)    
+                        main.$var2a.css('opacity', '0.2')
+                        main.insertBorder(main.$var2b)    
                         $('#var2b_outcome_text').text('-6 cents!').css('visibility', 'visible')
                     }
                     
@@ -662,13 +670,13 @@
                     main.assets += main.rewardAmount
                     if(main.position2 === 0){ // if bad outcomes are on the left
                         // it's a good outcome on the right
-                        main.$var2a_Click.css('opacity', '0.2')
-                        main.insertBorder(main.$var2b_Click)
+                        main.$var2a.css('opacity', '0.2')
+                        main.insertBorder(main.$var2b)
                         $('#var2b_outcome_text').text('+6 cents!').css('visibility', 'visible')  
                     }else{
                         // it's a good outcome on the left
-                        main.$var2b_Click.css('opacity', '0.2')
-                        main.insertBorder(main.$var2a_Click)
+                        main.$var2b.css('opacity', '0.2')
+                        main.insertBorder(main.$var2a)
                         $('#var2a_outcome_text').text('+6 cents!').css('visibility', 'visible')  
                     }
                     
@@ -705,9 +713,10 @@
                     // feedback text
                     if(main.guesses[main.guesses.length-1] == main.var1a){ // correctly guess A
                         main.$feedbackSpan.html('Correct!<br>+3 cents!')
-
+                        $('#continue_Left').css('visibility', 'visible')
                     }else{ // incorrectly guess B
                         main.$feedbackSpan.html('Incorrect!')
+                        $('#continue_Left').css('visibility', 'visible')
                     }
 
                 }else{
@@ -720,8 +729,10 @@
                     // feedback text
                     if(main.guesses[main.guesses.length-1] == main.var1b){
                         main.$feedbackSpan.html('Correct!<br>+3 cents!')
+                        $('#continue_Right').css('visibility', 'visible')
                     }else{
                         main.$feedbackSpan.html('Incorrect!')
+                        $('#continue_Right').css('visibility', 'visible')
                     }
                 }
                 main.$feedbackDiv.css('visibility', 'visible')
@@ -771,22 +782,20 @@
             // this function specifies which objects are "listening" for events to happen at which times.
 
             if(stage == 0){
-                main.$var2a_Click.unbind().on('click', main.var2a_Click)
-                main.$var2b_Click.unbind().on('click', main.var2b_Click)
+                main.$var2a.unbind().on('click', main.var2a_Click)
+                main.$var2b.unbind().on('click', main.var2b_Click)
             }else if(stage == 1){
-                main.$var2a_Click.unbind()
-                main.$var2b_Click.unbind()
+                main.$var2a.unbind()
+                main.$var2b.unbind()
                 main.$var1a.unbind().on('click', main.var1a_Function)
                 main.$var1b.unbind().on('click', main.var1b_Function)
             }else{
 
                 if(main.$correctInput.val() === main.var1a){
                     main.$var1a.unbind().on('click', main.newTrial)
-                    $('#clickInstruction').text('Click '+main.var1a+' to continue.')
                 }else{
                     // if the right is correct
                     main.$var1b.unbind().on('click', main.newTrial)
-                    $('#clickInstruction').text('Click '+main.var1b+' to continue.')
                 }
 
 
@@ -801,8 +810,8 @@
             main.bound = [
                 main.$var1a,
                 main.$var1b,
-                main.$var2a_Click,
-                main.$var2b_Click
+                main.$var2a,
+                main.$var2b
             ]
 
         },
@@ -1098,7 +1107,6 @@
         },
 
         insertBorder: function(object){
-            object.css('padding', '5px')
             object.css('border', '5px solid grey')
             object.css('-moz-border-radius', '20px')
             object.css('border-radius', '15px')
@@ -1107,7 +1115,6 @@
         removeBorder: function(object){
             // doesn't really remove the border, because that creates weird visual jumps.
             // instead makes the border the same color as a bootstrap well
-            object.css('padding', '5px')
             object.css('border', '5px solid #F5F5F5')
         }
 

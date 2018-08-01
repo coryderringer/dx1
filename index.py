@@ -1403,9 +1403,9 @@ class MturkIDHandler(webapp.RequestHandler):
 				elif self.session['usernum'] % 3 == 2:
 					self.session['condition'] = 'monetary'
 
+				self.session['condition'] = 'combined' # testing
 
 
-				# self.session['condition'] = 'story' # testing
 				# position1 and position2 (visual)
 				if self.session['condition'] == 'monetary':
 					a = ['RED', 'BLUE', 'PURPLE', 'GREEN']

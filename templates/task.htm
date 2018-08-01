@@ -101,6 +101,7 @@
                                 </div>
 
                             </div>
+                            <div class="col-xs-4"></div>
 
                             <!-- <div id="outcomePercentageText" class="col-xs-4 text-left">
                                 <p style="font-size: 14pt"><span id="outcomePercentageSpan">+0.06</span></p>
@@ -114,24 +115,24 @@
 
                         </div>
 
-                        <div style="height:50px" class="row">
+                        <div id="testRow" class="row">
 
-                            <div id="leftFace" class="col-xs-5" style="height:70px;">
-                                <div id="var2a">
-                                    <img id="var2aImg" src="/static/images/blank.png" style="height:50px"/>
-                                    <p id="var2a_outcome_text" style="text-align:right;position:relative; top:-35px; left:25px">+6 cents!</p>
+                            <div id="leftFace" class="col-xs-5">
+                                <div id="var2a" >
+                                    <img id="var2aImg" src="/static/images/blank.png" style="height:70px"/>
+                                    <p id="var2a_outcome_text" style="visibility: hidden" name="combined">+6 cents!</p>
                                 </div>
                                  
                             </div>
 
-                            <div id="leftBorderDiv" class="col-xs-1" style="border-right: 1px solid black; height:50px"></div>
-                            <div id="rightBorderDiv" style="height:50px" class="col-xs-1"></div>
+                            <div id="leftBorderDiv" class="col-xs-1" style="border-right: 1px solid black; height:70px"></div>
+                            <div id="rightBorderDiv" class="col-xs-1"></div>
 
                             <div id="rightFace" class="col-xs-5">
                                 <div id="var2b" class="text-center">
-                                    <img id="var2bImg" src="/static/images/blank.png" style="height:50px"/>
+                                    <img id="var2bImg" src="/static/images/blank.png" style="height:70px"/>
 
-                                    <p name="monetary">-6 cents!</p>
+                                    <p id="var2b_outcome_text" style="visibility: hidden" name="combined">-6 cents!</p>
                                 </div>
                             </div>
 
@@ -139,7 +140,7 @@
 
 
                     </div>
-                    <br>
+               
                     <div id="causeDiv" class = "text-center">
                         <p name="story" id="causePrompt">Guess whether the patient received TW405 or HL376:</p>
                         <p name="monetary">Guess whether the color will be <span name="var1a"></span> or <span name="var1b"></span>:</p>
@@ -335,13 +336,16 @@
 
                     // borders (prevent jumping)
                     main.removeBorder($('#leftFace'))
+                    main.removeBorder($('#rightFace'))
                     main.removeBorder(main.$var1a)
+                    main.removeBorder(main.$var1b)
 
                     main.$co.show()
 
                 }else if(stage == 1){
                     // if going forward:
                     main.$effectDiv.css('opacity', '1.0')
+                    main.$totalBonusSpan.text('0.30')
 
                     // if coming backward:
                     main.$var2b.css('opacity', '1.0')
@@ -387,8 +391,14 @@
 
                 }
             }else{
+                console.log(stage)
                 $('[name="monetary"]').hide()
                 $('[name="story"]').show()
+                
+                if(main.condition === 'story'){
+                    $('[name="combined"]').hide() // this is not the best way to do this...
+                }
+                
                 if(stage == 0){ // very beginning, opacity of 0.2 for the example div
 
                     // images
@@ -398,6 +408,12 @@
                     main.$var1bImg.attr('src', '/static/images/white.pill.png')
                     main.$var2_outcome_image.attr('src', '/static/images/good.png')
 
+                    // $('#leftFace').css('height', '60px')
+                    // borders (so they don't jump later)
+                    main.removeBorder($('#leftFace'))
+                    main.removeBorder($('#rightFace'))
+                    main.removeBorder(main.$var1a)
+                    main.removeBorder(main.$var1b)
 
                     // everything opaque
                     main.$effectDiv.css('opacity', '0.2')
@@ -417,11 +433,13 @@
                     // if coming backward:
                     main.$var2b.css('opacity', '1.0')
                     main.removeBorder(main.$var2a)
+                    $('#var2a_outcome_text').css('visibility', 'hidden')
                     main.$causeDiv.css('opacity', '0.2')
 
                     main.$treatmentBonusDiv.css('opacity', '1.0')
                     main.$accuracyBonusDiv.css('opacity', '0.2')
                     main.$totalBonusDiv.css('opacity', '1.0')
+                    main.$totalBonusSpan.text('0.30')
                     main.$scoreDiv.css('opacity', '1.0')
 
 
@@ -430,15 +448,16 @@
                     main.$causeDiv.css('opacity', '1.0')
                     main.$var2b.css('opacity', '0.2')
                     main.insertBorder(main.$var2a)
-
+                    $('#var2a_outcome_text').css('visibility', 'visible')
                     main.$drugB.css('opacity', '1.0')
-                    main.removeBorder(main.$var1a)
+                  
                     main.$feedbackDiv.text('')
+                    main.$totalBonusSpan.text('0.36')
 
                     // if coming backwards
                     main.$accuracyBonusSpan.text('0.00')
+                    main.removeBorder(main.$var1a)
                     
-                    main.$totalBonusSpan.text('0.30')
                     
                     
                     main.$accuracyBonusDiv.css('opacity', '0.2')
@@ -454,9 +473,9 @@
 
                     main.$accuracyBonusSpan.text('0.03')
                     if(main.condition == 'story'){
-                        main.$totalBonusSpan.text('1.03')
+                        main.$totalBonusSpan.text('0.33')
                     }else{
-                        main.$totalBonusSpan.text('1.09')
+                        main.$totalBonusSpan.text('0.39')
                     }
                     main.$accuracyBonusDiv.css('opacity', '1.0')
                     main.$totalBonusDiv.css('opacity', '1.0')
@@ -610,10 +629,6 @@
 
         insertBorder: function(object){
             object.css('padding', '5px')
-            if(object != main.$var1a){
-                // extra padding for text
-                object.css('padding-right', '30px')
-            }
             object.css('border', '5px solid grey')
             object.css('-moz-border-radius', '20px')
             object.css('border-radius', '15px')
@@ -621,7 +636,7 @@
 
         removeBorder: function(object){
             object.css('padding', '5px')
-            object.css('padding-right', '30px')
+            
             object.css('border', '5px solid #F5F5F5')
         }
 
