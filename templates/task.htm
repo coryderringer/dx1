@@ -120,7 +120,7 @@
                             <div id="leftFace" class="col-xs-5">
                                 <div id="var2a" >
                                     <img id="var2aImg" src="/static/images/blank.png" style="height:70px"/>
-                                    <p id="var2a_outcome_text" style="visibility: hidden" name="combined">+6 cents!</p>
+                                    <p id="var2a_outcome_text" style="visibility:hidden" name="combined">+6 cents!</p>
                                 </div>
                                  
                             </div>
@@ -132,7 +132,7 @@
                                 <div id="var2b" class="text-center">
                                     <img id="var2bImg" src="/static/images/blank.png" style="height:70px"/>
 
-                                    <p id="var2b_outcome_text" style="visibility: hidden" name="combined">-6 cents!</p>
+                                    <p id="var2b_outcome_text" style="visibility:hidden" name="combined">-6 cents!</p>
                                 </div>
                             </div>
 
@@ -312,12 +312,12 @@
             if(main.condition == 'story'){
                 main.$outcomePercentageSpan.hide()
                 $('[name="combinedCondition"]').hide()
-                main.$totalBonusSpan.text('1.00')
+                main.$totalBonusSpan.text('0.30')
             }
-            if(main.condition == 'monetary'){
-                if(stage == 0){ // very beginning, opacity of 0.2 for the example div
-
-
+            
+            if(stage == 0){ // very beginning, opacity of 0.2 for the example div
+                if(main.condition == 'monetary'){
+                    // monetary:
                     $('[name="story"]').hide()
                     $('[name="monetary"]').show()
 
@@ -327,80 +327,11 @@
                     main.$var1aImg.attr('src', '/static/images/orange.square.png').css('height', '60px').css('width', '60px')
                     main.$var1bImg.attr('src', '/static/images/yellow.square.png').css('height', '60px').css('width', '60px')
                     main.$var2_outcome_image.attr('src', '/static/images/rectangle.png')
+                }else{
 
-                    // everything opaque
-                    main.$effectDiv.css('opacity', '0.2')
-                    main.$causeDiv.css('opacity', '0.2')
-                    main.$scoreDiv.css('opacity', '0.2')
-                    main.$totalBonusDiv.css('opacity', '0.2')
-
-                    // borders (prevent jumping)
-                    main.removeBorder($('#leftFace'))
-                    main.removeBorder($('#rightFace'))
-                    main.removeBorder(main.$var1a)
-                    main.removeBorder(main.$var1b)
-
-                    main.$co.show()
-
-                }else if(stage == 1){
-                    // if going forward:
-                    main.$effectDiv.css('opacity', '1.0')
-                    main.$totalBonusSpan.text('0.30')
-
-                    // if coming backward:
-                    main.$var2b.css('opacity', '1.0')
-                    main.removeBorder($('#leftFace'))
-                    main.$causeDiv.css('opacity', '0.2')
-
-                    main.$treatmentBonusDiv.css('opacity', '1.0')
-                    main.$accuracyBonusDiv.css('opacity', '0.2')
-                    main.$totalBonusDiv.css('opacity', '1.0')
-                    main.$scoreDiv.css('opacity', '1.0')
-
-
-
-                }else if(stage == 2){
-                    main.$causeDiv.css('opacity', '1.0')
-                    main.$var2b.css('opacity', '0.2')
-                    main.insertBorder($('#leftFace'))
-
-                    main.$drugB.css('opacity', '1.0')
-                    main.removeBorder(main.$var1a)
-                    main.$feedbackDiv.text('')
-
-                    // if coming backwards
-                    main.$accuracyBonusSpan.text('0.00')
-                    main.$totalBonusSpan.text('0.36')
-                    main.$accuracyBonusDiv.css('opacity', '0.2')
-                    main.$totalBonusDiv.css('opacity', '1.0')
-
-
-
-                }else if(stage == 3){
-                    main.$drugB.css('opacity', '0.2')
-                    main.insertBorder(main.$var1a)
-                    main.$feedbackDiv.html('Correct!<br>+3 cents!')
-
-
-                    main.$accuracyBonusSpan.text('0.03')
-                    main.$totalBonusSpan.text('0.39')
-                    main.$accuracyBonusDiv.css('opacity', '1.0')
-                    main.$totalBonusDiv.css('opacity', '1.0')
-
-
-
-                }
-            }else{
-                console.log(stage)
-                $('[name="monetary"]').hide()
-                $('[name="story"]').show()
-                
-                if(main.condition === 'story'){
-                    $('[name="combined"]').hide() // this is not the best way to do this...
-                }
-                
-                if(stage == 0){ // very beginning, opacity of 0.2 for the example div
-
+                    // story/combined:
+                    $('[name="monetary"]').hide()
+                    $('[name="story"]').show()
                     // images
                     main.$var2aImg.attr('src', '/static/images/good.png')
                     main.$var2bImg.attr('src', '/static/images/bad.png')
@@ -408,84 +339,175 @@
                     main.$var1bImg.attr('src', '/static/images/white.pill.png')
                     main.$var2_outcome_image.attr('src', '/static/images/good.png')
 
-                    // $('#leftFace').css('height', '60px')
-                    // borders (so they don't jump later)
-                    main.removeBorder($('#leftFace'))
-                    main.removeBorder($('#rightFace'))
-                    main.removeBorder(main.$var1a)
-                    main.removeBorder(main.$var1b)
-
-                    // everything opaque
-                    main.$effectDiv.css('opacity', '0.2')
-                    main.$causeDiv.css('opacity', '0.2')
-                    main.$scoreDiv.css('opacity', '0.2')
-                    main.$totalBonusDiv.css('opacity', '0.2')
-
-                    main.$co.show()
-
-
-
-
-                }else if(stage == 1){
-                    // if going forward:
-                    main.$effectDiv.css('opacity', '1.0')
-
-                    // if coming backward:
-                    main.$var2b.css('opacity', '1.0')
-                    main.removeBorder(main.$var2a)
-                    $('#var2a_outcome_text').css('visibility', 'hidden')
-                    main.$causeDiv.css('opacity', '0.2')
-
-                    main.$treatmentBonusDiv.css('opacity', '1.0')
-                    main.$accuracyBonusDiv.css('opacity', '0.2')
-                    main.$totalBonusDiv.css('opacity', '1.0')
-                    main.$totalBonusSpan.text('0.30')
-                    main.$scoreDiv.css('opacity', '1.0')
-
-
-
-                }else if(stage == 2){
-                    main.$causeDiv.css('opacity', '1.0')
-                    main.$var2b.css('opacity', '0.2')
-                    main.insertBorder(main.$var2a)
-                    $('#var2a_outcome_text').css('visibility', 'visible')
-                    main.$drugB.css('opacity', '1.0')
-                  
-                    main.$feedbackDiv.text('')
-                    main.$totalBonusSpan.text('0.36')
-
-                    // if coming backwards
-                    main.$accuracyBonusSpan.text('0.00')
-                    main.removeBorder(main.$var1a)
-                    
-                    
-                    
-                    main.$accuracyBonusDiv.css('opacity', '0.2')
-                    main.$totalBonusDiv.css('opacity', '1.0')
-                    main.$scoreDiv.css('opacity', '1.0')
-
-
-                }else if(stage == 3){
-                    main.$drugB.css('opacity', '0.2')
-                    main.insertBorder(main.$var1a)
-                    main.$feedbackDiv.html('Correct!<br>+3 cents!')
-
-
-                    main.$accuracyBonusSpan.text('0.03')
-                    if(main.condition == 'story'){
-                        main.$totalBonusSpan.text('0.33')
-                    }else{
-                        main.$totalBonusSpan.text('0.39')
+                    // story:
+                    if(main.condition === 'story'){
+                        $('[name="combined"]').hide() // this is not the best way to do this...
                     }
-                    main.$accuracyBonusDiv.css('opacity', '1.0')
-                    main.$totalBonusDiv.css('opacity', '1.0')
-                    main.$scoreDiv.css('opacity', '1.0')
-
-
                 }
+
+                // $('#leftFace').css('height', '60px')
+                // borders (so they don't jump later)
+                main.removeBorder($('#leftFace'))
+                main.removeBorder($('#rightFace'))
+                main.removeBorder(main.$var1a)
+                main.removeBorder(main.$var1b)
+
+                // everything opaque
+                main.$effectDiv.css('opacity', '0.2')
+                main.$causeDiv.css('opacity', '0.2')
+                main.$scoreDiv.css('opacity', '0.2')
+                main.$totalBonusDiv.css('opacity', '0.2')
+
+                main.$co.show()
+
+            }else if(stage == 1){
+                // if going forward:
+                main.$effectDiv.css('opacity', '1.0')
+
+                // if coming backward:
+                main.$var2b.css('opacity', '1.0')
+                main.removeBorder(main.$var2a)
+                $('#var2a_outcome_text').css('visibility', 'hidden')
+                main.$causeDiv.css('opacity', '0.2')
+
+                main.$treatmentBonusDiv.css('opacity', '1.0')
+                main.$accuracyBonusDiv.css('opacity', '0.2')
+                main.$totalBonusDiv.css('opacity', '1.0')
+                main.$totalBonusSpan.text('0.30')
+                main.$scoreDiv.css('opacity', '1.0')
+
+
+
+
+            }else if(stage == 2){
+                main.$causeDiv.css('opacity', '1.0')
+                main.$var2b.css('opacity', '0.2')
+                main.insertBorder(main.$var2a)
+                $('#var2a_outcome_text').css('visibility', 'visible')
+                main.$drugB.css('opacity', '1.0')
+              
+                main.$feedbackDiv.text('')
+                main.$totalBonusSpan.text('0.36')
+
+                // if coming backwards
+                main.$accuracyBonusSpan.text('0.00')
+                main.removeBorder(main.$var1a)
+                
+                
+                
+                main.$accuracyBonusDiv.css('opacity', '0.2')
+                main.$totalBonusDiv.css('opacity', '1.0')
+                main.$scoreDiv.css('opacity', '1.0')
+
+
+
+            }else if(stage == 3){
+                main.$drugB.css('opacity', '0.2')
+                main.insertBorder(main.$var1a)
+                main.$feedbackDiv.html('Correct!<br>+3 cents!')
+
+
+                main.$accuracyBonusSpan.text('0.03')
+                if(main.condition == 'story'){
+                    main.$totalBonusSpan.text('0.33')
+                }else{
+                    main.$totalBonusSpan.text('0.39')
+                }
+                main.$accuracyBonusDiv.css('opacity', '1.0')
+                main.$totalBonusDiv.css('opacity', '1.0')
+                main.$scoreDiv.css('opacity', '1.0')
 
 
             }
+           
+                // console.log(stage)
+                // $('[name="monetary"]').hide()
+                // $('[name="story"]').show()
+                
+                // if(main.condition === 'story'){
+                //     $('[name="combined"]').hide() // this is not the best way to do this...
+                // }
+                
+                // if(stage == 0){ // very beginning, opacity of 0.2 for the example div
+
+                //     // $('#leftFace').css('height', '60px')
+                //     // borders (so they don't jump later)
+                //     main.removeBorder($('#leftFace'))
+                //     main.removeBorder($('#rightFace'))
+                //     main.removeBorder(main.$var1a)
+                //     main.removeBorder(main.$var1b)
+
+                //     // everything opaque
+                //     main.$effectDiv.css('opacity', '0.2')
+                //     main.$causeDiv.css('opacity', '0.2')
+                //     main.$scoreDiv.css('opacity', '0.2')
+                //     main.$totalBonusDiv.css('opacity', '0.2')
+
+                //     main.$co.show()
+
+
+
+
+                // }else if(stage == 1){
+                //     // if going forward:
+                //     main.$effectDiv.css('opacity', '1.0')
+
+                //     // if coming backward:
+                //     main.$var2b.css('opacity', '1.0')
+                //     main.removeBorder(main.$var2a)
+                //     $('#var2a_outcome_text').css('visibility', 'hidden')
+                //     main.$causeDiv.css('opacity', '0.2')
+
+                //     main.$treatmentBonusDiv.css('opacity', '1.0')
+                //     main.$accuracyBonusDiv.css('opacity', '0.2')
+                //     main.$totalBonusDiv.css('opacity', '1.0')
+                //     main.$totalBonusSpan.text('0.30')
+                //     main.$scoreDiv.css('opacity', '1.0')
+
+
+
+                // }else if(stage == 2){
+                //     main.$causeDiv.css('opacity', '1.0')
+                //     main.$var2b.css('opacity', '0.2')
+                //     main.insertBorder(main.$var2a)
+                //     $('#var2a_outcome_text').css('visibility', 'visible')
+                //     main.$drugB.css('opacity', '1.0')
+                  
+                //     main.$feedbackDiv.text('')
+                //     main.$totalBonusSpan.text('0.36')
+
+                //     // if coming backwards
+                //     main.$accuracyBonusSpan.text('0.00')
+                //     main.removeBorder(main.$var1a)
+                    
+                    
+                    
+                //     main.$accuracyBonusDiv.css('opacity', '0.2')
+                //     main.$totalBonusDiv.css('opacity', '1.0')
+                //     main.$scoreDiv.css('opacity', '1.0')
+
+
+                // }else if(stage == 3){
+                //     main.$drugB.css('opacity', '0.2')
+                //     main.insertBorder(main.$var1a)
+                //     main.$feedbackDiv.html('Correct!<br>+3 cents!')
+
+
+                //     main.$accuracyBonusSpan.text('0.03')
+                //     if(main.condition == 'story'){
+                //         main.$totalBonusSpan.text('0.33')
+                //     }else{
+                //         main.$totalBonusSpan.text('0.39')
+                //     }
+                //     main.$accuracyBonusDiv.css('opacity', '1.0')
+                //     main.$totalBonusDiv.css('opacity', '1.0')
+                //     main.$scoreDiv.css('opacity', '1.0')
+
+
+                // }
+
+
+            // }
 
         },
 

@@ -1542,7 +1542,11 @@ class MturkIDHandler(webapp.RequestHandler):
 
 
 				# order of test questions
-				self.session['testOrder'] = random.choice([1,2,3,4,5,6]) # all possible orders, not breaking down by memory vs causal
+				# self.session['testOrder'] = random.choice([1,2,3,4,5,6]) # all possible orders, not breaking down by memory vs causal
+				# because of the way we changed the causal judgment task, we should put that task at the end
+				# random 4 or 6 then (makes this easily changeable if we decide that this isn't important for future expts)
+				self.session['testOrder'] = random.choice([4,6])
+
 
 				# running tally of bonuses
 				self.session['runningBonuses'] = [0,0]
