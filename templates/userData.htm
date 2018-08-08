@@ -43,9 +43,9 @@
 
 			<!-- progress through app -->
 			<th>progress</th>
-			<th>Bonus One</th>
-			<th>Bonus Two</th>
-			<th>Reloads</th>
+			<th>Bonus</th>
+			<th>Total Trials</th> <!-- Should be no more than 96! -->
+
 
 			<!-- data they saw -->
 			<th colspan=96>v1_Data</th>
@@ -91,8 +91,8 @@
 
 			<th>{{ i.progress }}</th>
 			<th>{{ i.BonusOne }}</th>
-			<th>{{ i.BonusTwo }}</th>
-			<th>{{ i.Reloads }}</th>
+			<th>{{ i.Bonuses }}</th>
+			<th>{{ i.totalTrials }}</th>
 
 			{% for j in i.v1_Data %}
 				<th>{{ j }}</th>

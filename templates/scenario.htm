@@ -91,19 +91,18 @@
                             <span name="monetary">Guess whether the color will be <span name="var1a">SHAPE NAME 1</span> or <span name="var1b">SHAPE NAME 2</span>:</span>
                         </p>
                         <br>
-                        <div class = "row" id="pillDiv" style="height:75px">
-                            <div id="var1a" class="col-xs-5 text-center" style="height:100px">
+                        <div class = "row" id="pillDiv">
+                            <div id="var1a" class="col-xs-5 text-center">
                                 <p><span name="var1a">Drug A</span></p>
                                 <img name="var1a_image" src="/static/images/blank.png" style="width:100px"/>
                                 <p id="continue_Left" style="visibility:hidden">Click to Continue</p>
                             </div>
                             <div class = "col-xs-2 text-center">
-                                <div style="height:10px"></div>
-                                <div id="feedbackDiv" class="text-center" style="font-size: 10pt; padding:0px; height:75px">
-                                    <span id="feedbackSpan" style="position:relative; top:30px"></span>
+                                <div id="feedbackDiv" class="text-center" style="font-size: 10pt; padding:0px">
+                                    <span id="feedbackSpan" style="position:relative; top:40px"></span>
                                 </div>
                             </div>
-                            <div id="var1b" class="col-xs-5 text-center" style="height:100px">
+                            <div id="var1b" class="col-xs-5 text-center">
                                 <p><span name="var1b">Drug B</span></p>
                                 <img name="var1b_image" src="/static/images/blank.png" style="width:100px"/>
                                 <p id="continue_Right" style="visibility:hidden">Click to Continue</p>
@@ -131,11 +130,12 @@
             </div>
         </div>
 
-
+        
 
 
         <!-- ajax form to send tbt data to datastore -->
-        <form id="dataform" method="post" action="/task">
+        <form id="dataform" method="post" action=
+        "/task">
             <input id="timeInput" name="timeInput" type="hidden">
             <input id="attentionFailsInput" name="attentionFailsInput" type="hidden">
             <input id="trialInput" name="trialInput" type="hidden">
@@ -148,6 +148,7 @@
             <input id="reloadsInput" name="reloadsInput" type="hidden">
             <input id="var1_value" name="var1_value" type="hidden">
             <input id="var2_value" name="var2_value" type="hidden">
+            <input id="totalTrialInput" name="totalTrialInput" type="hidden">
 
 
                 <!-- data[13] -->
@@ -155,13 +156,14 @@
         </form>
 
         <!-- form to advance to final judgments -->
-        <form id="submitForm" method="get" action="/finalJudgment" class="hidden">
+        <form id="submitForm" method="post" action="/scenario" class="hidden">
+            <input type = "hidden" id="BonusInput2" name="BonusInput2">
             <input type="submit" value="" class="hidden"/>
         </form>
 
     </div>
 
-
+    <p>TOTAL TRIALS: <span id="trialsTest"></span></p>
 
 
 
@@ -213,6 +215,7 @@
                 main.rewardAmount = {{rewardAmount}}
             }
 
+            main.totalTrials = {{trials}}
             // testing:
             main.position2 = {{position2}}// if 0, left is bad. if 1, left is good
             main.frequency2 = {{frequency2}} // if 0, mostly bad
@@ -272,12 +275,9 @@
             main.var2b = '{{var2_Names_Right}}'
 
 
-            // console.log(main.var1a)
-            // console.log(main.var1b)
-            // console.log(main.var2a)
-            // console.log(main.var2b)
 
-            // // console.log(main.shapeSources[0].split('/')[3].split('.')[0])
+
+
 
             for(var i = 0; i < main.imageSources.length; i++){
                 // 2a
@@ -324,15 +324,7 @@
                 }
             }
 
-            // console.log(main.var1a_img_src)
-            // console.log(main.var1b_img_src)
-            // console.log(main.var2a_img_src)
-            // console.log(main.var2b_img_src)
-
-
-            // main.var1a = String(main.drugNames[main.drugs[0]])
-            // main.var1b = String(main.drugNames[main.drugs[1]])
-
+      
 
 
             // main.position1 denotes whether the left and right drug/shape (var1) are switched (1) or not (0).
@@ -343,51 +335,10 @@
 
             main.scenario = {{scenario}}
 
-            main.assets = 30
-
-            // console.log('')
-            // console.log(String(main.position2)+ ' (if 0, 0 in data is bad, 1 is good)')
-            // console.log('data: '+String(main.v2_Data[main.trialNumber]))
-
-
-            // don't know if this is the best place for this (testing)
-            // if(main.v2_Data[main.trialNumber] === 0){ // 0 is always bad
-            //     main.assets -= main.rewardAmount
-            // }else{
-            //     main.assets += main.rewardAmount
-            // }
-
-
-            main.accuracyBonus = 0
+            main.assets = {{bonus}}
+            
             main.guesses = new Array()
             main.attentionFails = 0 // resets every trial
-
-
-
-
-            // console.log('position 2: '+String(main.position2))
-            // console.log('frequency 2: '+String(main.frequency2))
-
-            // weird out of place thing that is really terrible in practice... #don'tTryThisAtHome
-            // find another way to do this because now it's messing other stuff up.
-            if(main.position2 == 1){ // switch left and right faces
-                // $('#rightFace').html('<div id="var2a_Click" class="text-center">'+
-                //     '<img src="/static/images/good.png" style="height:50px"/>'+
-                //     '</div>')
-                // $('#leftFace').html('<div id="var2b_Click" class="text-center">'+
-                //     '<img src="/static/images/bad.png" style="height:50px"/>'+
-                //     '</div>')
-                //
-                // // switch slider images
-                // $('#leftRangeLeftImg').attr('src','/static/images/bad.png')
-                // $('#leftRangeRightImg').attr('src','/static/images/good.png')
-                // $('#rightRangeLeftImg').attr('src','/static/images/bad.png')
-                // $('#rightRangeRightImg').attr('src','/static/images/good.png')
-                //
-                // // $('#v2_Prompt').text('Was this patient\'s outcome BAD or GOOD?')
-                // $('[name="var2a"]').text('NAME 2')
-                // $('[name="var2b"]').text('NAME 1')
-            }
 
 
 
@@ -554,6 +505,8 @@
 
 
             if(stage == 'reset'){ // new trial
+                $('#trialsTest').text(main.totalTrials)
+
                 ////// // console.log('render reset')
                 // Patient Number
 
@@ -652,7 +605,7 @@
                 console.log('render guess')
 
                 if(main.v2_Data[main.trialNumber] === 0){ // if it's a BAD outcome
-                    main.assets -= main.rewardAmount
+                    
                     if(main.position2 === 0){ // if bad outcomes are on the left
                         // it's a bad outcome on the left
                         main.$var2b.css('opacity', '0.2')
@@ -667,7 +620,7 @@
                     }
                     
                 }else{ // if it's a GOOD outcome
-                    main.assets += main.rewardAmount
+                    
                     if(main.position2 === 0){ // if bad outcomes are on the left
                         // it's a good outcome on the right
                         main.$var2a.css('opacity', '0.2')
@@ -736,24 +689,12 @@
                     }
                 }
                 main.$feedbackDiv.css('visibility', 'visible')
-
-                // SLIDERS
-                // main.$rangeLeft.css('opacity', '1.0')
-                // main.$rangeRight.css('opacity', '1.0')
-
-                // main.$treatmentBonusSpan.text(main.creditRender(main.assets))
-                // main.$accuracyBonusSpan.text(main.creditRender(main.accuracyBonus))
-                main.$totalBonusSpan.text(main.creditRender(main.accuracyBonus+main.assets))
-                // main.$feedbackButtonDiv.css('visibility', 'visible')
-
-            }else if(stage == 'rating'){
-                // console.log('change rating now')
+            
+                
+               
             }
 
-
-            // main.$treatmentBonusSpan.text(main.creditRender(main.assets))
-            // main.$accuracyBonusSpan.text(main.creditRender(main.accuracyBonus))
-            main.$totalBonusSpan.text(main.creditRender(main.accuracyBonus+main.assets))
+            main.$totalBonusSpan.text(main.creditRender(main.assets))
 
 
 
@@ -831,11 +772,14 @@
 
 
         var2a_Click: function(){
+
             if(main.position2 === 0){ // v2_Data = 0 means it's the left, bad outcome
 
-                if(main.v2_Data[main.trialNumber] === 0){ // correctly clicked left
+                if(main.v2_Data[main.trialNumber] === 0){ // bad outcome
+                    main.assets -= main.rewardAmount
                     main.bindEvents(1)
                     main.render('guess')
+
                 }else{
                     main.attentionFails += 1
 
@@ -854,6 +798,7 @@
                 }
             }else{ // v2_Data = 0 means it's the right, bad outcome
                 if(main.v2_Data[main.trialNumber] === 1){ // correctly clicked left
+                    main.assets += main.rewardAmount
                     main.bindEvents(1)
                     main.render('guess')
                 }else{
@@ -881,9 +826,13 @@
             // 0 is always bad
             // if position2 = 0, and v2_Data[trialNumber] = 0, they should click the left
 
-            if(main.position2 === 0){ // v2_Data = 0 means it's the left, bad outcome
+            if(main.position2 === 0){ 
+                // position2 means left is bad
+                    // v2_Data = 0 means it's the left, bad outcome
+                    // v2_Data = 1 means it's the right, good outcome
 
-                if(main.v2_Data[main.trialNumber] === 1){ // correctly clicked right
+                if(main.v2_Data[main.trialNumber] === 1){ // good outcome, correctly clicked right
+                    main.assets += main.rewardAmount
                     main.bindEvents(1)
                     main.render('guess')
                 }else{
@@ -904,6 +853,7 @@
                 }
             }else{ // v2_Data = 0 means it's the right, bad outcome
                 if(main.v2_Data[main.trialNumber] === 0){ // correctly clicked right
+                    main.assets -= main.rewardAmount
                     main.bindEvents(1)
                     main.render('guess')
                 }else{
@@ -957,7 +907,9 @@
         newTrial: function(){
             // this function fires when they click the feedback button ('next' button)
             // if the scenario is over, it goes to the next page, otherwise it resets everything.
+            main.totalTrials ++
             main.sendAjax()
+            console.log('sending ajax')
             if(main.trialNumber >= main.lengthOfData-1){
                 main.unbindEvents()
                 main.$co.hide()
@@ -965,7 +917,8 @@
             }else{
                 // new trial:
                 // console.log("NEW TRIAL")
-                main.trialNumber += 1
+                main.trialNumber ++
+                
 
 
 
@@ -1011,9 +964,9 @@
             main.$guessInput.val(main.guesses[main.guesses.length-1])
 
             // bonus total
-            var bonus = main.accuracyBonus + main.assets
-            $('#runningBonusInput').val(bonus)
-
+            
+            $('#runningBonusInput').val(main.assets)
+            console.log("BONUS: "+String(main.assets))
             // profit impact
             main.$profitImpactInput.val(0)
             if(main.v2_Data[main.trialNumber] === 0){
@@ -1029,7 +982,7 @@
 
             // valence input
             $('#valenceInput').val(main.valence)
-
+            $('#totalTrialInput').val(main.totalTrials)
 
 
 
@@ -1087,7 +1040,8 @@
             // score answer
             if(main.guesses[main.guesses.length-1] == main.$correctInput.val()){
                 // correct
-                main.accuracyBonus += main.accuracyBonusAmt
+                main.assets += main.accuracyBonusAmt
+                console.log('scoring accuracy bonus')
             }
 
             main.render('feedback')
@@ -1097,7 +1051,7 @@
         },
 
         mySubmit: function(){
-
+            $('#BonusInput2').val(main.assets)
             $('#submitForm').submit()
         },
 

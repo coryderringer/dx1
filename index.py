@@ -49,8 +49,7 @@ class User(db.Model):
 	ethnicity =			db.IntegerProperty()
 	race =				db.IntegerProperty()
 	age = 				db.IntegerProperty()
-	BonusOne =			db.IntegerProperty()
-	BonusTwo =			db.IntegerProperty()
+	Bonuses =			db.IntegerProperty()
 	testOrder =			db.IntegerProperty()
 	reloads =			db.IntegerProperty()
 	v1_Data =			db.ListProperty(int)
@@ -64,31 +63,7 @@ class User(db.Model):
 	drugColors =		db.ListProperty(str)
 	diseaseNames =		db.ListProperty(str)
 	progress =			db.IntegerProperty()
-
-
-# newuser = User(
-# 	usernum=usernum,
-# 	account=account,
-# 	browser=browser,
-# 	sex=0,
-# 	ethnicity=0,
-# 	race=0,
-# 	age=0,
-# 	BonusOne=0,
-# 	BonusTwo = 0,
-# 	testOrder = testOrder,
-# 	reloads = 0,
-# 	v1_Data = self.session['v1_Data'],
-# 	v2_Data = self.session['v2_Data'],
-# 	frequency1 = self.session['frequency1'],
-# 	frequency2 = self.session['frequency2'],
-# 	position2 = self.session['position2'],
-# 	var1_Names = self.session['var1_Names'],
-# 	var2_Names = self.session['var2_Names'],
-# 	condition = self.session['condition'],
-# 	drugColors = self.session['drugColors'],
-# 	diseaseNames = self.session['diseaseNames'],
-# 	progress = 0);
+	totalTrials = 		db.IntegerProperty()
 
 
 
@@ -252,7 +227,12 @@ class AjaxHandler(webapp.RequestHandler):
 		trialNumber = int(self.request.get('trialInput'))
 		trialGuess = str(self.request.get('guessInput'))
 		profitImpact = int(self.request.get('profitImpactInput'))
-		totalBonus = int(self.request.get('runningBonusInput'))
+		
+		self.session['trials'] = int(self.request.get('totalTrialInput')) 
+		# total number of trials (in the experiment), to track refreshes
+
+		self.session['runningBonuses'] = int(self.request.get('runningBonusInput'))
+		
 		valence = self.request.get('valenceInput')
 		var1_value = str(self.request.get('var1_value'))
 		var2_value = str(self.request.get('var2_value'))
@@ -278,7 +258,7 @@ class AjaxHandler(webapp.RequestHandler):
 		logging.info('var2_leftName: '+var2_Left)
 		logging.info('var2_rightName: '+var2_Right)
 
-
+		
 		logging.info('trialTime: '+str(trialTime))
 		logging.info('attentionFails: '+str(attentionFails))
 		logging.info('trialNumber: '+str(trialNumber))
@@ -292,11 +272,8 @@ class AjaxHandler(webapp.RequestHandler):
 
 		# logging.info('BONUS!!!!!! '+str(totalBonus))
 
-
-		if self.session['scenario'] == 0:
-			self.session['BonusOne'] = totalBonus
-		else:
-			self.session['BonusTwo'] = totalBonus
+		# self.session['runningBonuses'] = totalBonus
+		
 
 		# logging.info('BONUS TEST!' + str(self.session['BonusOne']))
 		# logging.info('SCENARIO IS '+str(self.session['scenario']))
@@ -372,12 +349,12 @@ class AjaxHandler(webapp.RequestHandler):
 
 		obj = que2.get()
 
-		obj.BonusOne = self.session['BonusOne']
-		obj.BonusTwo = self.session['BonusTwo']
+		obj.Bonuses = self.session['runningBonuses']
 
 		obj.put()
 		self.response.out.write({}) # ?
 
+		
 
 class AjaxMemoryHandler(webapp.RequestHandler):
 	def get(self):
@@ -638,6 +615,8 @@ class ScenarioHandler(webapp.RequestHandler):
 			doRender(self, 'scenario.htm',
 				{'usernum':self.session['usernum'],
 				'test': 0,
+				'trials':self.session['trials'],
+				'bonus': self.session['runningBonuses'],
 				'condition': self.session['condition'], # monetary, story, combined
 				'var1_Names_Left': self.session['var1_Names'][2*scenario],
 				'var1_Names_Right': self.session['var1_Names'][2*scenario+1],
@@ -655,47 +634,51 @@ class ScenarioHandler(webapp.RequestHandler):
 				'frequency1': self.session['frequency1'],
 				'frequency2': self.session['frequency2'][scenario],
 				'position2': self.session['position2'],
-				# 'testOrder':testOrder, # CHANGE FROM PILOT: ask the three in any order.
 				'rewardAmount':rewardAmount})
-
-
 
 		except KeyError:
 			doRender(self, 'mturkid.htm',
 				{'error':1})
 
-
 	def post(self):
 		self.session = get_current_session()
 
-		scenario = self.session['scenario']
-		# scenario = 0 # testing
+		scenario = self.session['scenario'] # for readability
+		
+		bonus = int(self.request.get('BonusInput2'))
+		# this is the hackiest solution ever but fuck it, it works now.
+		# method to this madness: when I was using AJAX to track bonuses I was running into 
+		# consistency problems in the session. Still don't know why...bonus would render in final judgment
+		# page as being (rewardAmt - bonusAmt) too large. This fixes that even though it's an ugly solution.
+		# Side note: I really would like to know why it was doing that...
 
-		if scenario == 0:
-			drugs = [self.session['drugNames'][0], self.session['drugNames'][1]]
-			drugColors = [self.session['drugColors'][0], self.session['drugColors'][1]]
-		else:
-			drugs = [self.session['drugNames'][2], self.session['drugNames'][3]]
-			drugColors = [self.session['drugColors'][2], self.session['drugColors'][3]]
+		u = db.Query(User).filter('usernum =', self.session['usernum'])
+		obj = u.get()
+		obj.Bonuses = bonus
+		obj.put()
+		
 
-		position1 = self.session['position1']
+		
 
-		# self.session['testOrder'] = 1 # testing
-
-		logging.info('TEST ORDER: '+str(self.session['testOrder']))
-
-
-
-		doRender(self, 'test.htm',
-			{'drugNames': self.session['drugNames'],
-			'diseaseNames': self.session['diseaseNames'],
-			'drugs': drugs,
-			'drugColors': drugColors,
-			'position1': position1,
-			'testOrder':self.session['testOrder'],
-			'frequency2':self.session['frequency2'][scenario],
+		doRender(self, 'test.htm',{
+			'bonus': bonus,
+			'scenario': self.session['scenario'],
+			'frequency1': self.session['frequency1'],
+			'frequency2': self.session['frequency2'][scenario],
+			'condition': self.session['condition'],
+			'testOrder': self.session['testOrder'],
+			'disease': self.session['diseaseNames'][scenario],
+			'var1_Names_Left': self.session['var1_Names'][2*scenario],
+			'var1_Names_Right': self.session['var1_Names'][2*scenario+1],
+			'var2_Names_Left': self.session['var2_Names'][2*scenario],
+			'var2_Names_Right': self.session['var2_Names'][2*scenario+1],
+			'drugColor_Left': self.session['drugColors'][2*scenario],
+			'drugColor_Right': self.session['drugColors'][2*scenario+1],
+			'reloads':0, # testing
 			'position2': self.session['position2'],
-			'memOrder':self.session['memOrder']})
+			'rewardAmount':rewardAmount}) # this is a global variable set at the very top (is this a bad practice?)
+
+	
 
 
 class ProgressCheckHandler(webapp.RequestHandler):
@@ -719,30 +702,36 @@ class ProgressCheckHandler(webapp.RequestHandler):
 		self.response.out.write(data) # this is the function you need!
 
 
-# first and second judgment refers to the get/post requests, NOT ajax
+
 class FinalJudgmentHandler(webapp.RequestHandler):
-	def get(self):
-		# this one is only used when they load the scenario page but should be on the test page
-		self.session = get_current_session()
+	# def get(self):
+	# 	self.session = get_current_session()
 
-		scenario = self.session['scenario'] # for readability
+	# 	scenario = self.session['scenario'] # for readability
+		
+	# 	bonus = self.request.get('BonusInput2') 
+	# 	# this is the hackiest solution ever but fuck it, it works now.
+	# 	# method to this madness: when I was using AJAX to track bonuses
 
-		doRender(self, 'test.htm',{
-			'scenario': self.session['scenario'],
-			'frequency1': self.session['frequency1'],
-			'frequency2': self.session['frequency2'][scenario],
-			'condition': self.session['condition'],
-			'testOrder': self.session['testOrder'],
-			'disease': self.session['diseaseNames'][scenario],
-			'var1_Names_Left': self.session['var1_Names'][2*scenario],
-			'var1_Names_Right': self.session['var1_Names'][2*scenario+1],
-			'var2_Names_Left': self.session['var2_Names'][2*scenario],
-			'var2_Names_Right': self.session['var2_Names'][2*scenario+1],
-			'drugColor_Left': self.session['drugColors'][2*scenario],
-			'drugColor_Right': self.session['drugColors'][2*scenario+1],
-			'reloads':0, # testing
-			'position2': self.session['position2'],
-			'rewardAmount':rewardAmount}) # this is a global variable set at the very top (is this a bad practice?)
+	# 	logging.info('runningBonus time3: '+str(bonus))
+
+	# 	doRender(self, 'test.htm',{
+	# 		'bonus': bonus,
+	# 		'scenario': self.session['scenario'],
+	# 		'frequency1': self.session['frequency1'],
+	# 		'frequency2': self.session['frequency2'][scenario],
+	# 		'condition': self.session['condition'],
+	# 		'testOrder': self.session['testOrder'],
+	# 		'disease': self.session['diseaseNames'][scenario],
+	# 		'var1_Names_Left': self.session['var1_Names'][2*scenario],
+	# 		'var1_Names_Right': self.session['var1_Names'][2*scenario+1],
+	# 		'var2_Names_Left': self.session['var2_Names'][2*scenario],
+	# 		'var2_Names_Right': self.session['var2_Names'][2*scenario+1],
+	# 		'drugColor_Left': self.session['drugColors'][2*scenario],
+	# 		'drugColor_Right': self.session['drugColors'][2*scenario+1],
+	# 		'reloads':0, # testing
+	# 		'position2': self.session['position2'],
+	# 		'rewardAmount':rewardAmount}) # this is a global variable set at the very top (is this a bad practice?)
 
 	def post(self):
 
@@ -751,7 +740,7 @@ class FinalJudgmentHandler(webapp.RequestHandler):
 		# write data
 
 		scenario = self.session['scenario']
-
+		self.session['runningBonuses'] = int(self.request.get('runningBonusInput'))
 
 
 		# logging.info('valence: '+valence)
@@ -784,13 +773,17 @@ class FinalJudgmentHandler(webapp.RequestHandler):
 			var1b_given_var2b = int(self.request.get('var1b_given_var2b')),
 
 			causalJudgment = int(self.request.get('causalJudgment')),
-			testOrder = int(self.request.get('testOrder'))
+			testOrder = int(self.request.get('testOrder')),
+			Bonuses = int(self.session['runningBonuses'])
 		);
 
 		obj.put()
 
 		self.session['scenario'] += 1
-		# self.session['scenario'] = 1 # testing
+		
+		# if self.session['scenario'] > 1:
+
+		# 	self.session['scenario'] = 1 # testing
 
 		scenario=self.session['scenario']
 
@@ -870,7 +863,8 @@ class FinalJudgmentHandler(webapp.RequestHandler):
 				'condition':condition,
 				'drugColor_Left': self.session['drugColors'][2*scenario],
 				'drugColor_Right': self.session['drugColors'][2*scenario+1],
-				'position2':self.session['position2']})
+				'position2':self.session['position2'],
+				'scenario':self.session['scenario']})
 
 
 		#
@@ -903,223 +897,8 @@ class FinalJudgmentHandler(webapp.RequestHandler):
 
 class TestHandler(webapp.RequestHandler):	# handler that renders a specific page, for testing purposes
 	def get(self):
-
-		logging.info('TEST HANDLER')
-		# this one is only used when they load the scenario page but should be on the test page
-		self.session = get_current_session()
-
-		self.session['usernum'] = 2 # testing
-
-		# disease names
-		self.session['diseaseNames'] = ['Duastea', 'Stectosis']
-		random.shuffle(self.session['diseaseNames'])
-		# drugColors = ['blue', 'green', 'orange', 'purple']
-
-		self.session['drugColors'] = ['lightblue', 'darkblue', 'orange', 'purple']
-		random.shuffle(self.session['drugColors'])
-			# names and colors are the randomized visuals for var1 (position1, now randomized in this handler (below), no need to randomized further)
-
-		# position2 (valence)
-		self.session['position2'] = random.choice([0,1])
-
-			# if 0, left value of var2 is BAD, right is GOOD
-			# if 1, left is GOOD, right is BAD
-			# this is position2 (valence)
-			# position2 (visual): just randomize the presentation of the stimuli in Python, than read them into JS in the order that they're randomized in.
-				# for the story conditions this will have to be read in consistently both times.
-
-		# cover story counterbalance
-		if self.session['usernum'] % 3 == 0:
-			self.session['condition'] = 'combined'
-		elif self.session['usernum'] % 3 == 1:
-			self.session['condition'] = 'story'
-		elif self.session['usernum'] % 3 == 2:
-			self.session['condition'] = 'monetary'
-
-		self.session['condition'] = 'story' # testing
-		# position1 and position2 (visual)
-		if self.session['condition'] == 'monetary':
-			# shapes
-			shapeNames = ['SQUARE', 'CIRCLE', 'STAR', 'TRIANGLE', 'OVAL', 'DIAMOND', 'RECTANGLE', 'PENTAGON']
-			# testing
-			# random.shuffle(shapeNames) # which shapes they see when. This takes care of position1 and position2 (visual)
-
-			self.session['var1_Names'] = shapeNames[0:4] # worked in python 3...we'll see
-				# the first two are the var1 shape names for the first scenario, in order (this is position1, no need to randomize further)
-			self.session['var2_Names'] = shapeNames[4:8]
-				# the first two are the var2 shape names for the first scenario, in order (this is position2 (visual), no need to randomize further)
-		else:
-
-			# drug names
-			self.session['var1_Names'] = ['XF702', 'BT339', 'GS596', 'PR242']
-			random.shuffle(self.session['var1_Names'])
-				# names and colors are the randomized visuals for var1 (position1, now randomized in python, no need to randomized further)
-
-
-
-			# valence and visual are the same for position2 in this condition
-			if self.session['position2'] == 0:
-				self.session['var2_Names'] = ['BAD', 'GOOD', 'BAD', 'GOOD']
-			else:
-				self.session['var2_Names'] = ['GOOD', 'BAD', 'GOOD', 'BAD']
-
-		self.session['frequency1'] = random.choice([0,1])
-		self.session['frequency2'] = [0,1] # is the left outcome common (0) or rare (1)
-
-		# in the story condition, if the bad outcome is on the left (position2 == 0) and the left outcome is common (frequency2 == 0), rare_positive valence.
-
-		random.shuffle(self.session['frequency2'])
-
-		#Make the data that this subject will see.
-		#It is made once and stored both in self.session and in database
-
-		# dataset 1
-		# new data method for E1
-		# Data1_var1 is the drug or shape1 in the first scenario: 0 is common, 1 is rare
-		if self.session['frequency1'] == 0:
-			a = [[0]*36, [1]*12] # 0 is common
-		else:
-			a = [[1]*36, [0]*12] # 1 is common
-
-		a = [item for sublist in a for item in sublist] # flatten the list
-
-		# Data1_var2 is the outcome/face or shape2:
-		# 0 is ***always bad*** in our datasets
-		if self.session['frequency2'][0] == 0:
-			b = [[0]*24, [1]*12, [0]*8, [1]*4] # 0 is common
-		else:
-			b = [[1]*24, [0]*12, [1]*8, [0]*4] # 1 is common
-
-		b = [item for sublist in b for item in sublist] # flatten the list
-
-		# random data order
-		order = list(range(48))
-		random.shuffle(order)
-
-		Data1_var1 = []
-		Data1_var2 = []
-
-		for i in order:
-			Data1_var1.append(a[i])
-			Data1_var2.append(b[i])
-
-		# dataset 2 (second scenario)
-		# Data1_var1 is the drug or shape1 in the first scenario: 0 is common, 1 is rare
-		if self.session['frequency1'] == 0:
-			a = [[0]*36, [1]*12] # 0 is common
-		else:
-			a = [[1]*36, [0]*12] # 1 is common
-
-		a = [item for sublist in a for item in sublist] # unlist
-
-		# Data1_var2 is the outcome/face or shape2
-		# 0 is ***always bad*** in our datasets
-		if self.session['frequency2'][1] == 0:
-			b = [[0]*24, [1]*12, [0]*8, [1]*4] # 0 is common
-		else:
-			b = [[1]*24, [0]*12, [1]*8, [0]*4] # 1 is common
-
-		b = [item for sublist in b for item in sublist] # unlist
-
-		random.shuffle(order)
-		Data2_var1 = []
-		Data2_var2 = []
-
-		for i in order:
-			Data2_var1.append(a[i])
-			Data2_var2.append(b[i])
-
-		self.session['v1_Data'] = [Data1_var1, Data2_var1]
-		self.session['v2_Data'] = [Data1_var2, Data2_var2]
-
-
-		# order of test questions
-		self.session['testOrder'] = random.choice([1,2,3,4,5,6]) # all possible orders, not breaking down by memory vs causal
-
-		# running tally of bonuses
-		self.session['runningBonuses'] = [0,0]
-
-		self.session['scenario'] = 0 # testing
-
-		trialGuesses = [0]*LengthOfData
-
-		# running tally of bonuses
-		runningBonuses = [0,0]
-
-		# # order of test questions
-		self.session['testOrder'] = random.choice([1,2,3,4,5,6]) # all possible orders, not breaking down by memory vs causal
-
-		# testing
-		self.session['testOrder'] = 1 # memory first
-
-		# TO = 1: Causal, E|C, C|E
-		# TO = 2: Causal, C|E, E|C
-		# TO = 3: E|C, Causal, C|E
-		# TO = 4: E|C, C|E, Causal
-		# TO = 5: C|E, Causal, E|C
-		# TO = 6: C|E, E|C, Causal
-
-		# newuser = User(
-		# 	usernum=usernum,
-		# 	account=account,
-		# 	browser=browser,
-		# 	sex=0,
-		# 	ethnicity=0,
-		# 	race=0,
-		# 	age=0,
-		# 	bonusAmt=0,
-		# 	testOrder = testOrder,
-		# 	memOrder = memOrder,
-		# 	progress = 0);
-		scenario = self.session['scenario']
-		doRender(self, 'test.htm',{
-			'scenario': self.session['scenario'],
-			'frequency1': self.session['frequency1'],
-			'frequency2': self.session['frequency2'][scenario],
-			'condition': self.session['condition'],
-			'testOrder': self.session['testOrder'],
-			'disease': self.session['diseaseNames'][scenario],
-			'var1_Names_Left': self.session['var1_Names'][2*scenario],
-			'var1_Names_Right': self.session['var1_Names'][2*scenario+1],
-			'var2_Names_Left': self.session['var2_Names'][2*scenario],
-			'var2_Names_Right': self.session['var2_Names'][2*scenario+1],
-			'drugColor_Left': self.session['drugColors'][2*scenario],
-			'drugColor_Right': self.session['drugColors'][2*scenario+1],
-			'reloads':0, # testing
-			'position2': self.session['position2'],
-			# 'testOrder':testOrder, # CHANGE FROM PILOT: ask the three in any order.
-			'rewardAmount':rewardAmount})
-
-		# scenario = self.session['scenario']
-		# scenario = 0 # testing
-	# ,
-		# {'drugNames': self.session['drugNames'],
-		# 'diseaseNames': self.session['diseaseNames'],
-		# 'drugs': drugs,
-		# 'drugColors': drugColors,
-		# 'position1': position1,
-		# 'testOrder':self.session['testOrder'],
-		# 'frequency2':self.session['frequency2'][scenario],
-		# 'position2': self.session['position2'],
-		# 'memOrder':self.session['memOrder']})
-
-
-		# if scenario == 0:
-		# 	drugs = [self.session['drugNames'][0], self.session['drugNames'][1]]
-		# 	drugColors = [self.session['drugColors'][0], self.session['drugColors'][1]]
-		# else:
-		# 	drugs = [self.session['drugNames'][2], self.session['drugNames'][3]]
-		# 	drugColors = [self.session['drugColors'][2], self.session['drugColors'][3]]
-
-		# position1 = self.session['position1']
-
-		# self.session['testOrder'] = 1 # testing
-
-		logging.info('TEST ORDER: '+str(self.session['testOrder']))
-
-
-
-
+		return
+	
 
 
 class InstructionsHandler(webapp.RequestHandler):
@@ -1156,6 +935,11 @@ class preScenarioHandler(webapp.RequestHandler):
 			'drugColor_Left': self.session['drugColors'][2*scenario],
 			'drugColor_Right': self.session['drugColors'][2*scenario+1],
 			'position2':self.session['position2']}) # don't need scenario, it's always 0
+
+
+
+
+
 
 class DataHandler(webapp.RequestHandler):
 	def get(self):
@@ -1202,9 +986,6 @@ class DataHandler(webapp.RequestHandler):
 				doRender(self, 'ajaxTest.htm',
 					{'t':t})
 
-			# elif page == 'causalTest':
-			# 	doRender(self, 'ajaxCausalTest.htm',
-			# 		{'c':c})
 		else:
 			doRender(self, 'dataloginfail.htm')
 
@@ -1231,7 +1012,7 @@ class DemographicsHandler(webapp.RequestHandler):
 
 	def post(self):
 		self.session=get_current_session()
-		bonus = self.session['BonusOne']+self.session['BonusTwo']
+		bonus = self.session['runningBonuses']
 		try:
 
 
@@ -1284,18 +1065,14 @@ class DemographicsHandler(webapp.RequestHandler):
 			obj.ethnicity = ethnicity
 			obj.race = race
 			obj.age = age
+			obj.totalTrials = self.session['trials']
 			obj.put();
 
 
-			# self.session.__delitem__('usernum')
-			# self.session.__delitem__('username')
-			# self.session.__delitem__('userkey')
-			# self.session.__delitem__('scenario')
-			# self.session.__delitem__('datalist')
 
 			self.session.__delitem__('account')
-			# self.session.__delitem__('BonusOne')
-			# self.session.__delitem__('BonusTwo')
+			
+			self.session.__delitem__('trials')
 			self.session.__delitem__('condition')
 			self.session.__delitem__('frequency2')
 			self.session.__delitem__('diseaseNames')
@@ -1373,7 +1150,11 @@ class MturkIDHandler(webapp.RequestHandler):
 			else:
 
 				# # order of test questions
-				testOrder = random.choice([1,2,3,4,5,6]) # all possible orders, not breaking down by memory vs causal
+				# testOrder = random.choice([1,2,3,4,5,6]) # all possible orders, not breaking down by memory vs causal
+				testOrder = random.choice([4,6]) 
+					# Because the causal task is another trial, it should go last! 
+					# Any order effects in the testing questions should affect all groups equally.
+
 
 				self.session['usernum'] = random.choice([1,2,3]) # testing
 				logging.info('USERNUM: '+str(self.session['usernum']))
@@ -1403,7 +1184,7 @@ class MturkIDHandler(webapp.RequestHandler):
 				elif self.session['usernum'] % 3 == 2:
 					self.session['condition'] = 'monetary'
 
-				self.session['condition'] = 'combined' # testing
+				self.session['condition'] = 'monetary' # testing
 
 
 				# position1 and position2 (visual)
@@ -1549,14 +1330,15 @@ class MturkIDHandler(webapp.RequestHandler):
 
 
 				# running tally of bonuses
-				self.session['runningBonuses'] = [0,0]
+				self.session['runningBonuses'] = 30
 
 				self.session['scenario'] = 0
+				self.session['trials'] = 0 # if they go back through the data again, their total trials will be greater than 96
 
 				trialGuesses = [0]*LengthOfData
 
 				# running tally of bonuses
-				runningBonuses = [0,0]
+				runningBonuses = 0
 
 				a = self.session['v1_Data']
 				a = [item for sublist in a for item in sublist]
@@ -1572,8 +1354,7 @@ class MturkIDHandler(webapp.RequestHandler):
 					ethnicity=0,
 					race=0,
 					age=0,
-					BonusOne=0,
-					BonusTwo = 0,
+					Bonuses = self.session['runningBonuses'],
 					testOrder = testOrder,
 					reloads = 0,
 					v1_Data = a,
@@ -1598,8 +1379,7 @@ class MturkIDHandler(webapp.RequestHandler):
 				self.session=get_current_session() #initialize sessions
 
 				self.session['account']				= account
-				self.session['BonusOne']			= 0
-				self.session['BonusTwo']			= 0
+				
 				self.session['scenario']			= 0
 				# order of test questions
 				self.session['testOrder'] = random.choice([1,2,3,4,5,6]) # all possible orders, not breaking down by memory vs causal
@@ -1613,34 +1393,6 @@ class MturkIDHandler(webapp.RequestHandler):
 				doRender(self, 'qualify.htm',{
 					'condition':self.session['condition']
 				})
-
-
-				# session variables:
-				# account
-				# BonusOne
-				# BonusTwo
-				# scenario
-				# testOrder
-				# trialGuesses
-				# userkey
-				# usernum
-				# trialNumber
-				# reloads
-				# v1_Data
-				# v2_Data
-				# frequency1
-				# frequency2
-				# position2
-				# var1_Names
-				# var2_Names
-				# condition
-				# drugColors
-				# diseaseNames
-
-
-
-
-
 
 
 
@@ -1673,9 +1425,7 @@ application = webapp.WSGIApplication([
 	# ('/.*',      TestHandler)],  # testing
 	debug=True)
 
-# IMPORTANT: PREVIOUS (PILOT) APP HAD SCENARIO DATA AND TEST ON THE SAME PAGE.
-# I CHANGED THIS FOR E1 BECAUSE THE HTML FILE WAS 2000+ LINES LONG, VERY UNWIELDY
-# NEED TO CHANGE THE HANDLERS TO REFLECT THIS
+
 
 def main():
 		run_wsgi_app(application)

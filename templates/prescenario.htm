@@ -30,9 +30,9 @@
 			treated with <span name="var1b"></span></b>. 
 		</p>
 
-		<p name="monetary" style="display:none">You will complete two scenarios,
+		<p name="monetary" style="display:none"><span name="firstScenario">You will complete two scenarios,
 			each about different shapes. The scenarios are unrelated. In the first
-			scenario, the shape is <b><span name="freq2a">most often</span> <span name="var2a"></span>, but is <span name="freq2b">sometimes</span> 
+			scenario,</span><span name="secondScenario">In the next scenario,</span> the shape is <b><span name="freq2a">most often</span> <span name="var2a"></span>, but is <span name="freq2b">sometimes</span> 
 			<span name="var2b"></span></b>. The color is <b><span name="freq1a">most often</span> <span name="var1a"></span>, but is <span name="freq1b">sometimes</span> <span name="var1b"></span></b>.  
 		</p>
         <br>
@@ -281,13 +281,17 @@
         },
 
         render: function(){
+			console.log("SCENARIO CHECK: "+String(main.scenario))
 			if(main.scenario === 0){
+				console.log('nope')
 				$('[name="secondScenario"]').hide()
 				$('[name="firstScenario"]').show()
 			}else{
+				console.log('yep')
 				$('[name="firstScenario"]').hide()
 				$('[name="secondScenario"]').show()
 			}
+
 			if(main.condition == 'monetary'){
 				main.$story.hide()
 				main.$monetary.show()
