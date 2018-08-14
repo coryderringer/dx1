@@ -65,7 +65,7 @@ class User(db.Model):
 	progress =			db.IntegerProperty()
 	totalTrials = 		db.IntegerProperty()
 	testAttempts = 		db.ListProperty(int)
-
+	Completion_Code = 	db.IntegerProperty()
 
 
 
@@ -992,6 +992,7 @@ class DemographicsHandler(webapp.RequestHandler):
 	def post(self):
 		self.session=get_current_session()
 		bonus = self.session['runningBonuses']
+		Completion_Code=random.randint(10000000,99999999)
 		try:
 
 
@@ -1035,11 +1036,11 @@ class DemographicsHandler(webapp.RequestHandler):
 
 
 
-			Completion_Code=random.randint(10000000,99999999)
+			
 
 
 			obj = User.get(self.session['userkey']);
-			# obj.Completion_Code = Completion_Code
+			obj.Completion_Code = Completion_Code
 			obj.sex = sex
 			obj.ethnicity = ethnicity
 			obj.race = race
@@ -1074,10 +1075,12 @@ class DemographicsHandler(webapp.RequestHandler):
 
 
 			doRender(self, 'logout.htm',
-				{'bonus':bonus})
+				{'bonus':bonus,
+				'code':Completion_Code})
 		except:
 			doRender(self, 'logout.htm',
-				{'bonus':bonus})
+				{'bonus':bonus,
+				'code': Completion_Code})
 
 
 ###############################################################################
