@@ -122,9 +122,9 @@
                 </div>
                 <div id="scoreDiv" class="col-xs-4 text-center">
 
-                    <p><b>Current bonus:</b></p>
+                    <p><b>Current Bonus:</b></p>
                     <div id="totalBonusDiv" class="scoreDisplay">
-                        $<span id="totalBonusSpan">0.30</span>
+                        <span id="totalBonusSpan">0.30</span>
                     </div>
                 </div>
             </div>
@@ -163,7 +163,7 @@
 
     </div>
 
-    <p>TOTAL TRIALS: <span id="trialsTest"></span></p>
+    <!-- <p>TOTAL TRIALS: <span id="trialsTest"></span></p> -->
 
 
 
@@ -182,20 +182,8 @@
 // var1 is the second row (it's the drug in the story conditions)
 // var2 is always the first row (it's the outcome in the story conditions)
 
-// $(document).ready(function(){
+$(document).ready(function(){
 
-    // document.write('{{usernum}}'+'<br>')
-    // document.write('{{condition}}'+'<br>')
-    // document.write('{{var1_Names}}'+'<br>')
-    // document.write('{{var2_Names}}'+'<br>')
-    // document.write('{{disease}}'+'<br>')
-    // document.write('{{drugColors}}'+'<br>')
-    // document.write('{{v1_Data}}'+'<br>')
-    // document.write('{{v2_Data}}'+'<br>')
-    // document.write('{{testOrder}}'+'<br>')
-    // document.write('{{trialGuesses}}'+'<br>')
-    // document.write('{{rewardAmount}}'+'<br>')
-    //
 
     var main = {
 
@@ -203,8 +191,12 @@
             // MAKE SURE "0" in the v2 data is always bad
             main.test = 0
             // variables
-            // main.trialNumber = {{trialNumber}}
-            main.trialNumber = 0
+            if({{trialNumber}} == 0){
+                main.trialNumber = 0
+            }else{
+                main.trialNumber = {{trialNumber}} + 1
+            }
+            
 
             main.condition = '{{condition}}' // story, monetary, combined
             // main.condition = 'story' // testing
@@ -610,13 +602,17 @@
                         // it's a bad outcome on the left
                         main.$var2b.css('opacity', '0.2')
                         main.insertBorder(main.$var2a)
-                        $('#var2a_outcome_text').text('-6 cents!').css('visibility', 'visible')
+                        if(main.condition != 'story'){
+                            $('#var2a_outcome_text').text('-6 cents!').css('visibility', 'visible')
+                        }
 
                     }else{
                         // it's a bad outcome on the right
                         main.$var2a.css('opacity', '0.2')
                         main.insertBorder(main.$var2b)    
-                        $('#var2b_outcome_text').text('-6 cents!').css('visibility', 'visible')
+                        if(main.condition != 'story'){
+                            $('#var2b_outcome_text').text('-6 cents!').css('visibility', 'visible')
+                        }
                     }
                     
                 }else{ // if it's a GOOD outcome
@@ -625,12 +621,16 @@
                         // it's a good outcome on the right
                         main.$var2a.css('opacity', '0.2')
                         main.insertBorder(main.$var2b)
-                        $('#var2b_outcome_text').text('+6 cents!').css('visibility', 'visible')  
+                        if(main.condition != 'story'){
+                            $('#var2b_outcome_text').text('+6 cents!').css('visibility', 'visible')  
+                        }
                     }else{
                         // it's a good outcome on the left
                         main.$var2b.css('opacity', '0.2')
                         main.insertBorder(main.$var2a)
-                        $('#var2a_outcome_text').text('+6 cents!').css('visibility', 'visible')  
+                        if(main.condition != 'story'){
+                            $('#var2a_outcome_text').text('+6 cents!').css('visibility', 'visible')  
+                        }
                     }
                     
                 }
@@ -694,8 +694,11 @@
                
             }
 
-            main.$totalBonusSpan.text(main.creditRender(main.assets))
-
+            if(main.assets < 0){
+                main.$totalBonusSpan.text('-$'+main.creditRender(Math.abs(main.assets)))
+            }else{
+                main.$totalBonusSpan.text('$'+main.creditRender(main.assets))
+            }
 
 
             main.$co.show()
@@ -1095,6 +1098,7 @@
 
 
 
-// })
- </script>
+})
+
+</script>
 {% endblock %}

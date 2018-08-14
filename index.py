@@ -64,6 +64,7 @@ class User(db.Model):
 	diseaseNames =		db.ListProperty(str)
 	progress =			db.IntegerProperty()
 	totalTrials = 		db.IntegerProperty()
+	testAttempts = 		db.ListProperty(int)
 
 
 
@@ -244,39 +245,7 @@ class AjaxHandler(webapp.RequestHandler):
 		var1_Right = self.session['var1_Names'][2*scenario+1]
 		var2_Left = self.session['var2_Names'][2*scenario]
 		var2_Right = self.session['var2_Names'][2*scenario+1]
-		# logging.info('RELOADS: '+str(self.session['reloads']))
-		logging.info('user: '+str(self.session['userkey']))
-		logging.info('usernum: ' +str(self.session['usernum']))
-
-		logging.info('account: '+str(self.session['account']))
-		logging.info('scenario: '+str(self.session['scenario']))
-		# 'var1_Left': self.session['var1_Names'][2*scenario],
-		# 'var1_Right': self.session['var1_Names'][2*scenario+1],
-		logging.info('condition: '+self.session['condition'])
-		logging.info('var1_leftName: '+var1_Left)
-		logging.info('var1_rightName: '+var1_Right)
-		logging.info('var2_leftName: '+var2_Left)
-		logging.info('var2_rightName: '+var2_Right)
-
 		
-		logging.info('trialTime: '+str(trialTime))
-		logging.info('attentionFails: '+str(attentionFails))
-		logging.info('trialNumber: '+str(trialNumber))
-		logging.info('reloads: '+str(self.session['reloads']))
-		logging.info('trialGuess: '+str(trialGuess))
-		# logging.info('trialCorrect: '+str(trialCorrect))
-		logging.info('profitImpact: '+str(profitImpact))
-		logging.info('valence: '+str(valence))
-		logging.info('var1 was '+var1_value)
-		logging.info('var2 was '+var2_value)
-
-		# logging.info('BONUS!!!!!! '+str(totalBonus))
-
-		# self.session['runningBonuses'] = totalBonus
-		
-
-		# logging.info('BONUS TEST!' + str(self.session['BonusOne']))
-		# logging.info('SCENARIO IS '+str(self.session['scenario']))
 
 		# how to check if there are example rows in the datastore
 		que = db.Query(ScenarioData).filter('usernum =', self.session['usernum']).filter('scenario =', self.session['scenario']).filter('trialNumber =', trialNumber)
@@ -350,7 +319,7 @@ class AjaxHandler(webapp.RequestHandler):
 		obj = que2.get()
 
 		obj.Bonuses = self.session['runningBonuses']
-
+		obj.reloads = self.session['reloads']
 		obj.put()
 		self.response.out.write({}) # ?
 
@@ -629,8 +598,10 @@ class ScenarioHandler(webapp.RequestHandler):
 				'v2_Data':self.session['v2_Data'][scenario], # var2
 				'testOrder':self.session['testOrder'],
 				'trialGuesses':self.session['trialGuesses'],
-				'trialNumber':0, # testing
-				'reloads':0, # testing
+				# 'trialNumber':0, # testing
+				'trialNumber': self.session['trialNumber'],
+				# 'reloads':0, # testing
+				'reloads': self.session['reloads'],
 				'frequency1': self.session['frequency1'],
 				'frequency2': self.session['frequency2'][scenario],
 				'position2': self.session['position2'],
@@ -644,7 +615,8 @@ class ScenarioHandler(webapp.RequestHandler):
 		self.session = get_current_session()
 
 		scenario = self.session['scenario'] # for readability
-		
+		logging.info('SCENARIO: '+str(scenario))
+
 		bonus = int(self.request.get('BonusInput2'))
 		# this is the hackiest solution ever but fuck it, it works now.
 		# method to this madness: when I was using AJAX to track bonuses I was running into 
@@ -652,15 +624,20 @@ class ScenarioHandler(webapp.RequestHandler):
 		# page as being (rewardAmt - bonusAmt) too large. This fixes that even though it's an ugly solution.
 		# Side note: I really would like to know why it was doing that...
 
+
 		u = db.Query(User).filter('usernum =', self.session['usernum'])
 		obj = u.get()
 		obj.Bonuses = bonus
+		obj.testAttempts[self.session['scenario']] += 1
+		self.session['testAttempts'] = obj.testAttempts
 		obj.put()
 		
-
+		# self.session['testAttempts'][self.session['scenario']] += 1 # make sure they're not reloading the test page!
 		
 
+		
 		doRender(self, 'test.htm',{
+
 			'bonus': bonus,
 			'scenario': self.session['scenario'],
 			'frequency1': self.session['frequency1'],
@@ -674,7 +651,6 @@ class ScenarioHandler(webapp.RequestHandler):
 			'var2_Names_Right': self.session['var2_Names'][2*scenario+1],
 			'drugColor_Left': self.session['drugColors'][2*scenario],
 			'drugColor_Right': self.session['drugColors'][2*scenario+1],
-			'reloads':0, # testing
 			'position2': self.session['position2'],
 			'rewardAmount':rewardAmount}) # this is a global variable set at the very top (is this a bad practice?)
 
@@ -746,10 +722,13 @@ class FinalJudgmentHandler(webapp.RequestHandler):
 		# logging.info('valence: '+valence)
 		obj = FinalJudgmentData(
 			user = self.session['userkey'],
+			usernum = self.session['usernum'],
 			account = self.session['account'],
 			scenario = self.session['scenario'],
 			valence = self.request.get('valence'),
 			condition = self.session['condition'],
+
+			testAttempts = self.session['testAttempts'],
 
 			var1_Left = self.request.get('var1a_Name'),
 			var1_Right = self.request.get('var1b_Name'),
@@ -1066,6 +1045,7 @@ class DemographicsHandler(webapp.RequestHandler):
 			obj.race = race
 			obj.age = age
 			obj.totalTrials = self.session['trials']
+			obj.Bonuses = bonus
 			obj.put();
 
 
@@ -1156,7 +1136,7 @@ class MturkIDHandler(webapp.RequestHandler):
 					# Any order effects in the testing questions should affect all groups equally.
 
 
-				self.session['usernum'] = random.choice([1,2,3]) # testing
+				self.session['usernum'] = usernum
 				logging.info('USERNUM: '+str(self.session['usernum']))
 				# disease names
 				self.session['diseaseNames'] = ['Duastea', 'Stectosis']
@@ -1169,7 +1149,7 @@ class MturkIDHandler(webapp.RequestHandler):
 
 				# position2 (valence)
 				self.session['position2'] = random.choice([0,1])
-				self.session['position2'] = 1 # testing
+				# self.session['position2'] = 1 # testing
 					# if 0, left value of var2 is BAD, right is GOOD
 					# if 1, left is GOOD, right is BAD
 					# this is position2 (valence)
@@ -1184,7 +1164,7 @@ class MturkIDHandler(webapp.RequestHandler):
 				elif self.session['usernum'] % 3 == 2:
 					self.session['condition'] = 'monetary'
 
-				self.session['condition'] = 'monetary' # testing
+				# self.session['condition'] = 'monetary' # testing
 
 
 				# position1 and position2 (visual)
@@ -1212,8 +1192,8 @@ class MturkIDHandler(webapp.RequestHandler):
 
 					# shapes
 					shapeNames = ['SQUARE', 'CIRCLE', 'STAR', 'TRIANGLE', 'OVAL', 'DIAMOND', 'RECTANGLE', 'PENTAGON']
-					# testing
-					# random.shuffle(shapeNames) # which shapes they see when. This takes care of position1 and position2 (visual) (commented out for testing)
+					
+					random.shuffle(shapeNames) # which shapes they see when. This takes care of position1 and position2 (visual) (commented out for testing)
 					self.session['var2_Names'] = shapeNames[0:4] # worked in python 3...we'll see
 						# the first two are the var1 shape names for the first scenario, in order (this is position1, no need to randomize further)
 					self.session['diseaseNames'] = ['','']
@@ -1221,7 +1201,7 @@ class MturkIDHandler(webapp.RequestHandler):
 				else:
 
 					# drug names
-					self.session['var1_Names'] = ['XF702', 'BT339', 'GS596', 'PR242']
+					self.session['var1_Names'] = ['XF7', 'BT3', 'GS5', 'PR2']
 					random.shuffle(self.session['var1_Names'])
 						# names and colors are the randomized visuals for var1 (position1, now randomized in python, no need to randomized further)
 
@@ -1359,6 +1339,7 @@ class MturkIDHandler(webapp.RequestHandler):
 					reloads = 0,
 					v1_Data = a,
 					v2_Data = b,
+					testAttempts = [0,0],
 					frequency1 = self.session['frequency1'],
 					frequency2 = self.session['frequency2'],
 					position2 = self.session['position2'],
@@ -1382,12 +1363,12 @@ class MturkIDHandler(webapp.RequestHandler):
 				
 				self.session['scenario']			= 0
 				# order of test questions
-				self.session['testOrder'] = random.choice([1,2,3,4,5,6]) # all possible orders, not breaking down by memory vs causal
 				self.session['trialGuesses']		= trialGuesses
 				self.session['userkey']				= userkey
 				self.session['usernum']				= usernum
 				self.session['trialNumber']			= 0
 				self.session['reloads']				= 0
+				
 
 
 				doRender(self, 'qualify.htm',{

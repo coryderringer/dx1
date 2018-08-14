@@ -72,99 +72,101 @@
 
 <script>
 
-var demo = {
+$(document).ready(function(){
+	var demo = {
 
-	init: function(){
-		demo.cacheDom()
+		init: function(){
+			demo.cacheDom()
 
-		demo.eventBinder()
-	},
+			demo.eventBinder()
+		},
 
-	cacheDom: function(){
-		$s1 = document.getElementById('s1')
-		$s2 = document.getElementById('s2')
-		$s3 = document.getElementById('s3')
-		$e1 = document.getElementById('e1')
-		$e2 = document.getElementById('e2')
-		$e3 = document.getElementById('e3')
-		$r1 = document.getElementById('r1')
-		$r2 = document.getElementById('r2')
-		$r3 = document.getElementById('r3')
-		$r4 = document.getElementById('r4')
-		$r5 = document.getElementById('r5')
-		$r6 = document.getElementById('r6')
-		$r7 = document.getElementById('r7')
-		$ageInput = $('#ageInput')
-	},
+		cacheDom: function(){
+			$s1 = document.getElementById('s1')
+			$s2 = document.getElementById('s2')
+			$s3 = document.getElementById('s3')
+			$e1 = document.getElementById('e1')
+			$e2 = document.getElementById('e2')
+			$e3 = document.getElementById('e3')
+			$r1 = document.getElementById('r1')
+			$r2 = document.getElementById('r2')
+			$r3 = document.getElementById('r3')
+			$r4 = document.getElementById('r4')
+			$r5 = document.getElementById('r5')
+			$r6 = document.getElementById('r6')
+			$r7 = document.getElementById('r7')
+			$ageInput = $('#ageInput')
+		},
 
-	eventBinder: function(){
+		eventBinder: function(){
 
-		$('#s1').unbind().on('change', demo.readytosubmit)
-		$('#s2').unbind().on('change', demo.readytosubmit)
-		$('#s3').unbind().on('change', demo.readytosubmit)
-		$('#e1').unbind().on('change', demo.readytosubmit)
-		$('#e2').unbind().on('change', demo.readytosubmit)
-		$('#e3').unbind().on('change', demo.readytosubmit)
-		$('#r1').unbind().on('change', demo.readytosubmit)
-		$('#r2').unbind().on('change', demo.readytosubmit)
-		$('#r3').unbind().on('change', demo.readytosubmit)
-		$('#r4').unbind().on('change', demo.readytosubmit)
-		$('#r5').unbind().on('change', demo.readytosubmit)
-		$('#r6').unbind().on('change', demo.readytosubmit)
-		$('#r7').unbind().on('change', demo.readytosubmit)
-		$ageInput.unbind().on('keypress', demo.readytosubmit)
+			$('#s1').unbind().on('change', demo.readytosubmit)
+			$('#s2').unbind().on('change', demo.readytosubmit)
+			$('#s3').unbind().on('change', demo.readytosubmit)
+			$('#e1').unbind().on('change', demo.readytosubmit)
+			$('#e2').unbind().on('change', demo.readytosubmit)
+			$('#e3').unbind().on('change', demo.readytosubmit)
+			$('#r1').unbind().on('change', demo.readytosubmit)
+			$('#r2').unbind().on('change', demo.readytosubmit)
+			$('#r3').unbind().on('change', demo.readytosubmit)
+			$('#r4').unbind().on('change', demo.readytosubmit)
+			$('#r5').unbind().on('change', demo.readytosubmit)
+			$('#r6').unbind().on('change', demo.readytosubmit)
+			$('#r7').unbind().on('change', demo.readytosubmit)
+			$ageInput.unbind().on('keypress', demo.readytosubmit)
 
-	},
+		},
 
-	readytosubmit: function(){
+		readytosubmit: function(){
 
-		s1 = $s1.checked 
-		s2 = $s2.checked 
-		s3 = $s3.checked 
-		e1 = $e1.checked 
-		e2 = $e2.checked 
-		e3 = $e3.checked 
-		r1 = $r1.checked 
-		r2 = $r2.checked 
-		r3 = $r3.checked 
-		r4 = $r4.checked 
-		r5 = $r5.checked 
-		r6 = $r6.checked 
-		r7 = $r7.checked 
-		
-		schecked = s1 || s2 || s3
-		echecked = e1 || e2 || e3
-		rchecked = r1 || r2 || r3 || r4 || r5 || r6 || r7
-		
-		if (schecked && echecked && rchecked){
-			console.log("stuff checked");
-			// if age isn't blank
-			// var age = document.getElementById('age')
-			if(demo.isNumeric($('#ageInput').val())){
-				document.getElementById('submit').disabled=false;	
+			s1 = $s1.checked 
+			s2 = $s2.checked 
+			s3 = $s3.checked 
+			e1 = $e1.checked 
+			e2 = $e2.checked 
+			e3 = $e3.checked 
+			r1 = $r1.checked 
+			r2 = $r2.checked 
+			r3 = $r3.checked 
+			r4 = $r4.checked 
+			r5 = $r5.checked 
+			r6 = $r6.checked 
+			r7 = $r7.checked 
+			
+			schecked = s1 || s2 || s3
+			echecked = e1 || e2 || e3
+			rchecked = r1 || r2 || r3 || r4 || r5 || r6 || r7
+			
+			if (schecked && echecked && rchecked){
+				console.log("stuff checked");
+				// if age isn't blank
+				// var age = document.getElementById('age')
+				if(demo.isNumeric($('#ageInput').val())){
+					document.getElementById('submit').disabled=false;	
+				}
 			}
-		}
-		else{
-			console.log("something not checked");
-			document.getElementById('submit').disabled=true;
-		}
-	},
+			else{
+				console.log("something not checked");
+				document.getElementById('submit').disabled=true;
+			}
+		},
 
-	
+		
 
-	isNumeric: function(n){
-		return !isNaN(parseFloat(n)) && isFinite(n);
+		isNumeric: function(n){
+			return !isNaN(parseFloat(n)) && isFinite(n);
+		}
+
 	}
 
-}
+	// $('ageInput').on('change', demo.readytosubmit)
+	// $('#s1').on('change', function(){
+	// 	alert('change!')
+	// })
 
-// $('ageInput').on('change', demo.readytosubmit)
-// $('#s1').on('change', function(){
-// 	alert('change!')
-// })
+	demo.init()
 
-demo.init()
-
+})
 </script>
 
 

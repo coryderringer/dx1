@@ -53,22 +53,29 @@
 </body>
 <script>
 
-bonus = {{bonus}}
+$(document).ready(function(){
+	bonus = {{bonus}}
 
-function creditRender(credits){
-    // display credits div
-    if(credits % 100 == 0){
-        var displayCredits = String(credits/100) + '.00';
-    }else if(credits %10 == 0){
-        displayCredits = String(credits/100) +'0';
-    }else{
-        displayCredits = credits/100;
-    }
-    return(displayCredits);
-    // $creditSpan.html(displayCredits);
-}
+	function creditRender(credits){
+	    // display credits div
+	    if(credits % 100 == 0){
+	        var displayCredits = String(credits/100) + '.00';
+	    }else if(credits %10 == 0){
+	        displayCredits = String(credits/100) +'0';
+	    }else{
+	        displayCredits = credits/100;
+	    }
+	    return(displayCredits);
+	    // $creditSpan.html(displayCredits);
+	}
 
-$('#bonusAmount').text('$'+creditRender(bonus))
+	if(bonus < 0){
+		$('#bonusAmount').text('$'+creditRender(0))		
+	}else{
+		$('#bonusAmount').text('$'+creditRender(bonus))	
+	}
+	
+})
 
 </script>
 

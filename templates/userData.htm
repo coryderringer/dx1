@@ -45,6 +45,8 @@
 			<th>progress</th>
 			<th>Bonus</th>
 			<th>Total Trials</th> <!-- Should be no more than 96! -->
+			<th>Reloads</th> <!-- Should be 0! -->
+			<th colspan = 2>Test Attempts</th> <!-- Should be [1,1] -->
 
 
 			<!-- data they saw -->
@@ -90,9 +92,13 @@
 			{% endfor %}
 
 			<th>{{ i.progress }}</th>
-			<th>{{ i.BonusOne }}</th>
 			<th>{{ i.Bonuses }}</th>
 			<th>{{ i.totalTrials }}</th>
+			<th>{{ i.reloads }}</th>
+
+			{% for j in i.testAttempts %}
+				<th>{{ j }}</th>
+			{% endfor %}
 
 			{% for j in i.v1_Data %}
 				<th>{{ j }}</th>

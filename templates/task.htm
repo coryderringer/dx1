@@ -26,7 +26,7 @@
                     <div style="height:175px">
                         <h3>Overview</h3>
                         <p name="story">For this task, imagine that you work in a hospital, and your job is to make sure that the patients have GOOD outcomes after treatment. You will see two scenarios, each containing information about patients who were treated for a fictional disease. You are responsible for finding out if the different medications are effective or not. Keep in mind that different diseases have different success rates for treatment. Before seeing data about each disease, you will be told which treatment is the most common, and whether the outcomes for the disease are typically GOOD or BAD.</p>
-                        <p name="monetary" style="display:none">For this task, you will learn about the relationships between shapes and colors. You will see two scenarios, each containing information about a set of two shapes and colors. You are responsible for finding out if there are relationships between the shapes and colors. Keep in mind that some shapes are more common than others, and some colors are more common than others. Before seeing the shape/color combinations, you will be told which shapes and colors are the most common.</p>
+                        <p name="monetary" style="display:none">For this task, you will learn about the relationships between shapes and colors. You will see two scenarios, each containing information about two shapes and two colors. You are responsible for finding out if there are relationships between the shapes and colors. (For example, when the shape is RECTANGLE, is the color more likely to be ORANGE or YELLOW?) Keep in mind that some shapes are more common than others, and some colors are more common than others. Before seeing the shape/color combinations, you will be told which shapes and colors are the most common.</p>
                     </div>
 
                     <button id="next1" class="btn btn-default" data-toggle="tab" href="#instructions2">
@@ -37,8 +37,8 @@
                 <div id="instructions2" class="tab-pane fade">
                     <div style="height:175px">
                         <h3>Overview</h3>
-                        <p name="story">For each patient, you will first see whether their outcome was GOOD or BAD. You will be asked to confirm the outcome by clicking the appropriate face. <span name="combinedCondition">Each GOOD or BAD outcome is added or subtracted from the bonus you will receive after completing this experiment. Each GOOD outcome (like this one) adds 6 cents to your baseline bonus of $0.30, while each BAD outcome subtracts 6 cents. (See "Treatment Bonus" on the right side.)</span></p>
-                        <p name="monetary" style="display:none">On each trial, you will first see whether the shape was a <span name="var2a">SQUARE</span> or a <span name="var2b">CIRCLE</span>. You will be asked to confirm by clicking the matching shape in the top row. Your bonus amount is affected by these shapes. In this case, each <span name="var2a">SQUARE</span> (like this one) adds 6 cents to your baseline bonus of $0.30, while each <span name="var2b">CIRCLE</span> subtracts 6 cents. (See "Bonus" on the right side.)</p>
+                        <p name="story">For each patient, you will first see whether their outcome was GOOD or BAD. You will be asked to <b>confirm</b> the outcome by clicking the appropriate face. <span name="combinedCondition">Each GOOD or BAD outcome is added or subtracted from the bonus you will receive after completing this experiment. Each GOOD outcome (like this one) adds 6 cents to your baseline bonus of $0.30, while each BAD outcome subtracts 6 cents. (See "Current Bonus" on the right side.) It is possible for your bonus to dip below zero if there are a lot of BAD outcomes. However, it is very unlikely that you will end the study with a negative bonus, and if that happens it will be rounded up to zero.</span></p>
+                        <p name="monetary" style="display:none">On each trial, you will first see whether the shape was a <span name="var2a">SQUARE</span> or a <span name="var2b">CIRCLE</span>. You will be asked to <b>confirm</b> by clicking the matching shape in the top row. Your bonus amount is affected by these shapes. In this case, each <span name="var2a">SQUARE</span> (like this one) adds 6 cents to your baseline bonus of $0.30, while each <span name="var2b">CIRCLE</span> subtracts 6 cents. (See "Current Bonus" on the right side.) It is possible for your bonus to dip below zero if there are a lot of bad shapes. However, it is very unlikely that you will end the study with a negative bonus, and if that happens it will be rounded up to zero.</p>
                     </div>
 
                     <button id="previous1" class="btn btn-default" data-toggle="tab" href="#instructions1">Previous</button>
@@ -50,8 +50,8 @@
                 <div id="instructions3" class="tab-pane fade">
                     <div style="height:175px">
                         <h3>Task Description</h3>
-                        <p name="story">You will also <b>guess</b> which of two treatments the patient received by clicking on one of the pills below. In this case the options are TW405 or HL376. You will be told the names of the drugs, as well as which one is more commonly used, before each disease scenario.
-                            <br><br>For now, let's say you guess TW405.
+                        <p name="story">You will also <b>guess</b> which of two treatments the patient received by clicking on one of the pills below. In this case the options are TW4 or HL3. You will be told the names of the drugs, as well as which one is more commonly used, before each disease scenario.
+                            <br><br>For now, let's say you guess TW4.
                         </p>
                         <p name="monetary" style="display:none">You will also <b>guess</b> what the color will be. In this case the options are <span name="var1a">COLOR</span> or <span name="var1b">COLOR</span>. You will be told the color options, as well as which one is more common, before each scenario.
                             <br><br>For now, let's say you guess <span name="var1a">COLOR</span>.</p>
@@ -65,8 +65,8 @@
                 <div id="instructions4" class="tab-pane fade">
                     <div style="height:175px">
                         <h3>Example Task</h3>
-                        <p name="story">After making your guess, you will receive immediate feedback about which drug the patient received. For each patient, if you correctly guess which drug they received, you will get a 3 cent accuracy bonus. The total bonus <span name="combinedCondition">(Treatment Bonus + Accuracy Bonus) is the amount that will be paid to you at the end of the study, and </span>is continually updated in the "Bonus" box on the right.</p>
-                        <p name="monetary" style="display:none">After making your guess, you will receive immediate feedback about the color, and you will be asked to click on the correct color. For each trial, if you correctly guess the color, you will get a 3 cent accuracy bonus. The total bonus is the amount that will be paid to you at the end of the study, and is continually updated in the "Bonus" box on the right.</p>
+                        <p name="story">After making your guess, you will receive immediate feedback about which drug the patient received. Each time you correctly guess the drug, you will receive a 3 cent accuracy bonus. Your bonus is continually updated in the "Current Bonus" box on the right.</p>
+                        <p name="monetary" style="display:none">After making your guess, you will receive immediate feedback about the color, and you will be asked to click on the correct color. Each time you correctly guess the color, you will receive a 3 cent accuracy bonus. Your bonus is continually updated in the "Current Bonus" box on the right.</p>
                     </div>
                     <button id="previous3" class="btn btn-default" data-toggle="tab" href="#instructions3">Previous</button>
                     <button id="next4" class="btn btn-info" data-toggle="tab">
@@ -142,12 +142,12 @@
                     </div>
                
                     <div id="causeDiv" class = "text-center">
-                        <p name="story" id="causePrompt">Guess whether the patient received TW405 or HL376:</p>
+                        <p name="story" id="causePrompt">Guess whether the patient received TW4 or HL3:</p>
                         <p name="monetary">Guess whether the color will be <span name="var1a"></span> or <span name="var1b"></span>:</p>
 
                         <div class="row" id="pillDiv" style="height:75px">
                             <div id="var1a" class="col-xs-5 text-center">
-                                <p name ="story">TW405</p>
+                                <p name ="story">TW4</p>
                                 <img id="var1aImg" src="/static/images/blank.png" style="width:100px"/>
                             </div>
                             <div class="col-xs-2 text-center">
@@ -155,19 +155,19 @@
                                 <div name="feedbackDiv" style="font-size: 10pt; padding: 5px; height: 75px"></div>
                             </div>
                             <div id="var1b" class="col-xs-5 text-center">
-                                <p name ="story">HL376</p>
+                                <p name ="story">HL3</p>
                                 <img id="var1bImg" src="/static/images/blank.png" style="width:100px"/>
                             </div>
                         </div>
 
                         <div>
-                            <span id="feedbackSpan" style="visibility: hidden">The patient received TW405!</span>
+                            <span id="feedbackSpan" style="visibility: hidden">The patient received TW4!</span>
                         </div>
                     </div>
                 </div>
                 <div id="scoreDiv" class="col-xs-4 text-center">
 
-                    <p><b>Current bonus:</b></p>
+                    <p><b>Current Bonus:</b></p>
                     <div id="totalBonusDiv" class="scoreDisplay">
                         Bonus: $<span id="totalBonusSpan">0.36</span>
                     </div>
@@ -193,7 +193,7 @@
 
 
 
-// $(document).ready(function(){
+$(document).ready(function(){
 
     var main = {
         // main should be the overall page function, data, etc.
@@ -220,8 +220,8 @@
             }else{
                 main.var2a = 'GOOD'
                 main.var2b = 'BAD'
-                main.var1a = 'TW405'
-                main.var1b = 'HL376'
+                main.var1a = 'TW4'
+                main.var1b = 'HL3'
             }
 
             main.position2 = {{position2}}
@@ -420,95 +420,6 @@
 
             }
            
-                // console.log(stage)
-                // $('[name="monetary"]').hide()
-                // $('[name="story"]').show()
-                
-                // if(main.condition === 'story'){
-                //     $('[name="combined"]').hide() // this is not the best way to do this...
-                // }
-                
-                // if(stage == 0){ // very beginning, opacity of 0.2 for the example div
-
-                //     // $('#leftFace').css('height', '60px')
-                //     // borders (so they don't jump later)
-                //     main.removeBorder($('#leftFace'))
-                //     main.removeBorder($('#rightFace'))
-                //     main.removeBorder(main.$var1a)
-                //     main.removeBorder(main.$var1b)
-
-                //     // everything opaque
-                //     main.$effectDiv.css('opacity', '0.2')
-                //     main.$causeDiv.css('opacity', '0.2')
-                //     main.$scoreDiv.css('opacity', '0.2')
-                //     main.$totalBonusDiv.css('opacity', '0.2')
-
-                //     main.$co.show()
-
-
-
-
-                // }else if(stage == 1){
-                //     // if going forward:
-                //     main.$effectDiv.css('opacity', '1.0')
-
-                //     // if coming backward:
-                //     main.$var2b.css('opacity', '1.0')
-                //     main.removeBorder(main.$var2a)
-                //     $('#var2a_outcome_text').css('visibility', 'hidden')
-                //     main.$causeDiv.css('opacity', '0.2')
-
-                //     main.$treatmentBonusDiv.css('opacity', '1.0')
-                //     main.$accuracyBonusDiv.css('opacity', '0.2')
-                //     main.$totalBonusDiv.css('opacity', '1.0')
-                //     main.$totalBonusSpan.text('0.30')
-                //     main.$scoreDiv.css('opacity', '1.0')
-
-
-
-                // }else if(stage == 2){
-                //     main.$causeDiv.css('opacity', '1.0')
-                //     main.$var2b.css('opacity', '0.2')
-                //     main.insertBorder(main.$var2a)
-                //     $('#var2a_outcome_text').css('visibility', 'visible')
-                //     main.$drugB.css('opacity', '1.0')
-                  
-                //     main.$feedbackDiv.text('')
-                //     main.$totalBonusSpan.text('0.36')
-
-                //     // if coming backwards
-                //     main.$accuracyBonusSpan.text('0.00')
-                //     main.removeBorder(main.$var1a)
-                    
-                    
-                    
-                //     main.$accuracyBonusDiv.css('opacity', '0.2')
-                //     main.$totalBonusDiv.css('opacity', '1.0')
-                //     main.$scoreDiv.css('opacity', '1.0')
-
-
-                // }else if(stage == 3){
-                //     main.$drugB.css('opacity', '0.2')
-                //     main.insertBorder(main.$var1a)
-                //     main.$feedbackDiv.html('Correct!<br>+3 cents!')
-
-
-                //     main.$accuracyBonusSpan.text('0.03')
-                //     if(main.condition == 'story'){
-                //         main.$totalBonusSpan.text('0.33')
-                //     }else{
-                //         main.$totalBonusSpan.text('0.39')
-                //     }
-                //     main.$accuracyBonusDiv.css('opacity', '1.0')
-                //     main.$totalBonusDiv.css('opacity', '1.0')
-                //     main.$scoreDiv.css('opacity', '1.0')
-
-
-                // }
-
-
-            // }
-
         },
 
         creditRender: function(credits){
@@ -606,7 +517,7 @@
 
         drugA_Click: function(){
             if(main.condition != 'monetary'){
-                alert('Great! During the experiment, clicking here is a guess that the patient received TW405!')
+                alert('Great! During the experiment, clicking here is a guess that the patient received TW4!')
             }else{
                 alert('Great! During the experiment, clicking here is a guess that the color will be ORANGE!')
             }
@@ -614,7 +525,7 @@
 
         drugB_Click: function(){
             if(main.condition != 'monetary'){
-                alert('Whoops! During the experiment, clicking here is a guess that the patient received HL376.')
+                alert('Whoops! During the experiment, clicking here is a guess that the patient received HL3.')
             }else{
                 alert('Whoops! During the experiment, clicking here is a guess that the color will be YELLOW!')
             }
@@ -672,7 +583,7 @@
 
 
 
+})
 
-// })
- </script>
+</script>
 {% endblock %}

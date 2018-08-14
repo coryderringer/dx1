@@ -33,7 +33,7 @@
 
 
 
-                    <div class="row" id="judgment1Div">
+                    <div class="row" id="judgment1Div" style="display:none">
                         <div class="col-xs-8" class="text-center">
                             <div id="effectDiv" class="text-center">
                                 <h2>
@@ -73,7 +73,7 @@
                                     
 
                                 <div id="choiceDiv" style="height:150px">
-                                    <p id="v1_Prompt">
+                                    <p id="v1_Prompt">Please click to choose:<br>
                                         <span name="story">Will you prescribe <span name="var1a">Drug A</span> or <span name="var1b">Drug B</span> if you want the outcome to be GOOD?</span>
                                         <span name="monetary">Will you choose <span name="var1a">COLOR 1</span> or <span name="var1b">COLOR 2</span> if you want the shape to be <span name="goodShape"></span>?</span>
                                     </p>
@@ -165,7 +165,7 @@
                         <!-- score div -->
                         <div id="scoreDiv" class="col-xs-4 text-center">
 
-                            <p><b>Current bonus:</b></p>
+                            <p><b>Current Bonus:</b></p>
                             <div id="totalBonusDiv" class="scoreDisplay">
                                 <span id="totalBonusSpan"></span>
                             </div>
@@ -371,12 +371,12 @@
 
 
 <script>
-document.write('BONUS: '+{{bonus}})
+
 // NOTE:
 // var1 is the second row (it's the drug in the story conditions)
 // var2 is always the first row (it's the outcome in the story conditions)
 
-// $(document).ready(function(){
+$(document).ready(function(){
 
 
 
@@ -386,6 +386,7 @@ document.write('BONUS: '+{{bonus}})
             // this function initializes the test variables in the page,
             // and calls the necessary functions and listeners to start the
             // final judgments (memory and causal strength)
+            
 
             test.var1a = '{{var1_Names_Left}}'
             test.var1b = '{{var1_Names_Right}}'
@@ -411,9 +412,7 @@ document.write('BONUS: '+{{bonus}})
             test.drugNames = ['XF702', 'BT339', 'GS596', 'PR242']
 
             test.TO = {{testOrder}}
-            test.TO = 1 // testing
-
-
+            
 
             if(test.TO === 1){
                 test.order = [causal, memory1, memory2]
@@ -863,6 +862,7 @@ document.write('BONUS: '+{{bonus}})
         },
 
         mySubmit: function(){
+
             $('#testDataform').submit()
             // alert('submitting form!')
         },
@@ -948,6 +948,11 @@ document.write('BONUS: '+{{bonus}})
                
 
                 // sliders (use them in next stage, but no reason not to initialize)
+                // NOTE FOR ANALYSIS: 
+                    // need freq1 and freq2 to figure out IC pattern
+                    // this is going to be a little weird because we're asking about the common outcome in one scenario and the rare outcome in the other scenario. (MAKE SURE IT WORKS THIS WAY IN THE STORY CONDITION)
+                    // theoretically I think I could believe that the good shape is related to red, but that the bad shape is not related to either
+                        // think about this, because you're going to have to address it.
                 $('#strengthSlider').slider({
                     formatter: function(value) {
                         if(value < 4){
@@ -1077,12 +1082,7 @@ document.write('BONUS: '+{{bonus}})
                 // render feedback
                 if(test.valence === 'rare-negative'){ // mostly positive, good outcome
                     test.bonusAmt += 100
-                    if(test.bonusAmt < 0){
-                        $('#totalBonusSpan').text('-$'+test.creditRender(test.bonusAmt))
-                    }else{
-                        $('#totalBonusSpan').text('$'+test.creditRender(test.bonusAmt))
-                    }
-
+                    
                     if(test.condition != 'monetary'){
                         $('#causalFeedbackImage').attr('src', '/static/images/good.png')
                         
@@ -2079,6 +2079,6 @@ document.write('BONUS: '+{{bonus}})
 
 
 
-// })
+})
  </script>
 {% endblock %}
